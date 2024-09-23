@@ -1,21 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace EE.Prototype.OOP
 {
     public class ShipView : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
+        [Header("Model")]
+        [SerializeField] ShipModel m_model;
 
-        // Update is called once per frame
-        void Update()
+        [Header("UI Components")]
+        [SerializeField] TMP_Text m_windEffectAmountText;
+
+        private void Update()
         {
-        
+            m_windEffectAmountText.text = $"Wind Effect: {m_model.WindEffect * 100:F2}";
         }
     }
 }

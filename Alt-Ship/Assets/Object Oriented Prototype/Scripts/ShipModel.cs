@@ -11,6 +11,9 @@ namespace EE.Prototype.OOP
         [SerializeField] private float m_speed;
         [SerializeField] private Vector3 m_seilDirection;
 
+        private float m_windEffect;
+        public float WindEffect => m_windEffect;
+
         #region Unity Callbacks
 
         private void FixedUpdate()
@@ -29,14 +32,14 @@ namespace EE.Prototype.OOP
             float angle = Vector3.Angle(m_seilDirection, m_windModule.Direction);
 
             // Calculate wind effect based on how perpendicular the sail is to the wind
-            float windEffect = Mathf.Sin(angle * Mathf.Deg2Rad);
+            m_windEffect = Mathf.Sin(angle * Mathf.Deg2Rad);
 
             // Use dot product to determine the direction of the wind (positive or negative)
             // If dot product is negative, the wind is coming from behind (angle close to 180 degrees)
             float windDirection = Mathf.Sign(Vector3.Dot(m_seilDirection, m_windModule.Direction));
 
             // Apply wind effect and reverse direction if necessary
-            return m_windModule.Velocity * windEffect * windDirection;
+            return m_windModule.Velocity * m_windEffect * windDirection;
         }
 
         #endregion
