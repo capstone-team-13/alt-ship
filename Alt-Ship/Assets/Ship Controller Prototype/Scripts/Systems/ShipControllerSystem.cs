@@ -1,4 +1,3 @@
-using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
 
@@ -6,7 +5,6 @@ namespace EE.Prototype.ShipControllers
 {
     public partial struct ShipControllerSystem : ISystem
     {
-        [BurstCompile]
         public readonly void OnUpdate(ref SystemState state) {
             float deltaTime = SystemAPI.Time.DeltaTime;
 

@@ -10,9 +10,6 @@ namespace EE.Prototype.ShipControllers
         [SerializeField] private float m_speed = 100.0f;
         [SerializeField] private float3 m_direction = new(1, 0, 0);
 
-        [Header("Camera")]
-        [SerializeField] GameObject m_camera;
-
         public class Baker : Baker<PlayerOneAuthoring>
         {
             public override void Bake(PlayerOneAuthoring authoring)
@@ -25,6 +22,10 @@ namespace EE.Prototype.ShipControllers
                     Direction = authoring.m_direction,
                 });
             }
+        }
+
+        private void Start()
+        {
         }
     }
 }
