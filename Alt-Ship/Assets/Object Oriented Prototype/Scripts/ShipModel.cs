@@ -6,7 +6,7 @@ namespace EE.Prototype.OOP
     {
         [Header("Refs.")]
         [SerializeField] private Rigidbody m_rigidbody;
-        [SerializeField] private WindModule m_windSystem;
+        [SerializeField] private WindModule m_windModule;
 
         [SerializeField] private float m_speed;
         [SerializeField] private Vector3 m_seilDirection;
@@ -16,7 +16,8 @@ namespace EE.Prototype.OOP
         private void FixedUpdate()
         {
             var windVelocity = CalcuateWindVelocity();
-            m_rigidbody.velocity += windVelocity;
+            var selfVelocity = m_speed * m_seilDirection;
+            m_rigidbody.velocity = selfVelocity + windVelocity;
         }
 
         #endregion
@@ -25,8 +26,17 @@ namespace EE.Prototype.OOP
 
         public Vector3 CalcuateWindVelocity()
         {
-            float windEffect = 1.0f - Vector3.Dot(m_seilDirection, m_windSystem.Direction);
-            return m_windSystem.Velocity * windEffect;
+            float angle = Vector3.Angle(m_seilDirection, m_windModule.Direction);
+
+            // Calculate wind effect based on how perpendicular the sail is to the wind
+            float windEffect = Mathf.Sin(angle * Mathf.Deg2Rad);
+
+            // Use dot product to determine the direction of the wind (positive or negative)
+            // If dot product is negative, the wind is coming from behind (angle close to 180 degrees)
+            float windDirection = Mathf.Sign(Vector3.Dot(m_seilDirection, m_windModule.Direction));
+
+            // Apply wind effect and reverse direction if necessary
+            return m_windModule.Velocity * windEffect * windDirection;
         }
 
         #endregion
