@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace EE.Prototype.ShipControllers
 {
-    public class ShipAuthoring : MonoBehaviour
+    public class PlayerOneAuthoring : MonoBehaviour
     {
+        [Header("Ship Model")]
         [SerializeField] private float m_speed = 100.0f;
-        [SerializeField] private float3 m_direction = new (1, 0, 0);
-        [SerializeField] BoxCollider m_collider;
+        [SerializeField] private float3 m_direction = new(1, 0, 0);
 
-        public class Baker : Baker<ShipAuthoring>
+        public class Baker : Baker<PlayerOneAuthoring>
         {
-            public override void Bake(ShipAuthoring authoring)
+            public override void Bake(PlayerOneAuthoring authoring)
             {
                 Entity entity = GetEntity(TransformUsageFlags.Dynamic);
 
@@ -22,6 +22,10 @@ namespace EE.Prototype.ShipControllers
                     Direction = authoring.m_direction,
                 });
             }
+        }
+
+        private void Start()
+        {
         }
     }
 }
