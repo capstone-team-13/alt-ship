@@ -1,1 +1,1 @@
-# alt-ship
+# Alternative Ship Game
