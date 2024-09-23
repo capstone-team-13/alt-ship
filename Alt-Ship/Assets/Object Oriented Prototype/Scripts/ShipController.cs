@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ShipController : MonoBehaviour
+namespace EE.Prototype.OOP
 {
-    // Start is called before the first frame update
-    void Start()
+    public class ShipController : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private float speed;
+        [SerializeField] private Vector3 direction;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void Start()
+        {
+            direction.Normalize();
+        }
+
+        private void Update()
+        {
+            transform.position += speed * direction * Time.deltaTime;
+        }
     }
 }
