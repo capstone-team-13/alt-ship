@@ -14,11 +14,16 @@ namespace EE.Prototype.OOP
         private float m_windEffect;
         public float WindEffect => m_windEffect;
 
+        private float m_apparentWindAngle;
+        public float ApparentWindAngle => m_apparentWindAngle;
+
         #region Unity Callbacks
 
         private void FixedUpdate()
         {
-            var windVelocity = CalcuateWindVelocity();
+            m_apparentWindAngle = CalculateApparentWindAngle();
+
+            var windVelocity = m_windModule.Velocity;
             var selfVelocity = m_speed * m_seilDirection;
             m_rigidbody.velocity = selfVelocity + windVelocity;
         }
@@ -40,6 +45,12 @@ namespace EE.Prototype.OOP
 
             // Apply wind effect and reverse direction if necessary
             return m_windModule.Velocity * m_windEffect * windDirection;
+        }
+
+        private float CalculateApparentWindAngle()
+        {
+            float apparentWindAngle = Vector3.SignedAngle(transform.forward, m_windModule.Direction, Vector3.up);
+            return apparentWindAngle;
         }
 
         #endregion
