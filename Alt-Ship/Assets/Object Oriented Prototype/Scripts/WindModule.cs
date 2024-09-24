@@ -8,6 +8,7 @@ namespace EE.Prototype.OOP
         private float m_speed;
         private Vector3 m_direction;
 
+        public float Speed => m_speed;
         public Vector3 Direction => m_direction;
         public Vector3 Velocity => m_speed * m_direction;
 
@@ -21,12 +22,13 @@ namespace EE.Prototype.OOP
         // TODO: REMOVE ME
         private float noiseOffsetX = 0.0f;
         private float noiseOffsetZ = 0.0f;
-        private float noiseSpeed = 0.1f;
+        private float noiseSpeedX = 0.1f;
+        private float noiseSpeedZ = 0.15f;
 
         private void SmoothWind()
         {
-            noiseOffsetX += Time.deltaTime * noiseSpeed;
-            noiseOffsetZ += Time.deltaTime * noiseSpeed;
+            noiseOffsetX += Time.deltaTime * noiseSpeedX;
+            noiseOffsetZ += Time.deltaTime * noiseSpeedZ;
 
             float windX = Mathf.PerlinNoise(noiseOffsetX, 0.0f) * 2 - 1;
             float windZ = Mathf.PerlinNoise(0.0f, noiseOffsetZ) * 2 - 1;
