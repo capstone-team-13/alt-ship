@@ -9,29 +9,26 @@ namespace EE.Prototype.OOP
         [SerializeField] private LayerMask m_detetableLayer;
         [SerializeField] private float m_raidus;
 
-        private Vector3[] m_positions;
-        public Vector3[] Positions => m_positions;
-        public int Capacity { get; private set; }
+        private Collider[] m_results = new Collider[8];
+        public int HitCount { get; private set; }
 
         private void FixedUpdate()
         {
-            Collider[] results = null;
-            Physics.OverlapSphereNonAlloc(transform.position, m_raidus, results, m_detetableLayer);
+            HitCount = Physics.OverlapSphereNonAlloc(transform.position, m_raidus, m_results, m_detetableLayer);
 
-            Capacity = results.Length;
+            if (HitCount <= 0) return;
 
-            if (Capacity <= 0) return;
-
-            if (Capacity > m_positions.Length)
+            if (HitCount > m_results.Length)
             {
-                Array.Resize(ref m_positions, m_positions.Length * 2);
+                Array.Resize(ref m_results, HitCount); 
+                Physics.OverlapSphereNonAlloc(transform.position, m_raidus, m_results, m_detetableLayer);
             }
+        }
 
-            for (int i = 0; i < Capacity; ++i)
-            {
-                var collider = results[i];
-                m_positions[i] = collider.transform.position;
-            }
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, m_raidus);
         }
     }
 }
