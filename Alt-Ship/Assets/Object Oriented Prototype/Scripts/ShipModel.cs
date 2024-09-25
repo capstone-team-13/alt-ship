@@ -19,6 +19,40 @@ namespace EE.Prototype.OOP
 
         #region Unity Callbacks
 
+        // TODO: Refactor into Ship Controller
+        [SerializeField] private float rotationSpeed = 5f;
+        [SerializeField] private float lerpSpeed = 5f;
+        private Vector3 targetEulerAngles;
+        private void Start()
+        {
+            targetEulerAngles = transform.localEulerAngles;
+        }
+        private void Update()
+        {
+            Vector3 currentEulerAngles = transform.localEulerAngles;
+
+            if (currentEulerAngles.y > 180)
+            {
+                currentEulerAngles.y -= 360;
+            }
+
+            float rotationDelta = rotationSpeed * Time.deltaTime;
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                targetEulerAngles.y = Mathf.Max(targetEulerAngles.y - rotationDelta, -60);
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                targetEulerAngles.y = Mathf.Min(targetEulerAngles.y + rotationDelta, 60);
+            }
+
+            Vector3 smoothEulerAngles = Vector3.Lerp(currentEulerAngles, targetEulerAngles, lerpSpeed * Time.deltaTime);
+            transform.localEulerAngles = smoothEulerAngles;
+
+            m_seilDirection = transform.forward;
+        }
+
         private void FixedUpdate()
         {
             m_apparentWindAngle = CalculateApparentWindAngle();
