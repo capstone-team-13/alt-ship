@@ -10,6 +10,9 @@ namespace EE.Prototype.OOP
         [SerializeField] private float m_raidus;
 
         private Collider[] m_results = new Collider[8];
+
+        public float Radius => m_raidus;
+        public Collider[] Results => m_results;
         public int HitCount { get; private set; }
 
         private void FixedUpdate()
