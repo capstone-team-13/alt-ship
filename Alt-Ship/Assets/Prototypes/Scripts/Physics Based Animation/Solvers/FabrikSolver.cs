@@ -1,7 +1,7 @@
 using System.Linq;
 using Unity.Mathematics;
 
-namespace EE.Prototype.CC
+namespace EE.Prototype.PBA
 {
     public class FabrikSolver
     {

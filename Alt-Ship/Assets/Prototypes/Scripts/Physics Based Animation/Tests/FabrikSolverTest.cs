@@ -2,7 +2,7 @@ using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace EE.Prototype.CC
+namespace EE.Prototype.PBA
 {
     public class FabrikSolverTest : MonoBehaviour
     {
