@@ -6,10 +6,6 @@ Shader "EE/Ocean Surface"
 	{
 		[HideInInspector] _AlphaCutoff("Alpha Cutoff ", Range(0, 1)) = 0.5
 		[HideInInspector] _EmissionColor("Emission Color", Color) = (1,1,1,1)
-		_WaveDirection("Wave Direction", Vector) = (1,0,0,0)
-		_WaveLength("Wave Length", Float) = 4.5
-		_WaveHeight("Wave Height", Float) = 0.2
-		_PeakSharpness("Peak Sharpness", Range( 0 , 1)) = 0.3
 
 
 		//_TransmissionShadow( "Transmission Shadow", Range( 0, 1 ) ) = 0.5
@@ -326,11 +322,7 @@ Shader "EE/Ocean Surface"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float3 _WaveDirection;
-			float _WaveLength;
-			float _WaveHeight;
-			float _PeakSharpness;
-			#ifdef ASE_TRANSMISSION
+						#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -371,28 +363,25 @@ Shader "EE/Ocean Surface"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				float3 Position_OS63 = v.positionOS.xyz;
-				float3 Position_OS16_g3 = Position_OS63;
-				float3 normalizeResult27 = normalize( _WaveDirection );
-				float3 Wave_Direction56 = normalizeResult27;
-				float3 Wave_Direction12_g3 = Wave_Direction56;
-				float Wave_Length49 = _WaveLength;
-				float Wave_Length3_g3 = Wave_Length49;
-				float temp_output_10_0_g3 = ( TWO_PI / Wave_Length3_g3 );
-				float dotResult22_g3 = dot( Position_OS16_g3 , ( Wave_Direction12_g3 * temp_output_10_0_g3 ) );
-				float Gravity9_g3 = 9.81;
-				float temp_output_27_0_g3 = ( dotResult22_g3 - ( sqrt( ( temp_output_10_0_g3 * Gravity9_g3 ) ) * _TimeParameters.x ) );
-				float temp_output_31_0_g3 = cos( temp_output_27_0_g3 );
-				float Wave_Height50 = _WaveHeight;
-				float Wave_Height25_g3 = Wave_Height50;
-				float temp_output_32_0_g3 = sin( temp_output_27_0_g3 );
-				float Peak_Sharpness51 = _PeakSharpness;
-				float Peak_Sharpness29_g3 = Peak_Sharpness51;
-				float3 Position_OS_Result53_g3 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g3 ) * Wave_Height25_g3 ) - ( ( temp_output_32_0_g3 * Peak_Sharpness29_g3 ) * Wave_Direction12_g3 ) ) + Position_OS16_g3 );
+				float3 Position_OS16_g5 = Position_OS63;
+				float3 Wave_Direction12_g5 = float3( -0.2,0,-0.8 );
+				float Wave_Length3_g5 = 2.5;
+				float temp_output_10_0_g5 = ( TWO_PI / Wave_Length3_g5 );
+				float dotResult22_g5 = dot( Position_OS16_g5 , ( Wave_Direction12_g5 * temp_output_10_0_g5 ) );
+				float Gravity9_g5 = 9.81;
+				float temp_output_27_0_g5 = ( dotResult22_g5 - ( sqrt( ( temp_output_10_0_g5 * Gravity9_g5 ) ) * _TimeParameters.x ) );
+				float temp_output_31_0_g5 = cos( temp_output_27_0_g5 );
+				float Wave_Height25_g5 = 0.04;
+				float temp_output_32_0_g5 = sin( temp_output_27_0_g5 );
+				float Peak_Sharpness29_g5 = 0.3;
+				float3 Position_OS_Result53_g5 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g5 ) * Wave_Height25_g5 ) - ( ( temp_output_32_0_g5 * Peak_Sharpness29_g5 ) * Wave_Direction12_g5 ) ) + Position_OS16_g5 );
+				float3 temp_output_90_0 = Position_OS_Result53_g5;
 				
-				float temp_output_33_0_g3 = ( temp_output_10_0_g3 * Wave_Height25_g3 );
-				float3 break49_g3 = ( ( temp_output_32_0_g3 * temp_output_33_0_g3 ) * Wave_Direction12_g3 );
-				float3 appendResult52_g3 = (float3(break49_g3.x , ( 1.0 - ( ( temp_output_31_0_g3 * temp_output_33_0_g3 ) * Peak_Sharpness29_g3 ) ) , break49_g3.z));
-				float3 Normal_OS_Result54_g3 = appendResult52_g3;
+				float temp_output_33_0_g5 = ( temp_output_10_0_g5 * Wave_Height25_g5 );
+				float3 break49_g5 = ( ( temp_output_32_0_g5 * temp_output_33_0_g5 ) * Wave_Direction12_g5 );
+				float3 appendResult52_g5 = (float3(break49_g5.x , ( 1.0 - ( ( temp_output_31_0_g5 * temp_output_33_0_g5 ) * Peak_Sharpness29_g5 ) ) , break49_g5.z));
+				float3 Normal_OS_Result54_g5 = appendResult52_g5;
+				float3 temp_output_90_57 = Normal_OS_Result54_g5;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -401,14 +390,14 @@ Shader "EE/Ocean Surface"
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
 
-				float3 vertexValue = Position_OS_Result53_g3;
+				float3 vertexValue = temp_output_90_0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS.xyz = vertexValue;
 				#else
 					v.positionOS.xyz += vertexValue;
 				#endif
-				v.normalOS = Normal_OS_Result54_g3;
+				v.normalOS = temp_output_90_57;
 				v.tangentOS = v.tangentOS;
 
 				VertexPositionInputs vertexInput = GetVertexPositionInputs( v.positionOS.xyz );
@@ -589,15 +578,16 @@ Shader "EE/Ocean Surface"
 
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
+				float4 color97 = IsGammaSpace() ? float4(0,0.8587019,1,0) : float4(0,0.7081497,1,0);
 				
 
-				float3 BaseColor = float3(0.5, 0.5, 0.5);
+				float3 BaseColor = color97.rgb;
 				float3 Normal = float3(0, 0, 1);
 				float3 Emission = 0;
 				float3 Specular = 0.5;
 				float Metallic = 0;
-				float Smoothness = 0.5;
-				float Occlusion = 1;
+				float Smoothness = 1.0;
+				float Occlusion = 1.0;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
@@ -936,11 +926,7 @@ Shader "EE/Ocean Surface"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float3 _WaveDirection;
-			float _WaveLength;
-			float _WaveHeight;
-			float _PeakSharpness;
-			#ifdef ASE_TRANSMISSION
+						#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -984,28 +970,25 @@ Shader "EE/Ocean Surface"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
 				float3 Position_OS63 = v.positionOS.xyz;
-				float3 Position_OS16_g3 = Position_OS63;
-				float3 normalizeResult27 = normalize( _WaveDirection );
-				float3 Wave_Direction56 = normalizeResult27;
-				float3 Wave_Direction12_g3 = Wave_Direction56;
-				float Wave_Length49 = _WaveLength;
-				float Wave_Length3_g3 = Wave_Length49;
-				float temp_output_10_0_g3 = ( TWO_PI / Wave_Length3_g3 );
-				float dotResult22_g3 = dot( Position_OS16_g3 , ( Wave_Direction12_g3 * temp_output_10_0_g3 ) );
-				float Gravity9_g3 = 9.81;
-				float temp_output_27_0_g3 = ( dotResult22_g3 - ( sqrt( ( temp_output_10_0_g3 * Gravity9_g3 ) ) * _TimeParameters.x ) );
-				float temp_output_31_0_g3 = cos( temp_output_27_0_g3 );
-				float Wave_Height50 = _WaveHeight;
-				float Wave_Height25_g3 = Wave_Height50;
-				float temp_output_32_0_g3 = sin( temp_output_27_0_g3 );
-				float Peak_Sharpness51 = _PeakSharpness;
-				float Peak_Sharpness29_g3 = Peak_Sharpness51;
-				float3 Position_OS_Result53_g3 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g3 ) * Wave_Height25_g3 ) - ( ( temp_output_32_0_g3 * Peak_Sharpness29_g3 ) * Wave_Direction12_g3 ) ) + Position_OS16_g3 );
+				float3 Position_OS16_g5 = Position_OS63;
+				float3 Wave_Direction12_g5 = float3( -0.2,0,-0.8 );
+				float Wave_Length3_g5 = 2.5;
+				float temp_output_10_0_g5 = ( TWO_PI / Wave_Length3_g5 );
+				float dotResult22_g5 = dot( Position_OS16_g5 , ( Wave_Direction12_g5 * temp_output_10_0_g5 ) );
+				float Gravity9_g5 = 9.81;
+				float temp_output_27_0_g5 = ( dotResult22_g5 - ( sqrt( ( temp_output_10_0_g5 * Gravity9_g5 ) ) * _TimeParameters.x ) );
+				float temp_output_31_0_g5 = cos( temp_output_27_0_g5 );
+				float Wave_Height25_g5 = 0.04;
+				float temp_output_32_0_g5 = sin( temp_output_27_0_g5 );
+				float Peak_Sharpness29_g5 = 0.3;
+				float3 Position_OS_Result53_g5 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g5 ) * Wave_Height25_g5 ) - ( ( temp_output_32_0_g5 * Peak_Sharpness29_g5 ) * Wave_Direction12_g5 ) ) + Position_OS16_g5 );
+				float3 temp_output_90_0 = Position_OS_Result53_g5;
 				
-				float temp_output_33_0_g3 = ( temp_output_10_0_g3 * Wave_Height25_g3 );
-				float3 break49_g3 = ( ( temp_output_32_0_g3 * temp_output_33_0_g3 ) * Wave_Direction12_g3 );
-				float3 appendResult52_g3 = (float3(break49_g3.x , ( 1.0 - ( ( temp_output_31_0_g3 * temp_output_33_0_g3 ) * Peak_Sharpness29_g3 ) ) , break49_g3.z));
-				float3 Normal_OS_Result54_g3 = appendResult52_g3;
+				float temp_output_33_0_g5 = ( temp_output_10_0_g5 * Wave_Height25_g5 );
+				float3 break49_g5 = ( ( temp_output_32_0_g5 * temp_output_33_0_g5 ) * Wave_Direction12_g5 );
+				float3 appendResult52_g5 = (float3(break49_g5.x , ( 1.0 - ( ( temp_output_31_0_g5 * temp_output_33_0_g5 ) * Peak_Sharpness29_g5 ) ) , break49_g5.z));
+				float3 Normal_OS_Result54_g5 = appendResult52_g5;
+				float3 temp_output_90_57 = Normal_OS_Result54_g5;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -1014,14 +997,14 @@ Shader "EE/Ocean Surface"
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
 
-				float3 vertexValue = Position_OS_Result53_g3;
+				float3 vertexValue = temp_output_90_0;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS.xyz = vertexValue;
 				#else
 					v.positionOS.xyz += vertexValue;
 				#endif
 
-				v.normalOS = Normal_OS_Result54_g3;
+				v.normalOS = temp_output_90_57;
 
 				float3 positionWS = TransformObjectToWorld( v.positionOS.xyz );
 
@@ -1291,11 +1274,7 @@ Shader "EE/Ocean Surface"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float3 _WaveDirection;
-			float _WaveLength;
-			float _WaveHeight;
-			float _PeakSharpness;
-			#ifdef ASE_TRANSMISSION
+						#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -1336,28 +1315,25 @@ Shader "EE/Ocean Surface"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				float3 Position_OS63 = v.positionOS.xyz;
-				float3 Position_OS16_g3 = Position_OS63;
-				float3 normalizeResult27 = normalize( _WaveDirection );
-				float3 Wave_Direction56 = normalizeResult27;
-				float3 Wave_Direction12_g3 = Wave_Direction56;
-				float Wave_Length49 = _WaveLength;
-				float Wave_Length3_g3 = Wave_Length49;
-				float temp_output_10_0_g3 = ( TWO_PI / Wave_Length3_g3 );
-				float dotResult22_g3 = dot( Position_OS16_g3 , ( Wave_Direction12_g3 * temp_output_10_0_g3 ) );
-				float Gravity9_g3 = 9.81;
-				float temp_output_27_0_g3 = ( dotResult22_g3 - ( sqrt( ( temp_output_10_0_g3 * Gravity9_g3 ) ) * _TimeParameters.x ) );
-				float temp_output_31_0_g3 = cos( temp_output_27_0_g3 );
-				float Wave_Height50 = _WaveHeight;
-				float Wave_Height25_g3 = Wave_Height50;
-				float temp_output_32_0_g3 = sin( temp_output_27_0_g3 );
-				float Peak_Sharpness51 = _PeakSharpness;
-				float Peak_Sharpness29_g3 = Peak_Sharpness51;
-				float3 Position_OS_Result53_g3 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g3 ) * Wave_Height25_g3 ) - ( ( temp_output_32_0_g3 * Peak_Sharpness29_g3 ) * Wave_Direction12_g3 ) ) + Position_OS16_g3 );
+				float3 Position_OS16_g5 = Position_OS63;
+				float3 Wave_Direction12_g5 = float3( -0.2,0,-0.8 );
+				float Wave_Length3_g5 = 2.5;
+				float temp_output_10_0_g5 = ( TWO_PI / Wave_Length3_g5 );
+				float dotResult22_g5 = dot( Position_OS16_g5 , ( Wave_Direction12_g5 * temp_output_10_0_g5 ) );
+				float Gravity9_g5 = 9.81;
+				float temp_output_27_0_g5 = ( dotResult22_g5 - ( sqrt( ( temp_output_10_0_g5 * Gravity9_g5 ) ) * _TimeParameters.x ) );
+				float temp_output_31_0_g5 = cos( temp_output_27_0_g5 );
+				float Wave_Height25_g5 = 0.04;
+				float temp_output_32_0_g5 = sin( temp_output_27_0_g5 );
+				float Peak_Sharpness29_g5 = 0.3;
+				float3 Position_OS_Result53_g5 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g5 ) * Wave_Height25_g5 ) - ( ( temp_output_32_0_g5 * Peak_Sharpness29_g5 ) * Wave_Direction12_g5 ) ) + Position_OS16_g5 );
+				float3 temp_output_90_0 = Position_OS_Result53_g5;
 				
-				float temp_output_33_0_g3 = ( temp_output_10_0_g3 * Wave_Height25_g3 );
-				float3 break49_g3 = ( ( temp_output_32_0_g3 * temp_output_33_0_g3 ) * Wave_Direction12_g3 );
-				float3 appendResult52_g3 = (float3(break49_g3.x , ( 1.0 - ( ( temp_output_31_0_g3 * temp_output_33_0_g3 ) * Peak_Sharpness29_g3 ) ) , break49_g3.z));
-				float3 Normal_OS_Result54_g3 = appendResult52_g3;
+				float temp_output_33_0_g5 = ( temp_output_10_0_g5 * Wave_Height25_g5 );
+				float3 break49_g5 = ( ( temp_output_32_0_g5 * temp_output_33_0_g5 ) * Wave_Direction12_g5 );
+				float3 appendResult52_g5 = (float3(break49_g5.x , ( 1.0 - ( ( temp_output_31_0_g5 * temp_output_33_0_g5 ) * Peak_Sharpness29_g5 ) ) , break49_g5.z));
+				float3 Normal_OS_Result54_g5 = appendResult52_g5;
+				float3 temp_output_90_57 = Normal_OS_Result54_g5;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -1366,7 +1342,7 @@ Shader "EE/Ocean Surface"
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
 
-				float3 vertexValue = Position_OS_Result53_g3;
+				float3 vertexValue = temp_output_90_0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS.xyz = vertexValue;
@@ -1374,7 +1350,7 @@ Shader "EE/Ocean Surface"
 					v.positionOS.xyz += vertexValue;
 				#endif
 
-				v.normalOS = Normal_OS_Result54_g3;
+				v.normalOS = temp_output_90_57;
 
 				VertexPositionInputs vertexInput = GetVertexPositionInputs( v.positionOS.xyz );
 
@@ -1601,11 +1577,7 @@ Shader "EE/Ocean Surface"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float3 _WaveDirection;
-			float _WaveLength;
-			float _WaveHeight;
-			float _PeakSharpness;
-			#ifdef ASE_TRANSMISSION
+						#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -1646,28 +1618,25 @@ Shader "EE/Ocean Surface"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				float3 Position_OS63 = v.positionOS.xyz;
-				float3 Position_OS16_g3 = Position_OS63;
-				float3 normalizeResult27 = normalize( _WaveDirection );
-				float3 Wave_Direction56 = normalizeResult27;
-				float3 Wave_Direction12_g3 = Wave_Direction56;
-				float Wave_Length49 = _WaveLength;
-				float Wave_Length3_g3 = Wave_Length49;
-				float temp_output_10_0_g3 = ( TWO_PI / Wave_Length3_g3 );
-				float dotResult22_g3 = dot( Position_OS16_g3 , ( Wave_Direction12_g3 * temp_output_10_0_g3 ) );
-				float Gravity9_g3 = 9.81;
-				float temp_output_27_0_g3 = ( dotResult22_g3 - ( sqrt( ( temp_output_10_0_g3 * Gravity9_g3 ) ) * _TimeParameters.x ) );
-				float temp_output_31_0_g3 = cos( temp_output_27_0_g3 );
-				float Wave_Height50 = _WaveHeight;
-				float Wave_Height25_g3 = Wave_Height50;
-				float temp_output_32_0_g3 = sin( temp_output_27_0_g3 );
-				float Peak_Sharpness51 = _PeakSharpness;
-				float Peak_Sharpness29_g3 = Peak_Sharpness51;
-				float3 Position_OS_Result53_g3 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g3 ) * Wave_Height25_g3 ) - ( ( temp_output_32_0_g3 * Peak_Sharpness29_g3 ) * Wave_Direction12_g3 ) ) + Position_OS16_g3 );
+				float3 Position_OS16_g5 = Position_OS63;
+				float3 Wave_Direction12_g5 = float3( -0.2,0,-0.8 );
+				float Wave_Length3_g5 = 2.5;
+				float temp_output_10_0_g5 = ( TWO_PI / Wave_Length3_g5 );
+				float dotResult22_g5 = dot( Position_OS16_g5 , ( Wave_Direction12_g5 * temp_output_10_0_g5 ) );
+				float Gravity9_g5 = 9.81;
+				float temp_output_27_0_g5 = ( dotResult22_g5 - ( sqrt( ( temp_output_10_0_g5 * Gravity9_g5 ) ) * _TimeParameters.x ) );
+				float temp_output_31_0_g5 = cos( temp_output_27_0_g5 );
+				float Wave_Height25_g5 = 0.04;
+				float temp_output_32_0_g5 = sin( temp_output_27_0_g5 );
+				float Peak_Sharpness29_g5 = 0.3;
+				float3 Position_OS_Result53_g5 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g5 ) * Wave_Height25_g5 ) - ( ( temp_output_32_0_g5 * Peak_Sharpness29_g5 ) * Wave_Direction12_g5 ) ) + Position_OS16_g5 );
+				float3 temp_output_90_0 = Position_OS_Result53_g5;
 				
-				float temp_output_33_0_g3 = ( temp_output_10_0_g3 * Wave_Height25_g3 );
-				float3 break49_g3 = ( ( temp_output_32_0_g3 * temp_output_33_0_g3 ) * Wave_Direction12_g3 );
-				float3 appendResult52_g3 = (float3(break49_g3.x , ( 1.0 - ( ( temp_output_31_0_g3 * temp_output_33_0_g3 ) * Peak_Sharpness29_g3 ) ) , break49_g3.z));
-				float3 Normal_OS_Result54_g3 = appendResult52_g3;
+				float temp_output_33_0_g5 = ( temp_output_10_0_g5 * Wave_Height25_g5 );
+				float3 break49_g5 = ( ( temp_output_32_0_g5 * temp_output_33_0_g5 ) * Wave_Direction12_g5 );
+				float3 appendResult52_g5 = (float3(break49_g5.x , ( 1.0 - ( ( temp_output_31_0_g5 * temp_output_33_0_g5 ) * Peak_Sharpness29_g5 ) ) , break49_g5.z));
+				float3 Normal_OS_Result54_g5 = appendResult52_g5;
+				float3 temp_output_90_57 = Normal_OS_Result54_g5;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -1676,7 +1645,7 @@ Shader "EE/Ocean Surface"
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
 
-				float3 vertexValue = Position_OS_Result53_g3;
+				float3 vertexValue = temp_output_90_0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS.xyz = vertexValue;
@@ -1684,7 +1653,7 @@ Shader "EE/Ocean Surface"
 					v.positionOS.xyz += vertexValue;
 				#endif
 
-				v.normalOS = Normal_OS_Result54_g3;
+				v.normalOS = temp_output_90_57;
 
 				float3 positionWS = TransformObjectToWorld( v.positionOS.xyz );
 
@@ -1819,9 +1788,10 @@ Shader "EE/Ocean Surface"
 					#endif
 				#endif
 
+				float4 color97 = IsGammaSpace() ? float4(0,0.8587019,1,0) : float4(0,0.7081497,1,0);
 				
 
-				float3 BaseColor = float3(0.5, 0.5, 0.5);
+				float3 BaseColor = color97.rgb;
 				float3 Emission = 0;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
@@ -1919,11 +1889,7 @@ Shader "EE/Ocean Surface"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float3 _WaveDirection;
-			float _WaveLength;
-			float _WaveHeight;
-			float _PeakSharpness;
-			#ifdef ASE_TRANSMISSION
+						#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -1964,28 +1930,25 @@ Shader "EE/Ocean Surface"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
 				float3 Position_OS63 = v.positionOS.xyz;
-				float3 Position_OS16_g3 = Position_OS63;
-				float3 normalizeResult27 = normalize( _WaveDirection );
-				float3 Wave_Direction56 = normalizeResult27;
-				float3 Wave_Direction12_g3 = Wave_Direction56;
-				float Wave_Length49 = _WaveLength;
-				float Wave_Length3_g3 = Wave_Length49;
-				float temp_output_10_0_g3 = ( TWO_PI / Wave_Length3_g3 );
-				float dotResult22_g3 = dot( Position_OS16_g3 , ( Wave_Direction12_g3 * temp_output_10_0_g3 ) );
-				float Gravity9_g3 = 9.81;
-				float temp_output_27_0_g3 = ( dotResult22_g3 - ( sqrt( ( temp_output_10_0_g3 * Gravity9_g3 ) ) * _TimeParameters.x ) );
-				float temp_output_31_0_g3 = cos( temp_output_27_0_g3 );
-				float Wave_Height50 = _WaveHeight;
-				float Wave_Height25_g3 = Wave_Height50;
-				float temp_output_32_0_g3 = sin( temp_output_27_0_g3 );
-				float Peak_Sharpness51 = _PeakSharpness;
-				float Peak_Sharpness29_g3 = Peak_Sharpness51;
-				float3 Position_OS_Result53_g3 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g3 ) * Wave_Height25_g3 ) - ( ( temp_output_32_0_g3 * Peak_Sharpness29_g3 ) * Wave_Direction12_g3 ) ) + Position_OS16_g3 );
+				float3 Position_OS16_g5 = Position_OS63;
+				float3 Wave_Direction12_g5 = float3( -0.2,0,-0.8 );
+				float Wave_Length3_g5 = 2.5;
+				float temp_output_10_0_g5 = ( TWO_PI / Wave_Length3_g5 );
+				float dotResult22_g5 = dot( Position_OS16_g5 , ( Wave_Direction12_g5 * temp_output_10_0_g5 ) );
+				float Gravity9_g5 = 9.81;
+				float temp_output_27_0_g5 = ( dotResult22_g5 - ( sqrt( ( temp_output_10_0_g5 * Gravity9_g5 ) ) * _TimeParameters.x ) );
+				float temp_output_31_0_g5 = cos( temp_output_27_0_g5 );
+				float Wave_Height25_g5 = 0.04;
+				float temp_output_32_0_g5 = sin( temp_output_27_0_g5 );
+				float Peak_Sharpness29_g5 = 0.3;
+				float3 Position_OS_Result53_g5 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g5 ) * Wave_Height25_g5 ) - ( ( temp_output_32_0_g5 * Peak_Sharpness29_g5 ) * Wave_Direction12_g5 ) ) + Position_OS16_g5 );
+				float3 temp_output_90_0 = Position_OS_Result53_g5;
 				
-				float temp_output_33_0_g3 = ( temp_output_10_0_g3 * Wave_Height25_g3 );
-				float3 break49_g3 = ( ( temp_output_32_0_g3 * temp_output_33_0_g3 ) * Wave_Direction12_g3 );
-				float3 appendResult52_g3 = (float3(break49_g3.x , ( 1.0 - ( ( temp_output_31_0_g3 * temp_output_33_0_g3 ) * Peak_Sharpness29_g3 ) ) , break49_g3.z));
-				float3 Normal_OS_Result54_g3 = appendResult52_g3;
+				float temp_output_33_0_g5 = ( temp_output_10_0_g5 * Wave_Height25_g5 );
+				float3 break49_g5 = ( ( temp_output_32_0_g5 * temp_output_33_0_g5 ) * Wave_Direction12_g5 );
+				float3 appendResult52_g5 = (float3(break49_g5.x , ( 1.0 - ( ( temp_output_31_0_g5 * temp_output_33_0_g5 ) * Peak_Sharpness29_g5 ) ) , break49_g5.z));
+				float3 Normal_OS_Result54_g5 = appendResult52_g5;
+				float3 temp_output_90_57 = Normal_OS_Result54_g5;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -1994,7 +1957,7 @@ Shader "EE/Ocean Surface"
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
 
-				float3 vertexValue = Position_OS_Result53_g3;
+				float3 vertexValue = temp_output_90_0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS.xyz = vertexValue;
@@ -2002,7 +1965,7 @@ Shader "EE/Ocean Surface"
 					v.positionOS.xyz += vertexValue;
 				#endif
 
-				v.normalOS = Normal_OS_Result54_g3;
+				v.normalOS = temp_output_90_57;
 
 				VertexPositionInputs vertexInput = GetVertexPositionInputs( v.positionOS.xyz );
 
@@ -2117,9 +2080,10 @@ Shader "EE/Ocean Surface"
 					#endif
 				#endif
 
+				float4 color97 = IsGammaSpace() ? float4(0,0.8587019,1,0) : float4(0,0.7081497,1,0);
 				
 
-				float3 BaseColor = float3(0.5, 0.5, 0.5);
+				float3 BaseColor = color97.rgb;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -2248,11 +2212,7 @@ Shader "EE/Ocean Surface"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float3 _WaveDirection;
-			float _WaveLength;
-			float _WaveHeight;
-			float _PeakSharpness;
-			#ifdef ASE_TRANSMISSION
+						#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -2293,28 +2253,25 @@ Shader "EE/Ocean Surface"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				float3 Position_OS63 = v.positionOS.xyz;
-				float3 Position_OS16_g3 = Position_OS63;
-				float3 normalizeResult27 = normalize( _WaveDirection );
-				float3 Wave_Direction56 = normalizeResult27;
-				float3 Wave_Direction12_g3 = Wave_Direction56;
-				float Wave_Length49 = _WaveLength;
-				float Wave_Length3_g3 = Wave_Length49;
-				float temp_output_10_0_g3 = ( TWO_PI / Wave_Length3_g3 );
-				float dotResult22_g3 = dot( Position_OS16_g3 , ( Wave_Direction12_g3 * temp_output_10_0_g3 ) );
-				float Gravity9_g3 = 9.81;
-				float temp_output_27_0_g3 = ( dotResult22_g3 - ( sqrt( ( temp_output_10_0_g3 * Gravity9_g3 ) ) * _TimeParameters.x ) );
-				float temp_output_31_0_g3 = cos( temp_output_27_0_g3 );
-				float Wave_Height50 = _WaveHeight;
-				float Wave_Height25_g3 = Wave_Height50;
-				float temp_output_32_0_g3 = sin( temp_output_27_0_g3 );
-				float Peak_Sharpness51 = _PeakSharpness;
-				float Peak_Sharpness29_g3 = Peak_Sharpness51;
-				float3 Position_OS_Result53_g3 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g3 ) * Wave_Height25_g3 ) - ( ( temp_output_32_0_g3 * Peak_Sharpness29_g3 ) * Wave_Direction12_g3 ) ) + Position_OS16_g3 );
+				float3 Position_OS16_g5 = Position_OS63;
+				float3 Wave_Direction12_g5 = float3( -0.2,0,-0.8 );
+				float Wave_Length3_g5 = 2.5;
+				float temp_output_10_0_g5 = ( TWO_PI / Wave_Length3_g5 );
+				float dotResult22_g5 = dot( Position_OS16_g5 , ( Wave_Direction12_g5 * temp_output_10_0_g5 ) );
+				float Gravity9_g5 = 9.81;
+				float temp_output_27_0_g5 = ( dotResult22_g5 - ( sqrt( ( temp_output_10_0_g5 * Gravity9_g5 ) ) * _TimeParameters.x ) );
+				float temp_output_31_0_g5 = cos( temp_output_27_0_g5 );
+				float Wave_Height25_g5 = 0.04;
+				float temp_output_32_0_g5 = sin( temp_output_27_0_g5 );
+				float Peak_Sharpness29_g5 = 0.3;
+				float3 Position_OS_Result53_g5 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g5 ) * Wave_Height25_g5 ) - ( ( temp_output_32_0_g5 * Peak_Sharpness29_g5 ) * Wave_Direction12_g5 ) ) + Position_OS16_g5 );
+				float3 temp_output_90_0 = Position_OS_Result53_g5;
 				
-				float temp_output_33_0_g3 = ( temp_output_10_0_g3 * Wave_Height25_g3 );
-				float3 break49_g3 = ( ( temp_output_32_0_g3 * temp_output_33_0_g3 ) * Wave_Direction12_g3 );
-				float3 appendResult52_g3 = (float3(break49_g3.x , ( 1.0 - ( ( temp_output_31_0_g3 * temp_output_33_0_g3 ) * Peak_Sharpness29_g3 ) ) , break49_g3.z));
-				float3 Normal_OS_Result54_g3 = appendResult52_g3;
+				float temp_output_33_0_g5 = ( temp_output_10_0_g5 * Wave_Height25_g5 );
+				float3 break49_g5 = ( ( temp_output_32_0_g5 * temp_output_33_0_g5 ) * Wave_Direction12_g5 );
+				float3 appendResult52_g5 = (float3(break49_g5.x , ( 1.0 - ( ( temp_output_31_0_g5 * temp_output_33_0_g5 ) * Peak_Sharpness29_g5 ) ) , break49_g5.z));
+				float3 Normal_OS_Result54_g5 = appendResult52_g5;
+				float3 temp_output_90_57 = Normal_OS_Result54_g5;
 				
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.positionOS.xyz;
@@ -2322,7 +2279,7 @@ Shader "EE/Ocean Surface"
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
 
-				float3 vertexValue = Position_OS_Result53_g3;
+				float3 vertexValue = temp_output_90_0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS.xyz = vertexValue;
@@ -2330,7 +2287,7 @@ Shader "EE/Ocean Surface"
 					v.positionOS.xyz += vertexValue;
 				#endif
 
-				v.normalOS = Normal_OS_Result54_g3;
+				v.normalOS = temp_output_90_57;
 				v.tangentOS = v.tangentOS;
 
 				VertexPositionInputs vertexInput = GetVertexPositionInputs( v.positionOS.xyz );
@@ -2672,11 +2629,7 @@ Shader "EE/Ocean Surface"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float3 _WaveDirection;
-			float _WaveLength;
-			float _WaveHeight;
-			float _PeakSharpness;
-			#ifdef ASE_TRANSMISSION
+						#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -2719,28 +2672,25 @@ Shader "EE/Ocean Surface"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				float3 Position_OS63 = v.positionOS.xyz;
-				float3 Position_OS16_g3 = Position_OS63;
-				float3 normalizeResult27 = normalize( _WaveDirection );
-				float3 Wave_Direction56 = normalizeResult27;
-				float3 Wave_Direction12_g3 = Wave_Direction56;
-				float Wave_Length49 = _WaveLength;
-				float Wave_Length3_g3 = Wave_Length49;
-				float temp_output_10_0_g3 = ( TWO_PI / Wave_Length3_g3 );
-				float dotResult22_g3 = dot( Position_OS16_g3 , ( Wave_Direction12_g3 * temp_output_10_0_g3 ) );
-				float Gravity9_g3 = 9.81;
-				float temp_output_27_0_g3 = ( dotResult22_g3 - ( sqrt( ( temp_output_10_0_g3 * Gravity9_g3 ) ) * _TimeParameters.x ) );
-				float temp_output_31_0_g3 = cos( temp_output_27_0_g3 );
-				float Wave_Height50 = _WaveHeight;
-				float Wave_Height25_g3 = Wave_Height50;
-				float temp_output_32_0_g3 = sin( temp_output_27_0_g3 );
-				float Peak_Sharpness51 = _PeakSharpness;
-				float Peak_Sharpness29_g3 = Peak_Sharpness51;
-				float3 Position_OS_Result53_g3 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g3 ) * Wave_Height25_g3 ) - ( ( temp_output_32_0_g3 * Peak_Sharpness29_g3 ) * Wave_Direction12_g3 ) ) + Position_OS16_g3 );
+				float3 Position_OS16_g5 = Position_OS63;
+				float3 Wave_Direction12_g5 = float3( -0.2,0,-0.8 );
+				float Wave_Length3_g5 = 2.5;
+				float temp_output_10_0_g5 = ( TWO_PI / Wave_Length3_g5 );
+				float dotResult22_g5 = dot( Position_OS16_g5 , ( Wave_Direction12_g5 * temp_output_10_0_g5 ) );
+				float Gravity9_g5 = 9.81;
+				float temp_output_27_0_g5 = ( dotResult22_g5 - ( sqrt( ( temp_output_10_0_g5 * Gravity9_g5 ) ) * _TimeParameters.x ) );
+				float temp_output_31_0_g5 = cos( temp_output_27_0_g5 );
+				float Wave_Height25_g5 = 0.04;
+				float temp_output_32_0_g5 = sin( temp_output_27_0_g5 );
+				float Peak_Sharpness29_g5 = 0.3;
+				float3 Position_OS_Result53_g5 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g5 ) * Wave_Height25_g5 ) - ( ( temp_output_32_0_g5 * Peak_Sharpness29_g5 ) * Wave_Direction12_g5 ) ) + Position_OS16_g5 );
+				float3 temp_output_90_0 = Position_OS_Result53_g5;
 				
-				float temp_output_33_0_g3 = ( temp_output_10_0_g3 * Wave_Height25_g3 );
-				float3 break49_g3 = ( ( temp_output_32_0_g3 * temp_output_33_0_g3 ) * Wave_Direction12_g3 );
-				float3 appendResult52_g3 = (float3(break49_g3.x , ( 1.0 - ( ( temp_output_31_0_g3 * temp_output_33_0_g3 ) * Peak_Sharpness29_g3 ) ) , break49_g3.z));
-				float3 Normal_OS_Result54_g3 = appendResult52_g3;
+				float temp_output_33_0_g5 = ( temp_output_10_0_g5 * Wave_Height25_g5 );
+				float3 break49_g5 = ( ( temp_output_32_0_g5 * temp_output_33_0_g5 ) * Wave_Direction12_g5 );
+				float3 appendResult52_g5 = (float3(break49_g5.x , ( 1.0 - ( ( temp_output_31_0_g5 * temp_output_33_0_g5 ) * Peak_Sharpness29_g5 ) ) , break49_g5.z));
+				float3 Normal_OS_Result54_g5 = appendResult52_g5;
+				float3 temp_output_90_57 = Normal_OS_Result54_g5;
 				
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.positionOS.xyz;
@@ -2748,7 +2698,7 @@ Shader "EE/Ocean Surface"
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
 
-				float3 vertexValue = Position_OS_Result53_g3;
+				float3 vertexValue = temp_output_90_0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS.xyz = vertexValue;
@@ -2756,7 +2706,7 @@ Shader "EE/Ocean Surface"
 					v.positionOS.xyz += vertexValue;
 				#endif
 
-				v.normalOS = Normal_OS_Result54_g3;
+				v.normalOS = temp_output_90_57;
 				v.tangentOS = v.tangentOS;
 
 				VertexPositionInputs vertexInput = GetVertexPositionInputs( v.positionOS.xyz );
@@ -2930,15 +2880,16 @@ Shader "EE/Ocean Surface"
 
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
+				float4 color97 = IsGammaSpace() ? float4(0,0.8587019,1,0) : float4(0,0.7081497,1,0);
 				
 
-				float3 BaseColor = float3(0.5, 0.5, 0.5);
+				float3 BaseColor = color97.rgb;
 				float3 Normal = float3(0, 0, 1);
 				float3 Emission = 0;
 				float3 Specular = 0.5;
 				float Metallic = 0;
-				float Smoothness = 0.5;
-				float Occlusion = 1;
+				float Smoothness = 1.0;
+				float Occlusion = 1.0;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
@@ -3124,11 +3075,7 @@ Shader "EE/Ocean Surface"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float3 _WaveDirection;
-			float _WaveLength;
-			float _WaveHeight;
-			float _PeakSharpness;
-			#ifdef ASE_TRANSMISSION
+						#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -3177,28 +3124,25 @@ Shader "EE/Ocean Surface"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				float3 Position_OS63 = v.positionOS.xyz;
-				float3 Position_OS16_g3 = Position_OS63;
-				float3 normalizeResult27 = normalize( _WaveDirection );
-				float3 Wave_Direction56 = normalizeResult27;
-				float3 Wave_Direction12_g3 = Wave_Direction56;
-				float Wave_Length49 = _WaveLength;
-				float Wave_Length3_g3 = Wave_Length49;
-				float temp_output_10_0_g3 = ( TWO_PI / Wave_Length3_g3 );
-				float dotResult22_g3 = dot( Position_OS16_g3 , ( Wave_Direction12_g3 * temp_output_10_0_g3 ) );
-				float Gravity9_g3 = 9.81;
-				float temp_output_27_0_g3 = ( dotResult22_g3 - ( sqrt( ( temp_output_10_0_g3 * Gravity9_g3 ) ) * _TimeParameters.x ) );
-				float temp_output_31_0_g3 = cos( temp_output_27_0_g3 );
-				float Wave_Height50 = _WaveHeight;
-				float Wave_Height25_g3 = Wave_Height50;
-				float temp_output_32_0_g3 = sin( temp_output_27_0_g3 );
-				float Peak_Sharpness51 = _PeakSharpness;
-				float Peak_Sharpness29_g3 = Peak_Sharpness51;
-				float3 Position_OS_Result53_g3 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g3 ) * Wave_Height25_g3 ) - ( ( temp_output_32_0_g3 * Peak_Sharpness29_g3 ) * Wave_Direction12_g3 ) ) + Position_OS16_g3 );
+				float3 Position_OS16_g5 = Position_OS63;
+				float3 Wave_Direction12_g5 = float3( -0.2,0,-0.8 );
+				float Wave_Length3_g5 = 2.5;
+				float temp_output_10_0_g5 = ( TWO_PI / Wave_Length3_g5 );
+				float dotResult22_g5 = dot( Position_OS16_g5 , ( Wave_Direction12_g5 * temp_output_10_0_g5 ) );
+				float Gravity9_g5 = 9.81;
+				float temp_output_27_0_g5 = ( dotResult22_g5 - ( sqrt( ( temp_output_10_0_g5 * Gravity9_g5 ) ) * _TimeParameters.x ) );
+				float temp_output_31_0_g5 = cos( temp_output_27_0_g5 );
+				float Wave_Height25_g5 = 0.04;
+				float temp_output_32_0_g5 = sin( temp_output_27_0_g5 );
+				float Peak_Sharpness29_g5 = 0.3;
+				float3 Position_OS_Result53_g5 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g5 ) * Wave_Height25_g5 ) - ( ( temp_output_32_0_g5 * Peak_Sharpness29_g5 ) * Wave_Direction12_g5 ) ) + Position_OS16_g5 );
+				float3 temp_output_90_0 = Position_OS_Result53_g5;
 				
-				float temp_output_33_0_g3 = ( temp_output_10_0_g3 * Wave_Height25_g3 );
-				float3 break49_g3 = ( ( temp_output_32_0_g3 * temp_output_33_0_g3 ) * Wave_Direction12_g3 );
-				float3 appendResult52_g3 = (float3(break49_g3.x , ( 1.0 - ( ( temp_output_31_0_g3 * temp_output_33_0_g3 ) * Peak_Sharpness29_g3 ) ) , break49_g3.z));
-				float3 Normal_OS_Result54_g3 = appendResult52_g3;
+				float temp_output_33_0_g5 = ( temp_output_10_0_g5 * Wave_Height25_g5 );
+				float3 break49_g5 = ( ( temp_output_32_0_g5 * temp_output_33_0_g5 ) * Wave_Direction12_g5 );
+				float3 appendResult52_g5 = (float3(break49_g5.x , ( 1.0 - ( ( temp_output_31_0_g5 * temp_output_33_0_g5 ) * Peak_Sharpness29_g5 ) ) , break49_g5.z));
+				float3 Normal_OS_Result54_g5 = appendResult52_g5;
+				float3 temp_output_90_57 = Normal_OS_Result54_g5;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -3207,7 +3151,7 @@ Shader "EE/Ocean Surface"
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
 
-				float3 vertexValue = Position_OS_Result53_g3;
+				float3 vertexValue = temp_output_90_0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS.xyz = vertexValue;
@@ -3215,7 +3159,7 @@ Shader "EE/Ocean Surface"
 					v.positionOS.xyz += vertexValue;
 				#endif
 
-				v.normalOS = Normal_OS_Result54_g3;
+				v.normalOS = temp_output_90_57;
 
 				float3 positionWS = TransformObjectToWorld( v.positionOS.xyz );
 
@@ -3415,11 +3359,7 @@ Shader "EE/Ocean Surface"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float3 _WaveDirection;
-			float _WaveLength;
-			float _WaveHeight;
-			float _PeakSharpness;
-			#ifdef ASE_TRANSMISSION
+						#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
 			#ifdef ASE_TRANSLUCENCY
@@ -3468,28 +3408,25 @@ Shader "EE/Ocean Surface"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				float3 Position_OS63 = v.positionOS.xyz;
-				float3 Position_OS16_g3 = Position_OS63;
-				float3 normalizeResult27 = normalize( _WaveDirection );
-				float3 Wave_Direction56 = normalizeResult27;
-				float3 Wave_Direction12_g3 = Wave_Direction56;
-				float Wave_Length49 = _WaveLength;
-				float Wave_Length3_g3 = Wave_Length49;
-				float temp_output_10_0_g3 = ( TWO_PI / Wave_Length3_g3 );
-				float dotResult22_g3 = dot( Position_OS16_g3 , ( Wave_Direction12_g3 * temp_output_10_0_g3 ) );
-				float Gravity9_g3 = 9.81;
-				float temp_output_27_0_g3 = ( dotResult22_g3 - ( sqrt( ( temp_output_10_0_g3 * Gravity9_g3 ) ) * _TimeParameters.x ) );
-				float temp_output_31_0_g3 = cos( temp_output_27_0_g3 );
-				float Wave_Height50 = _WaveHeight;
-				float Wave_Height25_g3 = Wave_Height50;
-				float temp_output_32_0_g3 = sin( temp_output_27_0_g3 );
-				float Peak_Sharpness51 = _PeakSharpness;
-				float Peak_Sharpness29_g3 = Peak_Sharpness51;
-				float3 Position_OS_Result53_g3 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g3 ) * Wave_Height25_g3 ) - ( ( temp_output_32_0_g3 * Peak_Sharpness29_g3 ) * Wave_Direction12_g3 ) ) + Position_OS16_g3 );
+				float3 Position_OS16_g5 = Position_OS63;
+				float3 Wave_Direction12_g5 = float3( -0.2,0,-0.8 );
+				float Wave_Length3_g5 = 2.5;
+				float temp_output_10_0_g5 = ( TWO_PI / Wave_Length3_g5 );
+				float dotResult22_g5 = dot( Position_OS16_g5 , ( Wave_Direction12_g5 * temp_output_10_0_g5 ) );
+				float Gravity9_g5 = 9.81;
+				float temp_output_27_0_g5 = ( dotResult22_g5 - ( sqrt( ( temp_output_10_0_g5 * Gravity9_g5 ) ) * _TimeParameters.x ) );
+				float temp_output_31_0_g5 = cos( temp_output_27_0_g5 );
+				float Wave_Height25_g5 = 0.04;
+				float temp_output_32_0_g5 = sin( temp_output_27_0_g5 );
+				float Peak_Sharpness29_g5 = 0.3;
+				float3 Position_OS_Result53_g5 = ( ( ( ( float3(0,1,0) * temp_output_31_0_g5 ) * Wave_Height25_g5 ) - ( ( temp_output_32_0_g5 * Peak_Sharpness29_g5 ) * Wave_Direction12_g5 ) ) + Position_OS16_g5 );
+				float3 temp_output_90_0 = Position_OS_Result53_g5;
 				
-				float temp_output_33_0_g3 = ( temp_output_10_0_g3 * Wave_Height25_g3 );
-				float3 break49_g3 = ( ( temp_output_32_0_g3 * temp_output_33_0_g3 ) * Wave_Direction12_g3 );
-				float3 appendResult52_g3 = (float3(break49_g3.x , ( 1.0 - ( ( temp_output_31_0_g3 * temp_output_33_0_g3 ) * Peak_Sharpness29_g3 ) ) , break49_g3.z));
-				float3 Normal_OS_Result54_g3 = appendResult52_g3;
+				float temp_output_33_0_g5 = ( temp_output_10_0_g5 * Wave_Height25_g5 );
+				float3 break49_g5 = ( ( temp_output_32_0_g5 * temp_output_33_0_g5 ) * Wave_Direction12_g5 );
+				float3 appendResult52_g5 = (float3(break49_g5.x , ( 1.0 - ( ( temp_output_31_0_g5 * temp_output_33_0_g5 ) * Peak_Sharpness29_g5 ) ) , break49_g5.z));
+				float3 Normal_OS_Result54_g5 = appendResult52_g5;
+				float3 temp_output_90_57 = Normal_OS_Result54_g5;
 				
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
@@ -3498,7 +3435,7 @@ Shader "EE/Ocean Surface"
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
 
-				float3 vertexValue = Position_OS_Result53_g3;
+				float3 vertexValue = temp_output_90_0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.positionOS.xyz = vertexValue;
@@ -3506,7 +3443,7 @@ Shader "EE/Ocean Surface"
 					v.positionOS.xyz += vertexValue;
 				#endif
 
-				v.normalOS = Normal_OS_Result54_g3;
+				v.normalOS = temp_output_90_57;
 
 				float3 positionWS = TransformObjectToWorld( v.positionOS.xyz );
 				o.positionCS = TransformWorldToHClip(positionWS);
@@ -3633,27 +3570,28 @@ Shader "EE/Ocean Surface"
 }
 /*ASEBEGIN
 Version=19603
+Node;AmplifyShaderEditor.PosVertexDataNode;37;-2176,-384;Inherit;False;0;0;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RegisterLocalVarNode;63;-1984,-384;Inherit;False;Position OS;-1;True;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.GetLocalVarNode;94;-80,64;Inherit;False;63;Position OS;1;0;OBJECT;;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.Vector3Node;12;-2336,-128;Inherit;False;Property;_WaveDirection;Wave Direction;0;0;Create;True;0;0;0;False;0;False;1,0,0;0,0,0;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
 Node;AmplifyShaderEditor.RangedFloatNode;13;-2176,32;Inherit;False;Property;_WaveLength;Wave Length;1;0;Create;True;0;0;0;False;0;False;4.5;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.NormalizeNode;27;-2144,-128;Inherit;False;False;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.PosVertexDataNode;37;-2176,-384;Inherit;False;0;0;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.RangedFloatNode;14;-2176,128;Inherit;False;Property;_WaveHeight;Wave Height;2;0;Create;True;0;0;0;False;0;False;0.2;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;38;-2272,208;Inherit;False;Property;_PeakSharpness;Peak Sharpness;3;0;Create;True;0;0;0;False;0;False;0.3;0.3;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;49;-1984,32;Inherit;False;Wave Length;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;56;-1984,-128;Inherit;False;Wave Direction;-1;True;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;63;-1984,-384;Inherit;False;Position OS;-1;True;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;50;-1984,128;Inherit;False;Wave Height;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;51;-1984,224;Inherit;False;Peak Sharpness;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;84;288,96;Inherit;False;63;Position OS;1;0;OBJECT;;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.GetLocalVarNode;88;256,192;Inherit;False;56;Wave Direction;1;0;OBJECT;;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.GetLocalVarNode;87;256,288;Inherit;False;49;Wave Length;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;86;256,384;Inherit;False;50;Wave Height;1;0;OBJECT;;False;1;FLOAT;0
-Node;AmplifyShaderEditor.GetLocalVarNode;85;256,480;Inherit;False;51;Peak Sharpness;1;0;OBJECT;;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;19;-2144,-224;Inherit;False;Constant;_Gravity;Gravity;3;0;Create;True;0;0;0;False;0;False;9.81;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;60;-1984,-224;Inherit;False;Gravity;-1;True;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.Vector3Node;33;-2176,-544;Inherit;False;Constant;_XZMask;XZ Mask;3;0;Create;True;0;0;0;False;0;False;0,1,0;0,0,0;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
-Node;AmplifyShaderEditor.FunctionNode;83;480,96;Inherit;False;Gerstner Wave;-1;;3;303f720b8db5d764b8583d68cc9e2115;0;5;64;FLOAT3;0,0,0;False;63;FLOAT3;1,0,0;False;62;FLOAT;4.5;False;61;FLOAT;0.2;False;60;FLOAT;0.3;False;2;FLOAT3;57;FLOAT3;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;800,48;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;12;EE/Ocean Surface;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;21;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;5;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;42;Lighting Model;0;0;Workflow;0;638638605712692112;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;Receive SSAO;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
+Node;AmplifyShaderEditor.FunctionNode;90;112,64;Inherit;False;Gerstner Wave;-1;;5;303f720b8db5d764b8583d68cc9e2115;0;5;64;FLOAT3;0,0,0;False;63;FLOAT3;-0.2,0,-0.8;False;62;FLOAT;2.5;False;61;FLOAT;0.04;False;60;FLOAT;0.3;False;2;FLOAT3;57;FLOAT3;0
+Node;AmplifyShaderEditor.FunctionNode;89;112,256;Inherit;False;Gerstner Wave;-1;;7;303f720b8db5d764b8583d68cc9e2115;0;5;64;FLOAT3;0,0,0;False;63;FLOAT3;-1,0,0;False;62;FLOAT;3;False;61;FLOAT;0.06;False;60;FLOAT;0.2;False;2;FLOAT3;57;FLOAT3;0
+Node;AmplifyShaderEditor.FunctionNode;91;112,448;Inherit;False;Gerstner Wave;-1;;8;303f720b8db5d764b8583d68cc9e2115;0;5;64;FLOAT3;0,0,0;False;63;FLOAT3;-0.5,0,0.5;False;62;FLOAT;2;False;61;FLOAT;0.08;False;60;FLOAT;0.4;False;2;FLOAT3;57;FLOAT3;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;92;416,64;Inherit;False;3;3;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;93;416,208;Inherit;False;3;3;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.RangedFloatNode;95;640,160;Inherit;False;Constant;_Float0;Float 0;4;0;Create;True;0;0;0;False;0;False;1;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.ColorNode;97;576,-48;Inherit;False;Constant;_Color0;Color 0;4;0;Create;True;0;0;0;False;0;False;0,0.8587019,1,0;0,0,0,0;True;True;0;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;2;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;5;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;False;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=ShadowCaster;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;3;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;5;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;True;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;False;False;True;1;LightMode=DepthOnly;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;4;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;5;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;False;0;;0;0;Standard;0;False;0
@@ -3663,19 +3601,27 @@ Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;7;0,0;Float;False;False;-1;
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;8;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;SceneSelectionPass;0;8;SceneSelectionPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;5;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;2;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=SceneSelectionPass;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;9;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ScenePickingPass;0;9;ScenePickingPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;5;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Picking;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;0;-576,48;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;5;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;0;False;False;0;;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;800,48;Float;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;12;EE/Ocean Surface;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;21;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;5;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForward;False;False;0;;0;0;Standard;42;Lighting Model;0;0;Workflow;0;638638605712692112;Surface;0;0;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;0;Forward Only;0;0;Transmission;0;0;  Transmission Shadow;0.5,False,;0;Translucency;0;0;  Translucency Strength;1,False,;0;  Normal Distortion;0.5,False,;0;  Scattering;2,False,;0;  Direct;0.9,False,;0;  Ambient;0.1,False,;0;  Shadow;0.5,False,;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;Receive SSAO;1;0;GPU Instancing;1;0;LOD CrossFade;1;0;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;0;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;True;True;True;True;True;True;True;True;False;;False;0
+WireConnection;63;0;37;0
 WireConnection;27;0;12;0
 WireConnection;49;0;13;0
 WireConnection;56;0;27;0
-WireConnection;63;0;37;0
 WireConnection;50;0;14;0
 WireConnection;51;0;38;0
 WireConnection;60;0;19;0
-WireConnection;83;64;84;0
-WireConnection;83;63;88;0
-WireConnection;83;62;87;0
-WireConnection;83;61;86;0
-WireConnection;83;60;85;0
-WireConnection;1;8;83;0
-WireConnection;1;10;83;57
+WireConnection;90;64;94;0
+WireConnection;89;64;94;0
+WireConnection;91;64;94;0
+WireConnection;92;0;90;57
+WireConnection;92;1;89;57
+WireConnection;92;2;91;57
+WireConnection;93;0;90;0
+WireConnection;93;1;89;0
+WireConnection;93;2;91;0
+WireConnection;1;0;97;5
+WireConnection;1;4;95;0
+WireConnection;1;5;95;0
+WireConnection;1;8;90;0
+WireConnection;1;10;90;57
 ASEEND*/
-//CHKSM=8548EAED61035015675510348B8999FA3657F4A4
+//CHKSM=EED451C68C4E97582072188BE9F3AFD7EA28DA6F
