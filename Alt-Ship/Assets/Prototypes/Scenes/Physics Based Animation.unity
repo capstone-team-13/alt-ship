@@ -2104,8 +2104,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_rigidbody: {fileID: 1479646215}
-  m_springConstant: 500
-  m_timeConstant: 0.02
+  m_springConstant: 10000
+  m_timeConstant: 500
   m_targetHeight: 4
 --- !u!54 &1479646215
 Rigidbody:
@@ -2115,7 +2115,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1479646209}
   serializedVersion: 4
-  m_Mass: 50
+  m_Mass: 25
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

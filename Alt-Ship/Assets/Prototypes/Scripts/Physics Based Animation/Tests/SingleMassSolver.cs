@@ -15,8 +15,10 @@ namespace EE.Prototype.PBA
         {
             // Spring Component = Kx
             var springForce = m_springConstant * (m_targetHeight - transform.position.y);
-            var antiGravityForce = m_springConstant * (m_targetHeight - transform.position.y) +
-                                   m_timeConstant * (0 - m_rigidbody.velocity.y);
+            var antiGravityForce = m_timeConstant * (0 - m_rigidbody.velocity.y);
+
+            Debug.Log(m_rigidbody.velocity);
+
             var force = springForce + antiGravityForce;
             m_rigidbody.AddForce(Vector3.up * force, ForceMode.Force);
         }
