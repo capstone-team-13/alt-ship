@@ -25,12 +25,12 @@ public class TempCharController : MonoBehaviour
         playerRB = this.GetComponent<Rigidbody>();
         inputAsset = this.GetComponent<PlayerInput>().actions;
         player = inputAsset.FindActionMap("PlayerMovement");
-        
-        if(PlayerCounter.playerCount == 1)
+
+        if (PlayerCounter.playerCount == 1)
         {
             this.GetComponent<MeshRenderer>().material = playerOneMat;
         }
-        else if(PlayerCounter.playerCount == 2)
+        else if (PlayerCounter.playerCount == 2)
         {
             this.GetComponent<MeshRenderer>().material = playerTwoMat;
         }
@@ -54,10 +54,20 @@ public class TempCharController : MonoBehaviour
 
     void MovePlayer()
     {
-        Debug.Log(move.ReadValue<Vector2>());
-        movementTranslator = new Vector3(move.ReadValue<Vector2>().x, 0, move.ReadValue<Vector2>().y);
-        playerRB.AddForce((movementTranslator * playerSpeed), ForceMode.Force);
+        if (move.IsPressed())
+        {
+            if (move.activeControl.device.name == "Keyboard" || move.activeControl.device.name == "Mouse")
+            {
+                Debug.Log(move.ReadValue<Vector2>());
+                movementTranslator = new Vector3(move.ReadValue<Vector2>().x, 0, move.ReadValue<Vector2>().y);
+                playerRB.AddForce((movementTranslator * playerSpeed), ForceMode.Force);
+            }
+        }
+        else
+        {
+            Debug.Log(move.ReadValue<Vector3>());
+            playerRB.AddForce(move.ReadValue<Vector3>() * playerSpeed);
+        }
+
     }
-
-
 }
