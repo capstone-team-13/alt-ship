@@ -7,17 +7,16 @@ namespace EE.Prototype.PBA
     {
         [SerializeField] private Rigidbody m_rigidbody;
         [SerializeField] private float m_springConstant;
-        [SerializeField] private float m_timeConstant;
+        [SerializeField] private float m_dampingConstant;
         [SerializeField] private Vector3 m_targetHeight;
 
         [UsedImplicitly]
         private void FixedUpdate()
         {
-            // Spring Component = Kx
-            var springForce = m_springConstant * (m_targetHeight - transform.position);
-            var antiGravityForce = m_timeConstant * (Vector3.zero - m_rigidbody.velocity);
+            Vector3 springForce = m_springConstant * (m_targetHeight - m_rigidbody.transform.position);
+            Vector3 convergenceForce = m_dampingConstant * (Vector3.zero - m_rigidbody.velocity);
 
-            var force = springForce + antiGravityForce;
+            Vector3 force = springForce + convergenceForce;
             m_rigidbody.AddForce(force, ForceMode.Force);
         }
     }
