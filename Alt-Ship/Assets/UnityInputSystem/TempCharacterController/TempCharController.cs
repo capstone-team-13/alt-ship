@@ -8,6 +8,7 @@ public class TempCharController : MonoBehaviour
     private InputActionAsset inputAsset;
     private InputActionMap player;
     private InputAction move;
+    private InputAction look;
 
     private Rigidbody playerRB;
 
@@ -43,6 +44,7 @@ public class TempCharController : MonoBehaviour
 
     private void OnEnable()
     {
+        look = player.FindAction("Camera");
         move = player.FindAction("Movement");
         player.Enable();
     }
@@ -58,14 +60,14 @@ public class TempCharController : MonoBehaviour
         {
             if (move.activeControl.device.name == "Keyboard" || move.activeControl.device.name == "Mouse")
             {
-                Debug.Log(move.ReadValue<Vector2>());
+                //Debug.Log(move.ReadValue<Vector2>());
                 movementTranslator = new Vector3(move.ReadValue<Vector2>().x, 0, move.ReadValue<Vector2>().y);
                 playerRB.AddForce((movementTranslator * playerSpeed), ForceMode.Force);
             }
         }
         else
         {
-            Debug.Log(move.ReadValue<Vector3>());
+            //Debug.Log(move.ReadValue<Vector3>());
             playerRB.AddForce(move.ReadValue<Vector3>() * playerSpeed);
         }
 
