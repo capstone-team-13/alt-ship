@@ -13,6 +13,9 @@ public class CameraController : MonoBehaviour
 
     private PlayerInputManager playerInputManager;
 
+    private InputActionAsset inputAsset;
+    private InputActionMap inputMap;
+
 
     private void Awake()
     {
@@ -32,15 +35,17 @@ public class CameraController : MonoBehaviour
     public void AddPlayer(PlayerInput player)
     {
         players.Add(player);
-        Transform playerParent = player.transform.parent;
-
         int layerToAdd = (int)Mathf.Log(playerLayers[players.Count - 1].value, 2);
 
-        playerParent.GetComponentInChildren<CinemachineInputProvider>().PlayerIndex = players.Count;
-        Debug.Log(players.Count);
+        inputAsset = player.GetComponent<PlayerInput>().actions;
+        inputMap = inputAsset.FindActionMap("PlayerMovement");
+
+        Transform playerParent = player.transform.parent; 
+
         playerParent.GetComponentInChildren<CinemachineFreeLook>().gameObject.layer = layerToAdd;
         playerParent.GetComponentInChildren<Camera>().cullingMask |= 1 << layerToAdd;
-        playerParent.GetComponentInChildren<CameraInput>().horizontal = player.actions.FindAction("Camera");
+
+        playerParent.GetComponentInChildren<CameraInput>().horizontal = inputMap.FindAction("Camera");
 
 
     }
