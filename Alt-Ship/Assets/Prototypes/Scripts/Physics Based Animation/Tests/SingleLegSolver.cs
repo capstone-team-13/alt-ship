@@ -6,6 +6,7 @@ namespace EE.Prototype.PBA
 {
     public class SingleLegSolver : MonoBehaviour
     {
+        [SerializeField] private Rigidbody m_body;
         [SerializeField] private Rigidbody m_jointBody1;
         [SerializeField] private Rigidbody m_jointBody2;
         [SerializeField] private HingeJoint m_joint1;
@@ -43,6 +44,8 @@ namespace EE.Prototype.PBA
             __M_UpdateJacobianTransport();
 
             // Debug.Log($"Virtual Force: {virtualForce}");
+            // m_body.AddForce(bodyVirtualForce, ForceMode.Force);
+
             Debug.DrawRay(endEffectorPosition, virtualForce.normalized, Color.blue);
 
             Accord.Math.Vector3 torque = m_jacobianTransport * new Accord.Math.Vector3(
@@ -56,31 +59,19 @@ namespace EE.Prototype.PBA
             float deltaAngularVelocity = angularAcceleration * deltaTime;
             float currentSpeed = motor.targetVelocity;
             float newSpeed = currentSpeed + deltaAngularVelocity;
-            newSpeed = Mathf.Clamp(newSpeed, -30f, 30f);
+            newSpeed = Mathf.Clamp(newSpeed, -15f, 15f);
             motor.targetVelocity = newSpeed;
             m_joint1.motor = motor;
 
             motor = m_joint2.motor;
             inertia = m_jointBody2.inertiaTensor.z;
-            angularAcceleration = torque.X / inertia;
-            deltaTime = Time.fixedDeltaTime;
+            angularAcceleration = torque.Y / inertia;
             deltaAngularVelocity = angularAcceleration * deltaTime;
             currentSpeed = motor.targetVelocity;
             newSpeed = currentSpeed + deltaAngularVelocity;
-            newSpeed = Mathf.Clamp(newSpeed, -30f, 30f);
+            newSpeed = Mathf.Clamp(newSpeed, -15f, 15f);
             motor.targetVelocity = newSpeed;
             m_joint2.motor = motor;
-
-            // JointMotor motor = m_joint1.motor;
-            // motor.force = result.X;
-            // m_joint1.motor = motor;
-            //
-            // motor = m_joint2.motor;
-            // motor.force = result.Y;
-            // m_joint2.motor = motor;
-
-            // m_jointBody1.AddTorque(0, 0, result.X, ForceMode.Force);
-            // m_jointBody2.AddTorque(0, 0, result.Y, ForceMode.Force);
 
             m_previousEndEffectorPosition = endEffectorPosition;
             m_endEffector.position = endEffectorPosition;
@@ -99,11 +90,11 @@ namespace EE.Prototype.PBA
         private Vector3 __M_CalculateForwardKinematic()
         {
             var localPosition = new Vector3(
-                m_length1 * Mathf.Sin(m_theta1) + m_length2 * Mathf.Sin(m_theta2),
                 m_length1 * Mathf.Cos(m_theta1) + m_length2 * Mathf.Cos(m_theta2),
+                m_length1 * Mathf.Sin(m_theta1) + m_length2 * Mathf.Sin(m_theta2),
                 0
             );
-            localPosition.y *= -1;
+            // localPosition.y *= -1;
 
             Vector3 worldPosition = localPosition + m_jointBody1.position;
             return worldPosition;
@@ -111,17 +102,36 @@ namespace EE.Prototype.PBA
 
         private void __M_UpdateJacobianTransport()
         {
-            m_jacobianTransport.V00 = m_length1 * Mathf.Cos(m_theta1);
-            m_jacobianTransport.V01 = -m_length1 * Mathf.Sin(m_theta1);
-            m_jacobianTransport.V10 = m_length2 * Mathf.Cos(m_theta2);
-            m_jacobianTransport.V11 = -m_length2 * Mathf.Sin(m_theta2);
+            m_jacobianTransport.V00 = -m_length1 * Mathf.Sin(m_theta1);
+            m_jacobianTransport.V01 = m_length1 * Mathf.Cos(m_theta1);
+            m_jacobianTransport.V10 = -m_length2 * Mathf.Sin(m_theta2);
+            m_jacobianTransport.V11 = m_length2 * Mathf.Cos(m_theta2);
         }
 
         [UsedImplicitly]
         private void OnDrawGizmos()
         {
+            m_theta1 = m_jointBody1.transform.eulerAngles.z * Mathf.Deg2Rad;
+            m_theta2 = m_jointBody2.transform.eulerAngles.z * Mathf.Deg2Rad;
+
+            var upperPosition = new Vector3(
+                m_length1 * Mathf.Cos(m_theta1),
+                m_length1 * Mathf.Sin(m_theta1),
+                0
+            );
+
+
+            var lowerPosition = new Vector3(
+                upperPosition.x + m_length2 * Mathf.Cos(m_theta2),
+                upperPosition.y + m_length2 * Mathf.Sin(m_theta2),
+                0
+            );
+
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(m_endEffector.position, 0.2f);
+            Gizmos.DrawWireSphere(upperPosition, 0.2f);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(lowerPosition, 0.2f);
         }
     }
 }
