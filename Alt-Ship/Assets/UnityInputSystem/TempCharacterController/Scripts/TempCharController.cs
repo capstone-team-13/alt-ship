@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,11 +15,18 @@ public class TempCharController : MonoBehaviour
     public Material playerOneMat;
     public Material playerTwoMat;
 
+    public Camera cinemachineCam;
+
+    public float camSpeed = 2;
+
+
+
     [SerializeField]
     private float playerSpeed;
 
     private void Awake()
     {
+
         PlayerCounter.playerCount += 1;
         playerRB = this.GetComponent<Rigidbody>();
         inputAsset = this.GetComponent<PlayerInput>().actions;
@@ -43,7 +48,7 @@ public class TempCharController : MonoBehaviour
         {
             MovePlayer();
         }
-        
+
     }
 
     private void OnEnable()
@@ -66,14 +71,32 @@ public class TempCharController : MonoBehaviour
             {
                 //Debug.Log(move.ReadValue<Vector2>());
                 movementTranslator = new Vector3(move.ReadValue<Vector2>().x, 0, move.ReadValue<Vector2>().y);
-                playerRB.AddForce((movementTranslator * playerSpeed), ForceMode.Force);
+                playerRB.AddRelativeForce((movementTranslator * playerSpeed), ForceMode.Force);
             }
         }
         else
         {
             //Debug.Log(move.ReadValue<Vector3>());
-            playerRB.AddForce(move.ReadValue<Vector3>() * playerSpeed);
+            
+            if(move.ReadValue<Vector3>().x != 0 || move.ReadValue<Vector3>().z != 0)
+            {
+                Vector3 cameraRotation = cinemachineCam.transform.eulerAngles;
+                var playerRotation = playerRB.transform.eulerAngles;
+                var newRotation = cameraRotation;
+                newRotation.x = playerRotation.x;
+                playerRB.transform.rotation = Quaternion.Euler(newRotation);
+            }
+            playerRB.AddForce(new Vector3((cinemachineCam.transform.forward.x * move.ReadValue<Vector3>().x) * playerSpeed, (cinemachineCam.transform.forward.y * move.ReadValue<Vector3>().y) * playerSpeed, (cinemachineCam.transform.forward.z * move.ReadValue<Vector3>().z) * playerSpeed));
         }
 
     }
+
+    private void OnDrawGizmos()
+    {
+        //Gizmos.color = Color.red;
+        //Gizmos.DrawRay(playerRB.transform.position, playerRB.transform.forward);
+
+    }
+
 }
+
