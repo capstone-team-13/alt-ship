@@ -23,6 +23,10 @@ public class TempCharController : MonoBehaviour
 
     [SerializeField]
     private float playerSpeed;
+    [SerializeField]
+    private float playerMaxSpeed;
+    [SerializeField]
+    private float playerDrag;
 
     private void Awake()
     {
@@ -40,6 +44,8 @@ public class TempCharController : MonoBehaviour
         {
             this.GetComponent<MeshRenderer>().material = playerTwoMat;
         }
+
+        playerRB.drag = playerDrag;
     }
 
     private void Update()
@@ -65,41 +71,40 @@ public class TempCharController : MonoBehaviour
 
     void MovePlayer()
     {
-        if (move.IsPressed())
+        Vector2 movementInput = PlayerCtrlInput();
+
+        Vector3 camForward = cinemachineCam.transform.forward;
+        Vector3 camRight = cinemachineCam.transform.right;
+
+        camForward.y = 0;
+        camRight.y = 0;
+        camForward.Normalize();
+        camRight.Normalize();
+         
+        Vector3 moveDir = (camForward * movementInput.y + camRight * movementInput.x).normalized;
+
+        if(playerRB.velocity.magnitude < playerMaxSpeed)
         {
-            if (move.activeControl.device.name == "Keyboard" || move.activeControl.device.name == "Mouse")
-            {
-                //Debug.Log(move.ReadValue<Vector2>());
-                movementTranslator = new Vector3(move.ReadValue<Vector2>().x, 0, move.ReadValue<Vector2>().y);
-                playerRB.AddRelativeForce((movementTranslator * playerSpeed), ForceMode.Force);
-            }
-        }
-        else
-        {
-            //Debug.Log(move.ReadValue<Vector3>());
-            
-            if(move.ReadValue<Vector3>().x != 0 || move.ReadValue<Vector3>().z != 0)
-            {
-                Vector3 cameraRotation = cinemachineCam.transform.eulerAngles;
-                var playerRotation = playerRB.transform.eulerAngles;
-                var newRotation = cameraRotation;
-                newRotation.x = playerRotation.x;
-                playerRB.transform.rotation = Quaternion.Euler(newRotation);
-            }
-            playerRB.AddForce(new Vector3((cinemachineCam.transform.forward.x * move.ReadValue<Vector3>().x) * playerSpeed, (cinemachineCam.transform.forward.y * move.ReadValue<Vector3>().y) * playerSpeed, (cinemachineCam.transform.forward.z * move.ReadValue<Vector3>().z) * playerSpeed), ForceMode.Force);
-            Debug.Log("X:" + cinemachineCam.transform.forward.x * move.ReadValue<Vector3>().x);
-            Debug.Log("Y:" + cinemachineCam.transform.forward.y * move.ReadValue<Vector3>().y);
-            Debug.Log("Z:" + cinemachineCam.transform.forward.z * move.ReadValue<Vector3>().z);
+            playerRB.AddForce(moveDir * playerSpeed, ForceMode.Force);
         }
 
     }
 
-    private void OnDrawGizmos()
+    private Vector2 PlayerCtrlInput()
     {
-        //Gizmos.color = Color.red;
-        //Gizmos.DrawRay(playerRB.transform.position, playerRB.transform.forward);
+        Vector2 moveV = Vector2.zero;
 
+        if(Keyboard.current != null)
+        {
+          //  move.ReadValue<Vector2>();
+        }
+        if(Gamepad.current != null)
+        {
+            moveV = new Vector2(move.ReadValue<Vector3>().x, move.ReadValue<Vector3>().y);
+        }
+        return moveV;
     }
+
 
 }
 
