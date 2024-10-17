@@ -86,7 +86,10 @@ public class TempCharController : MonoBehaviour
                 newRotation.x = playerRotation.x;
                 playerRB.transform.rotation = Quaternion.Euler(newRotation);
             }
-            playerRB.AddForce(new Vector3((cinemachineCam.transform.forward.x * move.ReadValue<Vector3>().x) * playerSpeed, (cinemachineCam.transform.forward.y * move.ReadValue<Vector3>().y) * playerSpeed, (cinemachineCam.transform.forward.z * move.ReadValue<Vector3>().z) * playerSpeed));
+            playerRB.AddForce(new Vector3((cinemachineCam.transform.forward.x * move.ReadValue<Vector3>().x) * playerSpeed, (cinemachineCam.transform.forward.y * move.ReadValue<Vector3>().y) * playerSpeed, (cinemachineCam.transform.forward.z * move.ReadValue<Vector3>().z) * playerSpeed), ForceMode.Force);
+            Debug.Log("X:" + cinemachineCam.transform.forward.x * move.ReadValue<Vector3>().x);
+            Debug.Log("Y:" + cinemachineCam.transform.forward.y * move.ReadValue<Vector3>().y);
+            Debug.Log("Z:" + cinemachineCam.transform.forward.z * move.ReadValue<Vector3>().z);
         }
 
     }
