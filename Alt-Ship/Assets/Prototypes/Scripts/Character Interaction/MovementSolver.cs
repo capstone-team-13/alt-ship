@@ -6,13 +6,20 @@ namespace EE.Prototype.CI
     public class MovementSolver : MonoBehaviour
     {
         [SerializeField] private Transform m_base;
-        [SerializeField] private Transform m_leftHand;
-        [SerializeField] private Transform m_rightHand;
+        [SerializeField] private Transform m_grabPivot;
         [SerializeField] private Transform[] m_foots;
 
-        private float m_baseFootDistance = 2.25f;
         private Vector3[] m_baseToFoot;
+
         private int m_swingFoot = 0;
+        private int activeFootIndex;
+        private bool isMoving;
+        [SerializeField] private float stepTime = 0.25f;
+        private float timeSinceLastStep;
+        private int resetFootIndex;
+
+        public Transform Base => m_base;
+        public Transform GrabPivot => m_grabPivot;
 
         [UsedImplicitly]
         private void Start()
@@ -28,34 +35,47 @@ namespace EE.Prototype.CI
         {
             Vector3 input = __M_GetUserInput();
             m_base.Translate(input * 5.0f * Time.deltaTime);
-            m_leftHand.Translate(input * 5.0f * Time.deltaTime);
-            m_rightHand.Translate(input * 5.0f * Time.deltaTime);
 
-            if ((m_base.position - m_foots[m_swingFoot].position).magnitude > m_baseFootDistance * 1.25f)
+            if (input.magnitude != 0)
             {
-                float checkDistance = 1.0f;
-                bool isGrounded = Physics.Raycast(m_foots[m_swingFoot].position, Vector3.down, out RaycastHit _,
-                    checkDistance);
+                isMoving = true;
+                MoveFeetBasedOnInput();
+            }
+            else if (isMoving) ResetFeetToBase();
+        }
 
-                Debug.Log(isGrounded);
+        private void MoveFeetBasedOnInput()
+        {
+            Transform activeFoot = m_foots[activeFootIndex];
+            Vector3 targetPosition = m_base.position + m_baseToFoot[activeFootIndex];
 
-                if (isGrounded)
-                {
-                    m_foots[m_swingFoot].position = m_base.position + m_baseToFoot[m_swingFoot];
-                    m_swingFoot++;
-                    m_swingFoot %= m_foots.Length;
+            float sinOffset = Mathf.Sin(Time.time * Mathf.PI * 2.0f) * 0.25f;
+            targetPosition.y += sinOffset;
 
-                    int nextSwingFoot = m_swingFoot;
+            activeFoot.position = Vector3.Lerp(activeFoot.position, targetPosition, Time.deltaTime * 5f);
 
-                    Vector3 initialPosition = m_foots[nextSwingFoot].position;
-                    initialPosition.y += 1.0f;
-                    m_foots[nextSwingFoot].position = initialPosition;
+            timeSinceLastStep += Time.deltaTime;
 
-                    m_swingFoot = nextSwingFoot;
-                }
-                else m_foots[m_swingFoot].Translate(0, -1 * Time.deltaTime, 0);
+            if (timeSinceLastStep >= stepTime || (activeFoot.position - targetPosition).magnitude < 0.1f)
+            {
+                activeFootIndex = (activeFootIndex + 1) % m_foots.Length;
+                timeSinceLastStep = 0f;
             }
         }
+
+        private void ResetFeetToBase()
+        {
+            Transform foot = m_foots[resetFootIndex];
+            Vector3 basePosition = m_base.position + m_baseToFoot[resetFootIndex];
+            foot.position = Vector3.Lerp(foot.position, basePosition, Time.deltaTime * 5.0f);
+
+            if (!((foot.position - basePosition).magnitude < 0.1f)) return;
+
+            resetFootIndex = (resetFootIndex + 1) % m_foots.Length;
+
+            if (resetFootIndex == 0) isMoving = false;
+        }
+
 
         [System.Diagnostics.Contracts.Pure]
         private Vector3 __M_GetUserInput()
@@ -64,9 +84,11 @@ namespace EE.Prototype.CI
             float vertical = Input.GetAxis("Vertical");
 
             var movement = new Vector3(horizontal, 0.0f, vertical);
+
             return movement;
         }
 
+        [UsedImplicitly]
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
