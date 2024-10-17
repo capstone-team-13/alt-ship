@@ -1,32 +1,60 @@
 using JetBrains.Annotations;
-using System.Diagnostics.Contracts;
 using UnityEngine;
 
 namespace EE.Prototype.CI
 {
     public class MovementSolver : MonoBehaviour
     {
-        [SerializeField] private Rigidbody m_rigidbody;
-        [SerializeField] private float m_springConstant;
-        [SerializeField] private float m_dampingConstant;
-        [SerializeField] private Vector3 m_targetPosition;
+        [SerializeField] private Transform m_base;
+        [SerializeField] private Transform m_leftHand;
+        [SerializeField] private Transform m_rightHand;
+        [SerializeField] private Transform[] m_foots;
+
+        private float m_baseFootDistance = 2.25f;
+        private Vector3[] m_baseToFoot;
+        private int m_swingFoot = 0;
+
+        [UsedImplicitly]
+        private void Start()
+        {
+            m_baseToFoot = new Vector3[m_foots.Length];
+
+            for (int i = 0; i < m_foots.Length; i++)
+                m_baseToFoot[i] = m_foots[i].position - m_base.position;
+        }
 
         [UsedImplicitly]
         private void Update()
         {
             Vector3 input = __M_GetUserInput();
-            m_targetPosition += input * (1.0f * Time.deltaTime);
-        }
+            m_base.Translate(input * 5.0f * Time.deltaTime);
+            m_leftHand.Translate(input * 5.0f * Time.deltaTime);
+            m_rightHand.Translate(input * 5.0f * Time.deltaTime);
 
+            if ((m_base.position - m_foots[m_swingFoot].position).magnitude > m_baseFootDistance * 1.25f)
+            {
+                float checkDistance = 1.0f;
+                bool isGrounded = Physics.Raycast(m_foots[m_swingFoot].position, Vector3.down, out RaycastHit _,
+                    checkDistance);
 
-        [UsedImplicitly]
-        private void FixedUpdate()
-        {
-            Vector3 springForce = m_springConstant * (m_targetPosition - m_rigidbody.transform.position);
-            Vector3 convergenceForce = m_dampingConstant * (Vector3.zero - m_rigidbody.velocity);
+                Debug.Log(isGrounded);
 
-            Vector3 force = springForce + convergenceForce;
-            m_rigidbody.AddForce(force, ForceMode.Force);
+                if (isGrounded)
+                {
+                    m_foots[m_swingFoot].position = m_base.position + m_baseToFoot[m_swingFoot];
+                    m_swingFoot++;
+                    m_swingFoot %= m_foots.Length;
+
+                    int nextSwingFoot = m_swingFoot;
+
+                    Vector3 initialPosition = m_foots[nextSwingFoot].position;
+                    initialPosition.y += 1.0f;
+                    m_foots[nextSwingFoot].position = initialPosition;
+
+                    m_swingFoot = nextSwingFoot;
+                }
+                else m_foots[m_swingFoot].Translate(0, -1 * Time.deltaTime, 0);
+            }
         }
 
         [System.Diagnostics.Contracts.Pure]
@@ -37,6 +65,12 @@ namespace EE.Prototype.CI
 
             var movement = new Vector3(horizontal, 0.0f, vertical);
             return movement;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(m_foots[m_swingFoot].position, Vector3.down);
         }
     }
 }
