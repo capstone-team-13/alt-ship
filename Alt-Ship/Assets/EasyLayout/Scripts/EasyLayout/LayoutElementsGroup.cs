@@ -19,7 +19,7 @@
 		int columns;
 
 		/// <summary>
-		/// Elements.
+		/// Element.
 		/// </summary>
 		public List<LayoutElementInfo> Elements => elements;
 
@@ -41,14 +41,14 @@
 		public int Columns => columns + 1;
 
 		/// <summary>
-		/// Elements count.
+		/// Element count.
 		/// </summary>
 		public int Count => elements.Count;
 
 		/// <summary>
 		/// Set elements.
 		/// </summary>
-		/// <param name="newElements">Elements.</param>
+		/// <param name="newElements">Element.</param>
 		public void SetElements(List<LayoutElementInfo> newElements)
 		{
 			elements = newElements;
@@ -100,7 +100,7 @@
 		/// Get elements at row.
 		/// </summary>
 		/// <param name="row">Row.</param>
-		/// <returns>Elements.</returns>
+		/// <returns>Element.</returns>
 		public List<LayoutElementInfo> GetRow(int row)
 		{
 			rowElements.Clear();
@@ -160,7 +160,7 @@
 		/// Get elements at column.
 		/// </summary>
 		/// <param name="column">Column.</param>
-		/// <returns>Elements.</returns>
+		/// <returns>Element.</returns>
 		public List<LayoutElementInfo> GetColumn(int column)
 		{
 			columnElements.Clear();

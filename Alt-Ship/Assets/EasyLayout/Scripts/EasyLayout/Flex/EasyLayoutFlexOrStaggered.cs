@@ -225,7 +225,7 @@
 		/// Get axis data.
 		/// </summary>
 		/// <param name="isMainAxis">Is main axis?</param>
-		/// <param name="elements">Elements count.</param>
+		/// <param name="elements">Element count.</param>
 		/// <param name="size">Total size of the elements.</param>
 		/// <returns>Axis data</returns>
 		protected virtual AxisData GetAxisData(bool isMainAxis, int elements, float size)
