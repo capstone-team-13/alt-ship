@@ -152,7 +152,7 @@
             Generates a random combination, with repetition, by randomly selecting k of N elements.
             </summary>
             <param name="n">Number of elements in the set.</param>
-            <param name="k">Number of elements to choose from the set. Elements can be chosen more than once.</param>
+            <param name="k">Number of elements to choose from the set. Element can be chosen more than once.</param>
             <param name="randomSource">The random number generator to use. Optional; the default random source will be used if null.</param>
             <returns>Integer mask array of length <c>N</c>, for each item the number of times it was selected.</returns>
         </member>
@@ -161,7 +161,7 @@
             Select a random combination, with repetition, from a data sequence by selecting k elements in original order.
             </summary>
             <param name="data">The data source to choose from.</param>
-            <param name="elementsToChoose">Number of elements (k) to choose from the data set. Elements can be chosen more than once.</param>
+            <param name="elementsToChoose">Number of elements (k) to choose from the data set. Element can be chosen more than once.</param>
             <param name="randomSource">The random number generator to use. Optional; the default random source will be used if null.</param>
             <returns>The chosen combination with repetition, in the original order.</returns>
         </member>
@@ -202,7 +202,7 @@
             Generate a random variation, with repetition, by randomly selecting k of n elements with order.
             </summary>
             <param name="n">Number of elements in the set.</param>
-            <param name="k">Number of elements to choose from the set. Elements can be chosen more than once.</param>
+            <param name="k">Number of elements to choose from the set. Element can be chosen more than once.</param>
             <param name="randomSource">The random number generator to use. Optional; the default random source will be used if null.</param>
             <returns>An array of length <c>K</c> that contains the indices of the selections as integers of the interval <c>[0, N)</c>.</returns>
         </member>
@@ -211,7 +211,7 @@
             Select a random variation, with repetition, from a data sequence by randomly selecting k elements in random order.
             </summary>
             <param name="data">The data source to choose from.</param>
-            <param name="elementsToChoose">Number of elements (k) to choose from the data set. Elements can be chosen more than once.</param>
+            <param name="elementsToChoose">Number of elements (k) to choose from the data set. Element can be chosen more than once.</param>
             <param name="randomSource">The random number generator to use. Optional; the default random source will be used if null.</param>
             <returns>The chosen variation with repetition, in random order.</returns>
         </member>
@@ -14573,7 +14573,7 @@
             Approximation algorithm for definite integrals by the Trapezium rule of the Newton-Cotes family.
             </summary>
             <remarks>
-            <a href="http://en.wikipedia.org/wiki/Trapezium_rule">Wikipedia - Trapezium Rule</a>
+            <a href="http://en.wikipedia.org/wiki/Trapezium_rule">Wikipedia - Trapezium Setting</a>
             </remarks>
         </member>
         <member name="M:MathNet.Numerics.Integration.NewtonCotesTrapeziumRule.IntegrateTwoPoint(System.Func{System.Double,System.Double},System.Double,System.Double)">
@@ -41135,7 +41135,7 @@
              <summary>
              Search for a step size alpha that satisfies the weak Wolfe conditions. The weak Wolfe
              Conditions are
-             i)  Armijo Rule:         f(x_k + alpha_k p_k) &lt;= f(x_k) + c1 alpha_k p_k^T g(x_k)
+             i)  Armijo Setting:         f(x_k + alpha_k p_k) &lt;= f(x_k) + c1 alpha_k p_k^T g(x_k)
              ii) Curvature Condition: p_k^T g(x_k + alpha_k p_k) &gt;= c2 p_k^T g(x_k)
              where g(x) is the gradient of f(x), 0 &lt; c1 &lt; c2 &lt; 1.
             
