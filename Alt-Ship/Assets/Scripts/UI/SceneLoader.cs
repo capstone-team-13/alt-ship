@@ -13,7 +13,7 @@ public class SceneLoader : MonoBehaviour
 
     private static readonly string[] m_sceneNames =
     {
-        "Start",
+        "GameStart",
         "Level Selection",
         "Level #1"
     };

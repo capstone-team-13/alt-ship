@@ -187,7 +187,7 @@
 		private float elementsRotationStart;
 
 		/// <summary>
-		/// Start rotation for elements.
+		/// GameStart rotation for elements.
 		/// </summary>
 		public float ElementsRotationStart
 		{
@@ -244,12 +244,12 @@
 			sb.AppendValue("\tHeight Auto: ", HeightAuto);
 			sb.AppendValue("\tHeight: ", Height);
 
-			sb.AppendValue("\tAngle Start: ", AngleStart);
+			sb.AppendValue("\tAngle GameStart: ", AngleStart);
 			sb.AppendValue("\tAngle Step Auto: ", AngleStepAuto);
 			sb.AppendValue("\tAngle Step: ", AngleStep);
 			sb.AppendValueEnum("\tAlign: ", Align);
 			sb.AppendValue("\tElements Rotate: ", ElementsRotate);
-			sb.AppendValue("\tElements Rotation Start: ", ElementsRotationStart);
+			sb.AppendValue("\tElements Rotation GameStart: ", ElementsRotationStart);
 
 			sb.AppendLine("\t#####");
 

@@ -23,6 +23,7 @@ namespace EE.Prototype.OOP
         [SerializeField] private float rotationSpeed = 5f;
         [SerializeField] private float lerpSpeed = 5f;
         private Vector3 targetEulerAngles;
+
         private void Start()
         {
             targetEulerAngles = transform.localEulerAngles;

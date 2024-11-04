@@ -57,7 +57,7 @@
 		public enum Items
 		{
 			/// <summary>
-			/// Start position.
+			/// GameStart position.
 			/// </summary>
 			Start = 0,
 
@@ -67,7 +67,7 @@
 			Center = 1,
 
 			/// <summary>
-			/// End position.
+			/// GameEnd position.
 			/// </summary>
 			End = 2,
 		}

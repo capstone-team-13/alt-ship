@@ -10,5 +10,6 @@ namespace EE.AMVCC.Examples
         {
             Application.Instance.Push(new BallCommand.LogCommand("I'm a ball"));
         }
+
     }
 }

@@ -160,7 +160,7 @@
 		/// <summary>
 		/// Convert input to match direction.
 		/// </summary>
-		/// <param name="input">Input.</param>
+		/// <param name="input">RotationSign.</param>
 		/// <returns>Converted input.</returns>
 		protected Vector2 ByAxis(Vector2 input)
 		{

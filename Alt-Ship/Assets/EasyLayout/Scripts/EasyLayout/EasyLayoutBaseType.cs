@@ -191,32 +191,32 @@
 			public readonly RectTransform Target;
 
 			/// <summary>
-			/// Start position.
+			/// GameStart position.
 			/// </summary>
 			public readonly Vector2 StartPosition;
 
 			/// <summary>
-			/// Start pivot.
+			/// GameStart pivot.
 			/// </summary>
 			public readonly Vector2 StartPivot;
 
 			/// <summary>
-			/// Start rotation.
+			/// GameStart rotation.
 			/// </summary>
 			public readonly Quaternion StartRotation;
 
 			/// <summary>
-			/// End position.
+			/// GameEnd position.
 			/// </summary>
 			public readonly Vector2 EndPosition;
 
 			/// <summary>
-			/// End pivot.
+			/// GameEnd pivot.
 			/// </summary>
 			public readonly Vector2 EndPivot;
 
 			/// <summary>
-			/// End rotation.
+			/// GameEnd rotation.
 			/// </summary>
 			public readonly Quaternion EndRotation;
 
@@ -286,12 +286,12 @@
 			public readonly RectTransform Target;
 
 			/// <summary>
-			/// Start size.
+			/// GameStart size.
 			/// </summary>
 			public readonly Vector2 StartSize;
 
 			/// <summary>
-			/// End size.
+			/// GameEnd size.
 			/// </summary>
 			public readonly Vector2 EndSize;
 
@@ -301,7 +301,7 @@
 			public readonly bool UnscaledTime;
 
 			/// <summary>
-			/// Start time.
+			/// GameStart time.
 			/// </summary>
 			float time;
 

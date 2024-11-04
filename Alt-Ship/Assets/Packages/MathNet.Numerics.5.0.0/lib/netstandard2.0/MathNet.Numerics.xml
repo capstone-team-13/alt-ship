@@ -689,7 +689,7 @@
             <summary>
             Parse a part (real or complex) from a complex number.
             </summary>
-            <param name="token">Start Token.</param>
+            <param name="token">GameStart Token.</param>
             <param name="imaginary">Is set to <c>true</c> if the part identified itself as being imaginary.</param>
             <param name="format">
             An <see cref="T:System.IFormatProvider"/> that supplies culture-specific
@@ -1256,7 +1256,7 @@
             <summary>
             Parse a part (real or complex) from a complex number.
             </summary>
-            <param name="token">Start Token.</param>
+            <param name="token">GameStart Token.</param>
             <param name="imaginary">Is set to <c>true</c> if the part identified itself as being imaginary.</param>
             <param name="format">
             An <see cref="T:System.IFormatProvider"/> that supplies culture-specific
@@ -1524,7 +1524,7 @@
             </summary>
         </member>
         <member name="F:MathNet.Numerics.Constants.SpeedOfLight">
-            <summary>Speed of Light in Vacuum: c_0 = 2.99792458e8 [m s^-1] (defined, exact; 2007 CODATA)</summary>
+            <summary>InitialSpeed of Light in Vacuum: c_0 = 2.99792458e8 [m s^-1] (defined, exact; 2007 CODATA)</summary>
         </member>
         <member name="F:MathNet.Numerics.Constants.MagneticPermeability">
             <summary>Magnetic Permeability in Vacuum: mu_0 = 4*Pi * 10^-7 [N A^-2 = kg m A^-2 s^-2] (defined, exact; 2007 CODATA)</summary>
@@ -2172,7 +2172,7 @@
             <summary>
             Creates a function handle for the derivative of a scalar univariate function.
             </summary>
-            <param name="f">Input function handle.</param>
+            <param name="f">RotationSign function handle.</param>
             <param name="order">Derivative order.</param>
             <returns>Function handle that evaluates the derivative of input function at a fixed order.</returns>
         </member>
@@ -2205,7 +2205,7 @@
             <summary>
             Creates a function handle for the partial derivative of a multivariate function.
             </summary>
-            <param name="f">Input function handle.</param>
+            <param name="f">RotationSign function handle.</param>
             <param name="parameterIndex">Index of the independent variable for partial derivative.</param>
             <param name="order">Derivative order.</param>
             <returns>Function handle that evaluates partial derivative of input function at a fixed order.</returns>
@@ -2214,7 +2214,7 @@
             <summary>
             Creates a function handle for the partial derivative of a vector multivariate function.
             </summary>
-            <param name="f">Input function handle.</param>
+            <param name="f">RotationSign function handle.</param>
             <param name="parameterIndex">Index of the independent variable for partial derivative.</param>
             <param name="order">Derivative order.</param>
             <returns>Function handle that evaluates partial derivative of input function at fixed order.</returns>
@@ -2255,7 +2255,7 @@
             <summary>
             Creates a function handle for the mixed partial derivative of a multivariate function.
             </summary>
-            <param name="f">Input function handle.</param>
+            <param name="f">RotationSign function handle.</param>
             <param name="parameterIndex">Vector of indices for the independent variables at descending derivative orders.</param>
             <param name="order">Highest derivative order.</param>
             <returns>Function handle that evaluates the fixed mixed partial derivative of input function at fixed order.</returns>
@@ -2264,7 +2264,7 @@
             <summary>
             Creates a function handle for the mixed partial derivative of a multivariate vector function.
             </summary>
-            <param name="f">Input vector function handle.</param>
+            <param name="f">RotationSign vector function handle.</param>
             <param name="parameterIndex">Vector of indices for the independent variables at descending derivative orders.</param>
             <param name="order">Highest derivative order.</param>
             <returns>Function handle that evaluates the fixed mixed partial derivative of input function at fixed order.</returns>
@@ -17838,7 +17838,7 @@
             <param name="a">Source matrix</param>
             <param name="rowCount">The number of rows in <paramref name="a"/></param>
             <param name="column">Column index</param>
-            <param name="rowStart">Start row index</param>
+            <param name="rowStart">GameStart row index</param>
             <returns>Norm2 (Euclidean norm) of the column</returns>
         </member>
         <member name="M:MathNet.Numerics.LinearAlgebra.Double.Factorization.UserSvd.Dnrm2Vector(System.Double[],System.Int32)">
@@ -17846,7 +17846,7 @@
             Calculate Norm 2 of the vector <paramref name="a"/> starting from index <paramref name="rowStart"/>
             </summary>
             <param name="a">Source vector</param>
-            <param name="rowStart">Start index</param>
+            <param name="rowStart">GameStart index</param>
             <returns>Norm2 (Euclidean norm) of the vector</returns>
         </member>
         <member name="M:MathNet.Numerics.LinearAlgebra.Double.Factorization.UserSvd.Ddot(MathNet.Numerics.LinearAlgebra.Matrix{System.Double},System.Int32,System.Int32,System.Int32,System.Int32)">
@@ -18645,7 +18645,7 @@
             <summary>
             Sort vector descending, not changing vector but placing sorted indices to <paramref name="sortedIndices"/>
             </summary>
-            <param name="lowerBound">Start sort form</param>
+            <param name="lowerBound">GameStart sort form</param>
             <param name="upperBound">Sort till upper bound</param>
             <param name="sortedIndices">Array with sorted vector indices</param>
             <param name="values">Source <see cref="T:MathNet.Numerics.LinearAlgebra.Double.Vector"/></param>
@@ -22119,7 +22119,7 @@
             <param name="a">Source matrix</param>
             <param name="rowCount">The number of rows in <paramref name="a"/></param>
             <param name="column">Column index</param>
-            <param name="rowStart">Start row index</param>
+            <param name="rowStart">GameStart row index</param>
             <returns>Norm2 (Euclidean norm) of the column</returns>
         </member>
         <member name="M:MathNet.Numerics.LinearAlgebra.Single.Factorization.UserSvd.Dnrm2Vector(System.Single[],System.Int32)">
@@ -22127,7 +22127,7 @@
             Calculate Norm 2 of the vector <paramref name="a"/> starting from index <paramref name="rowStart"/>
             </summary>
             <param name="a">Source vector</param>
-            <param name="rowStart">Start index</param>
+            <param name="rowStart">GameStart index</param>
             <returns>Norm2 (Euclidean norm) of the vector</returns>
         </member>
         <member name="M:MathNet.Numerics.LinearAlgebra.Single.Factorization.UserSvd.Ddot(MathNet.Numerics.LinearAlgebra.Matrix{System.Single},System.Int32,System.Int32,System.Int32,System.Int32)">
@@ -22926,7 +22926,7 @@
             <summary>
             Sort vector descending, not changing vector but placing sorted indices to <paramref name="sortedIndices"/>
             </summary>
-            <param name="lowerBound">Start sort form</param>
+            <param name="lowerBound">GameStart sort form</param>
             <param name="upperBound">Sort till upper bound</param>
             <param name="sortedIndices">Array with sorted vector indices</param>
             <param name="values">Source <see cref="T:MathNet.Numerics.LinearAlgebra.Single.Vector"/></param>
@@ -26127,7 +26127,7 @@
             <param name="eigenVectors">The eigen vectors to work on.</param>
             <param name="matrixA">Previously tridiagonalized matrix by <see cref="M:MathNet.Numerics.LinearAlgebra.Complex.Factorization.UserEvd.SymmetricTridiagonalize(System.Numerics.Complex[0:,0:],System.Double[],System.Double[],System.Numerics.Complex[],System.Int32)"/>.</param>
             <param name="tau">Contains further information about the transformations</param>
-            <param name="order">Input matrix order</param>
+            <param name="order">RotationSign matrix order</param>
             <remarks>This is derived from the Algol procedures HTRIBK, by
             by Smith, Boyle, Dongarra, Garbow, Ikebe, Klema, Moler, and Wilkinson, Handbook for
             Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
@@ -26378,7 +26378,7 @@
             <param name="a">Source matrix</param>
             <param name="rowCount">The number of rows in <paramref name="a"/></param>
             <param name="column">Column index</param>
-            <param name="rowStart">Start row index</param>
+            <param name="rowStart">GameStart row index</param>
             <returns>Norm2 (Euclidean norm) of the column</returns>
         </member>
         <member name="M:MathNet.Numerics.LinearAlgebra.Complex.Factorization.UserSvd.Cnrm2Vector(System.Numerics.Complex[],System.Int32)">
@@ -26386,7 +26386,7 @@
             Calculate Norm 2 of the vector <paramref name="a"/> starting from index <paramref name="rowStart"/>
             </summary>
             <param name="a">Source vector</param>
-            <param name="rowStart">Start index</param>
+            <param name="rowStart">GameStart index</param>
             <returns>Norm2 (Euclidean norm) of the vector</returns>
         </member>
         <member name="M:MathNet.Numerics.LinearAlgebra.Complex.Factorization.UserSvd.Cdotc(MathNet.Numerics.LinearAlgebra.Matrix{System.Numerics.Complex},System.Int32,System.Int32,System.Int32,System.Int32)">
@@ -27185,7 +27185,7 @@
             <summary>
             Sort vector descending, not changing vector but placing sorted indices to <paramref name="sortedIndices"/>
             </summary>
-            <param name="lowerBound">Start sort form</param>
+            <param name="lowerBound">GameStart sort form</param>
             <param name="upperBound">Sort till upper bound</param>
             <param name="sortedIndices">Array with sorted vector indices</param>
             <param name="values">Source <see cref="T:MathNet.Numerics.LinearAlgebra.Complex.Vector"/></param>
@@ -30358,7 +30358,7 @@
             <param name="eigenVectors">The eigen vectors to work on.</param>
             <param name="matrixA">Previously tridiagonalized matrix by <see cref="M:MathNet.Numerics.LinearAlgebra.Complex32.Factorization.UserEvd.SymmetricTridiagonalize(MathNet.Numerics.Complex32[0:,0:],System.Single[],System.Single[],MathNet.Numerics.Complex32[],System.Int32)"/>.</param>
             <param name="tau">Contains further information about the transformations</param>
-            <param name="order">Input matrix order</param>
+            <param name="order">RotationSign matrix order</param>
             <remarks>This is derived from the Algol procedures HTRIBK, by
             by Smith, Boyle, Dongarra, Garbow, Ikebe, Klema, Moler, and Wilkinson, Handbook for
             Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
@@ -30609,7 +30609,7 @@
             <param name="a">Source matrix</param>
             <param name="rowCount">The number of rows in <paramref name="a"/></param>
             <param name="column">Column index</param>
-            <param name="rowStart">Start row index</param>
+            <param name="rowStart">GameStart row index</param>
             <returns>Norm2 (Euclidean norm) of the column</returns>
         </member>
         <member name="M:MathNet.Numerics.LinearAlgebra.Complex32.Factorization.UserSvd.Cnrm2Vector(MathNet.Numerics.Complex32[],System.Int32)">
@@ -30617,7 +30617,7 @@
             Calculate Norm 2 of the vector <paramref name="a"/> starting from index <paramref name="rowStart"/>
             </summary>
             <param name="a">Source vector</param>
-            <param name="rowStart">Start index</param>
+            <param name="rowStart">GameStart index</param>
             <returns>Norm2 (Euclidean norm) of the vector</returns>
         </member>
         <member name="M:MathNet.Numerics.LinearAlgebra.Complex32.Factorization.UserSvd.Cdotc(MathNet.Numerics.LinearAlgebra.Matrix{MathNet.Numerics.Complex32},System.Int32,System.Int32,System.Int32,System.Int32)">
@@ -31416,7 +31416,7 @@
             <summary>
             Sort vector descending, not changing vector but placing sorted indices to <paramref name="sortedIndices"/>
             </summary>
-            <param name="lowerBound">Start sort form</param>
+            <param name="lowerBound">GameStart sort form</param>
             <param name="upperBound">Sort till upper bound</param>
             <param name="sortedIndices">Array with sorted vector indices</param>
             <param name="values">Source <see cref="T:MathNet.Numerics.LinearAlgebra.Complex32.Vector"/></param>
@@ -40878,8 +40878,8 @@
             First Order AB method(same as Forward Euler)
             </summary>
             <param name="y0">Initial value</param>
-            <param name="start">Start Time</param>
-            <param name="end">End Time</param>
+            <param name="start">GameStart Time</param>
+            <param name="end">GameEnd Time</param>
             <param name="N">Size of output array(the larger, the finer)</param>
             <param name="f">ode model</param>
             <returns>approximation with size N</returns>
@@ -40889,8 +40889,8 @@
             Second Order AB Method
             </summary>
             <param name="y0">Initial value 1</param>
-            <param name="start">Start Time</param>
-            <param name="end">End Time</param>
+            <param name="start">GameStart Time</param>
+            <param name="end">GameEnd Time</param>
             <param name="N">Size of output array(the larger, the finer)</param>
             <param name="f">ode model</param>
             <returns>approximation with size N</returns>
@@ -40900,8 +40900,8 @@
             Third Order AB Method
             </summary>
             <param name="y0">Initial value 1</param>
-            <param name="start">Start Time</param>
-            <param name="end">End Time</param>
+            <param name="start">GameStart Time</param>
+            <param name="end">GameEnd Time</param>
             <param name="N">Size of output array(the larger, the finer)</param>
             <param name="f">ode model</param>
             <returns>approximation with size N</returns>
@@ -40911,8 +40911,8 @@
             Fourth Order AB Method
             </summary>
             <param name="y0">Initial value 1</param>
-            <param name="start">Start Time</param>
-            <param name="end">End Time</param>
+            <param name="start">GameStart Time</param>
+            <param name="end">GameEnd Time</param>
             <param name="N">Size of output array(the larger, the finer)</param>
             <param name="f">ode model</param>
             <returns>approximation with size N</returns>
@@ -44375,7 +44375,7 @@
             <param name="dataEv">Data array of matrix V (eigenvectors)</param>
             <param name="matrixA">Previously tridiagonalized matrix by SymmetricTridiagonalize.</param>
             <param name="tau">Contains further information about the transformations</param>
-            <param name="order">Input matrix order</param>
+            <param name="order">RotationSign matrix order</param>
             <remarks>This is derived from the Algol procedures HTRIBK, by
             by Smith, Boyle, Dongarra, Garbow, Ikebe, Klema, Moler, and Wilkinson, Handbook for
             Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
@@ -44814,7 +44814,7 @@
             <param name="dataEv">Data array of matrix V (eigenvectors)</param>
             <param name="matrixA">Previously tridiagonalized matrix by SymmetricTridiagonalize.</param>
             <param name="tau">Contains further information about the transformations</param>
-            <param name="order">Input matrix order</param>
+            <param name="order">RotationSign matrix order</param>
             <remarks>This is derived from the Algol procedures HTRIBK, by
             by Smith, Boyle, Dongarra, Garbow, Ikebe, Klema, Moler, and Wilkinson, Handbook for
             Auto. Comp., Vol.ii-Linear Algebra, and the corresponding

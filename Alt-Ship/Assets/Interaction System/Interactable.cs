@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,10 +18,17 @@ namespace EE.Interactions
         private bool m_canInteract = true;
         private double m_lastInteractTime;
 
-        [Header("Configs")]
-        [SerializeField] [Tooltip("0 - Keyboard, 1 - Xbox Controller")]private KeyCode[] m_interactionKey = { KeyCode.E, KeyCode.Joystick1Button2 };
-        [SerializeField][Space(4)][Tooltip("In second (s)")] private float m_interactionCoolingDown;
-        [Space(4)][Tooltip("Assign your callbacks here")] public UnityEvent<GameObject> OnInteracted;
+        [Header("Configs")] [SerializeField] [Tooltip("0 - Keyboard, 1 - Xbox Controller")]
+        private KeyCode[] m_interactionKey = { KeyCode.E, KeyCode.Joystick1Button2 };
+
+        [SerializeField] [Space(4)] [Tooltip("In second (s)")]
+        private float m_interactionCoolingDown;
+
+        [Space(4)] [Tooltip("Assign your callbacks here")]
+        public UnityEvent<GameObject> OnInteracted;
+
+        [Space(4)] [Tooltip("Interaction Condition")]
+        public Func<bool> CanInteract;
 
         private void Awake()
         {
@@ -38,7 +46,8 @@ namespace EE.Interactions
                 Debug.Log($"Interaction is cooling down for {gameObject.name}.");
             }
 #endif
-            if (desiredKeyPressed && m_canInteract) __M_Interact();
+            // TODO: UI Implementation
+            if (CanInteract() && desiredKeyPressed && m_canInteract) __M_Interact();
         }
 
         private void __M_Interact()
