@@ -22,7 +22,7 @@ public class CannonFire : MonoBehaviour
 
     void OnEnable()
     {
-        timestamp = Time.time + cooldown;
+        timestamp = 0;
         fireCannon.Enable();
         fireCannon.performed += launchBall;
         toggle1 = false;

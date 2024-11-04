@@ -6,16 +6,21 @@ public class CannonTimeout : MonoBehaviour
 {
     private float timeLeft = 4f;
     private bool isEnabled = false;
+
+    Vector3 prevPos;
     // Start is called before the first frame update
 
     private void OnEnable()
     {
+        prevPos = transform.position;
         isEnabled = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        prevPos = transform.position;
+
         if (isEnabled)
         {
             timeLeft -= Time.deltaTime;
@@ -25,4 +30,14 @@ public class CannonTimeout : MonoBehaviour
             }
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag != "Cannon")
+        {
+            isEnabled = false;
+            Destroy(this.transform.gameObject);
+        }
+    }
+
 }
