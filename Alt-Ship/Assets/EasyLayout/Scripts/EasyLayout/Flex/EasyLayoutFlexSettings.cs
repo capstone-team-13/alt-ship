@@ -57,7 +57,7 @@
 		public enum Items
 		{
 			/// <summary>
-			/// Start position.
+			/// GameStart position.
 			/// </summary>
 			Start = 0,
 
@@ -67,7 +67,7 @@
 			Center = 1,
 
 			/// <summary>
-			/// End position.
+			/// GameEnd position.
 			/// </summary>
 			End = 2,
 		}
@@ -91,7 +91,7 @@
 		Content justifyContent = Content.Start;
 
 		/// <summary>
-		/// Elements positions at the main axis.
+		/// Element positions at the main axis.
 		/// </summary>
 		public Content JustifyContent
 		{
@@ -105,7 +105,7 @@
 		Content alignContent = Content.Start;
 
 		/// <summary>
-		/// Elements positions at the sub axis.
+		/// Element positions at the sub axis.
 		/// </summary>
 		public Content AlignContent
 		{

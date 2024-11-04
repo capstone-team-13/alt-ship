@@ -911,7 +911,7 @@
 		void HexSettingsChanged() => NotifyPropertyChanged(nameof(HexSettings));
 
 		/// <summary>
-		/// Start this instance.
+		/// GameStart this instance.
 		/// </summary>
 		protected override void Start()
 		{

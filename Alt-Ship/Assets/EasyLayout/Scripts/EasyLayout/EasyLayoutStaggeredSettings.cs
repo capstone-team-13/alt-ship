@@ -116,8 +116,8 @@
 			sb.AppendValue("\tFixed Blocks Count: ", FixedBlocksCount);
 			sb.AppendValue("\tBlocks Count: ", BlocksCount);
 			sb.AppendLine("\t#####");
-			sb.AppendValue("\tPadding Inner Start: ", EasyLayoutUtilities.List2String(PaddingInnerStart));
-			sb.AppendValue("\tPadding Inner End: ", EasyLayoutUtilities.List2String(PaddingInnerEnd));
+			sb.AppendValue("\tPadding Inner GameStart: ", EasyLayoutUtilities.List2String(PaddingInnerStart));
+			sb.AppendValue("\tPadding Inner GameEnd: ", EasyLayoutUtilities.List2String(PaddingInnerEnd));
 		}
 	}
 }

@@ -103,7 +103,7 @@
 		protected bool ChangePivot;
 
 		/// <summary>
-		/// Elements group.
+		/// Element group.
 		/// </summary>
 		protected LayoutElementsGroup ElementsGroup = new LayoutElementsGroup();
 
@@ -191,32 +191,32 @@
 			public readonly RectTransform Target;
 
 			/// <summary>
-			/// Start position.
+			/// GameStart position.
 			/// </summary>
 			public readonly Vector2 StartPosition;
 
 			/// <summary>
-			/// Start pivot.
+			/// GameStart pivot.
 			/// </summary>
 			public readonly Vector2 StartPivot;
 
 			/// <summary>
-			/// Start rotation.
+			/// GameStart rotation.
 			/// </summary>
 			public readonly Quaternion StartRotation;
 
 			/// <summary>
-			/// End position.
+			/// GameEnd position.
 			/// </summary>
 			public readonly Vector2 EndPosition;
 
 			/// <summary>
-			/// End pivot.
+			/// GameEnd pivot.
 			/// </summary>
 			public readonly Vector2 EndPivot;
 
 			/// <summary>
-			/// End rotation.
+			/// GameEnd rotation.
 			/// </summary>
 			public readonly Quaternion EndRotation;
 
@@ -286,12 +286,12 @@
 			public readonly RectTransform Target;
 
 			/// <summary>
-			/// Start size.
+			/// GameStart size.
 			/// </summary>
 			public readonly Vector2 StartSize;
 
 			/// <summary>
-			/// End size.
+			/// GameEnd size.
 			/// </summary>
 			public readonly Vector2 EndSize;
 
@@ -301,7 +301,7 @@
 			public readonly bool UnscaledTime;
 
 			/// <summary>
-			/// Start time.
+			/// GameStart time.
 			/// </summary>
 			float time;
 
@@ -467,7 +467,7 @@
 		/// <summary>
 		/// Perform layout.
 		/// </summary>
-		/// <param name="elements">Elements.</param>
+		/// <param name="elements">Element.</param>
 		/// <param name="setValues">Set element positions and sizes.</param>
 		/// <param name="resizeType">Resize type.</param>
 		/// <returns>Size of the group.</returns>
@@ -1029,7 +1029,7 @@
 		/// Resize specified elements to fit.
 		/// </summary>
 		/// <param name="size">Size.</param>
-		/// <param name="elements">Elements.</param>
+		/// <param name="elements">Element.</param>
 		/// <param name="spacing">Spacing.</param>
 		/// <param name="axis">Axis to fit.</param>
 		/// <param name="increaseOnly">Size can be only increased.</param>
@@ -1093,7 +1093,7 @@
 		/// Shrink specified elements size to fit.
 		/// </summary>
 		/// <param name="size">Size.</param>
-		/// <param name="elements">Elements.</param>
+		/// <param name="elements">Element.</param>
 		/// <param name="spacing">Spacing.</param>
 		/// <param name="axis">Axis to fit.</param>
 		protected static void ShrinkToFit(float size, List<LayoutElementInfo> elements, float spacing, RectTransform.Axis axis)
@@ -1182,7 +1182,7 @@
 		/// Shrink specified elements to fit.
 		/// </summary>
 		/// <param name="size">Size.</param>
-		/// <param name="group">Elements.</param>
+		/// <param name="group">Element.</param>
 		/// <param name="spacing">Spacing.</param>
 		/// <param name="axis">Axis to fit.</param>
 		protected static void ShrinkToFit(float size, LayoutElementsGroup group, float spacing, RectTransform.Axis axis)
