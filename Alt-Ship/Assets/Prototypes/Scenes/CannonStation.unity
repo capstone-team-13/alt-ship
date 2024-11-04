@@ -221,13 +221,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 387971329}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.001891072, y: -0, z: -0, w: 0.9999982}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 1, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0.217, y: 0, z: 0}
 --- !u!1 &823172702
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,7 +576,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f1e4b8ea5c02c584aa6ff1817a57743d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -614,14 +614,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1245805228}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.25945285, y: -0, z: -0, w: 0.9657558}
   m_LocalPosition: {x: 0, y: 1.375, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 990667580}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -30.075, y: 0, z: 0}
 --- !u!54 &1245805233
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -661,10 +661,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a1aa58455403240a9c0f1c5b6b4928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 5
+  fireCannon:
+    m_Name: Fire Cannon
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 026fd93b-e9cc-43c5-97a2-32cffd1ace3e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: c71774a6-83ca-41e5-9ece-6b1feac91db7
+      m_Path: <Keyboard>/x
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Fire Cannon
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 02a7a8a2-caa9-4f05-9603-6f63b779a9b2
+      m_Path: <Gamepad>/buttonWest
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Fire Cannon
+      m_Flags: 0
+    m_Flags: 0
+  force: 6
   cannonBallPref: {fileID: 5724602821431987991, guid: c015624d256ad854f8e4d56727231e01,
     type: 3}
   startPosition: {fileID: 990667580}
+  cooldown: 3
+  timestamp: 0
+  cantFire: {fileID: 2100000, guid: 7915110015c322442b38e6b6f54cd453, type: 2}
+  canFire: {fileID: 2100000, guid: f1e4b8ea5c02c584aa6ff1817a57743d, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
