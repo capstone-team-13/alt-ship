@@ -1,20 +1,51 @@
+using JetBrains.Annotations;
+using System.Linq;
 using UnityEngine;
 
 namespace EE.AMVCC
 {
-    public abstract class Application<TModel, TView, TController> : MonoBehaviour
-        where TModel : Model
-        where TView : View
-        where TController : IController
+    public class Application : MonoBehaviour
     {
-        public TModel Model;
-        public TView View;
-        public TController Controller;
+        private static Application m_instance;
 
-        public virtual void Notify(string eventType, Object sender, params object[] data)
+        private IController[] m_controllers;
+
+        public static Application Instance
         {
-            Controller.OnNotified(eventType, sender, data);
+            get
+            {
+                if (m_instance != null) return m_instance;
+
+                m_instance = FindObjectOfType<Application>();
+
+                if (m_instance != null) return m_instance;
+
+                var singletonObject = new GameObject("Application");
+                m_instance = singletonObject.AddComponent<Application>();
+                DontDestroyOnLoad(singletonObject);
+                return m_instance;
+            }
+        }
+
+        [UsedImplicitly]
+        protected virtual void Awake()
+        {
+            if (m_instance == null)
+            {
+                m_instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else if (m_instance != this)
+            {
+                Destroy(gameObject);
+            }
+
+            m_controllers = FindObjectsOfType<MonoBehaviour>().OfType<IController>().ToArray();
+        }
+
+        public void Push<TCommand>(TCommand command) where TCommand : ICommand
+        {
+            foreach (var controller in m_controllers) controller.Notify(command);
         }
     }
-
 }

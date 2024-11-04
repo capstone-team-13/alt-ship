@@ -5332,7 +5332,7 @@
             <param name="culture">The <see cref="T:System.Globalization.CultureInfo" /> to use as the current culture.</param>
             <param name="value">The <see cref="T:System.Object" /> to convert.</param>
             <returns>An <see cref="T:System.Object" /> that represents the converted value.</returns>
-            <exception cref="T:System.ArgumentException">Inavlid value type: " + value.GetType().FullName - value</exception>
+            <exception cref="T:System.ArgumentException">Inavlid value type: " + value.GetControllerType().FullName - value</exception>
         </member>
         <member name="M:Accord.Math.Converters.RationalConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Type)">
             <summary>

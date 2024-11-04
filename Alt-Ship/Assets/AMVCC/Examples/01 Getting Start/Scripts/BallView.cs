@@ -1,19 +1,10 @@
-using JetBrains.Annotations;
-using Events = EE.AMVCC.Examples.BounceBallApplication.Events;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace EE.AMVCC.Examples
 {
-    public class BallView : BounceElement
+    public class BallView : View
     {
-        public void ScaleDown()
-        {
-            transform.localScale *= 0.9f;
-        }
-
-        [UsedImplicitly]
-        private void OnCollisionEnter()
-        {
-            App.Notify(Events.Ball.HitGround, gameObject, null);
-        }
+        public Text BounceText;
     }
 }
