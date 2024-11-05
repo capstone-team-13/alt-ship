@@ -10,7 +10,7 @@ public class InteractionKeyUI : MonoBehaviour
     [SerializeField] private TMP_Text m_actionName;
 
     [UsedImplicitly]
-    public void Active(Interactable interactable)
+    public void Active(IInteractable interactable)
     {
         m_group.alpha = 1;
         m_keycode.text = interactable.KeyCode.ToString();
@@ -18,7 +18,7 @@ public class InteractionKeyUI : MonoBehaviour
     }
 
     [UsedImplicitly]
-    public void Deactivate(Interactable interactable)
+    public void Deactivate(IInteractable interactable)
     {
         m_group.alpha = 0;
     }
