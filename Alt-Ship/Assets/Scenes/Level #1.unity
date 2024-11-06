@@ -944,8 +944,8 @@ Transform:
   m_GameObject: {fileID: 429224797}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -0.33333334}
-  m_LocalScale: {x: 0.041666668, y: 1, z: 0.041666668}
+  m_LocalPosition: {x: 0, y: 1, z: -7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 684679379}
@@ -1025,6 +1025,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_interactionKey: 6500000060010000
   m_interactionName: Start Steer
+  m_action:
+    m_Name: Action
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e01025ba-4826-4057-9552-88152d91058c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   m_interactionCoolingDown: 0.1
   OnActivated:
     m_PersistentCalls:
@@ -1072,7 +1081,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_interactionRadius: 2
-  m_rotationY: -180
+  m_imageRotationY: 0
   m_playerLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -1391,7 +1400,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 0.041666668, y: 1, z: 0.041666668}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 595947505}
@@ -1956,8 +1965,8 @@ Transform:
   m_GameObject: {fileID: 789085822}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.39583334, y: 1, z: 0.3125}
-  m_LocalScale: {x: 0.041666668, y: 1, z: 0.041666668}
+  m_LocalPosition: {x: -8.5, y: 1, z: 6.5625}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 977758793}
@@ -2031,6 +2040,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_interactionKey: 6500000060010000
   m_interactionName: Shoot
+  m_action:
+    m_Name: Action
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a5700004-2604-4915-b6d3-16042749d842
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 3417bffa-8033-4a48-a709-34d6989bc0eb
+      m_Path: Keyboard/E
+      m_Interactions: Press
+      m_Processors: 
+      m_Groups: 
+      m_Action: Action
+      m_Flags: 0
+    m_Flags: 0
   m_interactionCoolingDown: 2
   OnActivated:
     m_PersistentCalls:
@@ -3016,7 +3042,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 24, y: 1, z: 24}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1701215690}
@@ -3539,7 +3565,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 24, y: 1, z: 24}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1482615752}
@@ -3741,7 +3767,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.083333336, y: 1, z: 0}
-  m_LocalScale: {x: 0.041666668, y: 1, z: 0.041666668}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 542714768}
