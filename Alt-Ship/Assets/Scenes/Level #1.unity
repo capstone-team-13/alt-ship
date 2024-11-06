@@ -1025,11 +1025,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_interactionKey: 6500000060010000
   m_interactionName: Start Steer
-  m_action:
-    m_Name: Action
+  m_inputAction:
+    m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: e01025ba-4826-4057-9552-88152d91058c
+    m_Id: d2ad66c5-8ab3-46f1-b4be-374c15c474bb
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -1085,89 +1085,6 @@ MonoBehaviour:
   m_playerLayer:
     serializedVersion: 2
     m_Bits: 8
---- !u!1 &497261711
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 497261712}
-  - component: {fileID: 497261714}
-  - component: {fileID: 497261713}
-  m_Layer: 0
-  m_Name: Mesh
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &497261712
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 497261711}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 789085823}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &497261713
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 497261711}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 6c2af81404e8409428c04bd195d073e7, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &497261714
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 497261711}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &508631009
 GameObject:
   m_ObjectHideFlags: 0
@@ -1970,7 +1887,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 977758793}
-  - {fileID: 497261712}
   m_Father: {fileID: 1701215690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &789085824
@@ -2040,22 +1956,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_interactionKey: 6500000060010000
   m_interactionName: Shoot
-  m_action:
-    m_Name: Action
+  m_inputAction:
+    m_Name: Input
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: a5700004-2604-4915-b6d3-16042749d842
+    m_Id: 8b45442e-41a0-450b-88ce-96bd0fe5deef
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 3417bffa-8033-4a48-a709-34d6989bc0eb
-      m_Path: Keyboard/E
-      m_Interactions: Press
-      m_Processors: 
-      m_Groups: 
-      m_Action: Action
-      m_Flags: 0
+    m_SingletonActionBindings: []
     m_Flags: 0
   m_interactionCoolingDown: 2
   OnActivated:
@@ -3594,7 +3502,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 24, y: 1, z: 24}
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &1701215692
 MonoBehaviour:
