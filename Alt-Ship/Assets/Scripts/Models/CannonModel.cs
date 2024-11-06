@@ -3,12 +3,8 @@ using UnityEngine;
 
 public class CannonModel : Model
 {
-    public GameObject Projectile;
+    public Rigidbody Projectile;
+    public Transform ShootAt;
 
-    public float InitialSpeed = 5.0f;
-    public Vector3 Direction = new(0, 0, 1);
-
-    [Header("Player Interaction")] public float InteractionRadius = 5.0f;
-
-    public LayerMask PlayerLayer;
+    public float InitialForce = 10.0f;
 }
