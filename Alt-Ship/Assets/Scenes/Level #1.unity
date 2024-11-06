@@ -927,7 +927,7 @@ GameObject:
   - component: {fileID: 429224802}
   - component: {fileID: 429224801}
   - component: {fileID: 429224804}
-  - component: {fileID: 429224806}
+  - component: {fileID: 429224805}
   m_Layer: 0
   m_Name: Rudder
   m_TagString: Untagged
@@ -1011,7 +1011,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67d80bb51ea9ae342b19833536063b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &429224806
+--- !u!114 &429224805
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1023,16 +1023,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd3d852c26d3514f823650d8c348466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_interactionKey: 6500000060010000
   m_interactionName: Start Steer
   m_inputAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: d2ad66c5-8ab3-46f1-b4be-374c15c474bb
+    m_Name: Input
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 8513b478-16d4-4620-8660-2a68daa54d0f
     m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
+    m_Interactions: Press
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: e98ca954-9311-4f29-a843-6afee40eaccc
+      m_Path: <Keyboard>/E
+      m_Interactions: Press
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input
+      m_Flags: 0
     m_Flags: 0
   m_interactionCoolingDown: 0.1
   OnActivated:
@@ -1954,16 +1961,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9662a70aac9342740a0db06a59c2fd76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_interactionKey: 6500000060010000
   m_interactionName: Shoot
   m_inputAction:
     m_Name: Input
-    m_Type: 0
-    m_ExpectedControlType: 
+    m_Type: 1
+    m_ExpectedControlType: Button
     m_Id: 8b45442e-41a0-450b-88ce-96bd0fe5deef
     m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
+    m_Interactions: Press
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: bac448d8-707f-4259-b808-57703ca595be
+      m_Path: <Keyboard>/E
+      m_Interactions: Press
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input
+      m_Flags: 0
     m_Flags: 0
   m_interactionCoolingDown: 2
   OnActivated:

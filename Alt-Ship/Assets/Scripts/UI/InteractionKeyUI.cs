@@ -13,7 +13,7 @@ public class InteractionKeyUI : MonoBehaviour
     public void Active(IInteractable interactable)
     {
         m_group.alpha = 1;
-        m_keycode.text = interactable.KeyCode.ToString();
+        m_keycode.text = interactable.KeyName;
         m_actionName.text = interactable.InteractionName;
     }
 
