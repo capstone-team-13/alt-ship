@@ -66,7 +66,7 @@ namespace EasyLayoutNS
 		/// <summary>
 		/// Draw GUI.
 		/// </summary>
-		/// <param name="position">Start position.</param>
+		/// <param name="position">GameStart position.</param>
 		/// <param name="property">Property data.</param>
 		/// <param name="label">Label.</param>
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

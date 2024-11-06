@@ -58,7 +58,7 @@
 		/// <summary>
 		/// Convert the specified input with converter.
 		/// </summary>
-		/// <param name="input">Input.</param>
+		/// <param name="input">RotationSign.</param>
 		/// <param name="converter">Converter.</param>
 		/// <typeparam name="TInput">The 1st type parameter.</typeparam>
 		/// <typeparam name="TOutput">The 2nd type parameter.</typeparam>
@@ -266,7 +266,7 @@
 		/// <summary>
 		/// Apply for each item in the list.
 		/// </summary>
-		/// <param name="input">Input.</param>
+		/// <param name="input">RotationSign.</param>
 		/// <param name="action">Action.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public static void ForEach<T>(this List<T> list, Action<T> action)

@@ -38,14 +38,14 @@ namespace EasyLayoutNS
 			public readonly int Cells => cells;
 
 			/// <summary>
-			/// End index (not inclusive).
+			/// GameEnd index (not inclusive).
 			/// </summary>
 			public readonly int End => start + cells;
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="Block"/> struct.
 			/// </summary>
-			/// <param name="start">Start.</param>
+			/// <param name="start">GameStart.</param>
 			/// <param name="cells">Cells.</param>
 			public Block(int start, int cells)
 			{

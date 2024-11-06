@@ -122,7 +122,7 @@
 		/// Gets the widths sizes info.
 		/// </summary>
 		/// <returns>The widths sizes info.</returns>
-		/// <param name="elems">Elements.</param>
+		/// <param name="elems">Element.</param>
 		public static SizesInfo GetWidths(List<LayoutElementInfo> elems)
 		{
 			var sizes = new Size[elems.Count];
@@ -143,7 +143,7 @@
 		/// Gets the heights sizes info.
 		/// </summary>
 		/// <returns>The heights sizes info.</returns>
-		/// <param name="elems">Elements.</param>
+		/// <param name="elems">Element.</param>
 		public static SizesInfo GetHeights(List<LayoutElementInfo> elems)
 		{
 			var sizes = new Size[elems.Count];
@@ -164,7 +164,7 @@
 		/// Gets the widths sizes info.
 		/// </summary>
 		/// <returns>The widths sizes info.</returns>
-		/// <param name="group">Elements group.</param>
+		/// <param name="group">Element group.</param>
 		public static SizesInfo GetWidths(LayoutElementsGroup group)
 		{
 			var sizes = new Size[group.Columns];
@@ -180,7 +180,7 @@
 		/// Gets the heights sizes info.
 		/// </summary>
 		/// <returns>The heights sizes info.</returns>
-		/// <param name="group">Elements group.</param>
+		/// <param name="group">Element group.</param>
 		public static SizesInfo GetHeights(LayoutElementsGroup group)
 		{
 			var sizes = new Size[group.Rows];

@@ -78,7 +78,7 @@
 		/// Get the maximum widths.
 		/// </summary>
 		/// <returns>The maximum widths.</returns>
-		/// <param name="elems">Elements.</param>
+		/// <param name="elems">Element.</param>
 		public static Size MaxWidths(List<LayoutElementInfo> elems)
 		{
 			var min = 0f;
@@ -99,7 +99,7 @@
 		/// Get the maximum heights.
 		/// </summary>
 		/// <returns>The maximum heights.</returns>
-		/// <param name="elems">Elements.</param>
+		/// <param name="elems">Element.</param>
 		public static Size MaxHeights(List<LayoutElementInfo> elems)
 		{
 			var min = 0f;
