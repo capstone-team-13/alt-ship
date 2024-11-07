@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -143,3 +144,4 @@ class MyDoCreateScriptAsset : EndNameEditAction
         return AssetDatabase.LoadAssetAtPath(pathName, typeof(Object));
     }
 }
+#endif

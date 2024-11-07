@@ -94,14 +94,8 @@ public class TempCharController : MonoBehaviour
     {
         Vector2 moveV = Vector2.zero;
 
-        if(Keyboard.current != null)
-        {
-          //  move.ReadValue<Vector2>();
-        }
-        if(Gamepad.current != null)
-        {
-            moveV = new Vector2(move.ReadValue<Vector3>().x, move.ReadValue<Vector3>().y);
-        }
+        moveV = new Vector2(move.ReadValue<Vector2>().x, move.ReadValue<Vector2>().y);
+        
         return moveV;
     }
 

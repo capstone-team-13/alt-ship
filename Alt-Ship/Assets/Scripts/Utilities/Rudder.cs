@@ -5,28 +5,9 @@ using Application = EE.AMVCC.Application;
 
 public class Rudder : MonoBehaviour
 {
-    [Header("Player Interaction")] [SerializeField]
-    private float m_interactionRadius = 5.0f;
-
-    [SerializeField] private LayerMask m_playerLayer;
-    [SerializeField] private Interactable m_interactable;
-
     private bool m_steering;
 
     #region Unity Callbacks
-
-    [UsedImplicitly]
-    private void Awake()
-    {
-        m_interactable.CanInteract = __M_CanInteract;
-    }
-
-    [UsedImplicitly]
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, m_interactionRadius);
-    }
 
     [UsedImplicitly]
     private void Update()
@@ -47,28 +28,12 @@ public class Rudder : MonoBehaviour
 
     #endregion
 
-
     #region API
 
-    public void Interact()
+    public void Interact(IInteractable interactable)
     {
-        m_steering = true;
-        Debug.Log("Start Steering...");
-    }
-
-    #endregion
-
-    #region Internal
-
-    private bool __M_CanInteract()
-    {
-        var colliders = Physics.OverlapSphere(transform.position, m_interactionRadius, m_playerLayer);
-        // TODO: Add condition that player behind the cannon
-
-        // TODO: Better State Management
-        if (m_steering && colliders.Length <= 0) m_steering = false;
-
-        return !m_steering && colliders.Length > 0;
+        m_steering = !m_steering;
+        interactable.InteractionName = m_steering ? "Stop Steering" : "Start Steer";
     }
 
     #endregion
