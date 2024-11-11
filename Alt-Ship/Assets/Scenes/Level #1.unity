@@ -2109,6 +2109,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1007514451}
   - component: {fileID: 1007514452}
+  - component: {fileID: 1007514456}
   - component: {fileID: 1007514454}
   - component: {fileID: 1007514453}
   - component: {fileID: 1007514455}
@@ -2127,13 +2128,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1007514450}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 695763078}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1701215690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1007514452
 BoxCollider:
@@ -2169,9 +2170,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parentBlackboard: {fileID: 0}
-  _serializedBlackboard: '{"_variables":{}}'
-  _objectReferences: []
-  _serializedVariables: []
+  _serializedBlackboard: '{"_variables":{"Target Position":{"_name":"Target Position","_id":"f6c110ec-3f4b-4f41-a75f-ebba63bbb443","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Vector3,
+    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"Sheep":{"_value":1,"_name":"Sheep","_id":"faf88a24-51fd-492c-b339-1c6db48a5237","$type":"NodeCanvas.Framework.Variable`1[[SheepModel,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}}}'
+  _objectReferences:
+  - {fileID: 0}
+  - {fileID: 1007514456}
+  _serializedVariables:
+  - _json: '{"_name":"Target Position","_id":"f6c110ec-3f4b-4f41-a75f-ebba63bbb443","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Vector3,
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references: []
+  - _json: '{"_value":1,"_name":"Sheep","_id":"faf88a24-51fd-492c-b339-1c6db48a5237","$type":"NodeCanvas.Framework.Variable`1[[SheepModel,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: 1007514456}
 --- !u!114 &1007514454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2185,13 +2198,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _serializedExposedParameters: []
-  _boundGraphSerialization: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[],"connections":[],"canvasGroups":[],"localBlackboard":{"_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
+  _boundGraphSerialization: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"_position":{"x":151.0,"y":182.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"0"},{"_action":{"TargetPosition":{"_name":"Target
+    Position","_targetVariableID":"f6c110ec-3f4b-4f41-a75f-ebba63bbb443"},"Sheep":{"_name":"Sheep","_targetVariableID":"faf88a24-51fd-492c-b339-1c6db48a5237"},"$type":"NodeCanvas.Tasks.Actions.MoveToPosition"},"_position":{"x":57.0,"y":285.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"1"},{"_action":{"actions":[{"waitTime":{"_value":2.0},"$type":"NodeCanvas.Tasks.Actions.Wait"},{"TargetPosition":{"_name":"Target
+    Position","_targetVariableID":"f6c110ec-3f4b-4f41-a75f-ebba63bbb443"},"$type":"NodeCanvas.Tasks.Actions.SelectTargetPosition"}],"$type":"NodeCanvas.Framework.ActionList"},"_position":{"x":203.0,"y":282.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"2"}],"connections":[{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
   _boundGraphObjectReferences: []
   _boundGraphSource:
     _version: 3.3
     _category: 
     _comments: 
-    _translation: {x: 0, y: 0}
+    _translation: {x: 250, y: 58}
     _zoomFactor: 1
   _firstActivation: 0
   _enableAction: 0
@@ -2217,6 +2232,21 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.5, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &1007514456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007514450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a29a7baabc491f40a30fab9345ec75c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: 5
+  Dead: 0
+  Speed: 5
 --- !u!1 &1036309879
 GameObject:
   m_ObjectHideFlags: 0
@@ -3804,6 +3834,7 @@ Transform:
   - {fileID: 1482615752}
   - {fileID: 789085823}
   - {fileID: 429224798}
+  - {fileID: 1007514451}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1701215691
@@ -4178,5 +4209,4 @@ SceneRoots:
   - {fileID: 926228120}
   - {fileID: 2124954997}
   - {fileID: 1093067055}
-  - {fileID: 1007514451}
   - {fileID: 194497427}
