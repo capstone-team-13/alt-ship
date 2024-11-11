@@ -19,12 +19,15 @@ public class CameraController : MonoBehaviour
     public Transform spawnPointA;
     public Transform spawnPointB;
 
+    int playerNumber = 0;
+
 
     private void OnEnable()
     {
         Debug.Log("Hello world 1");
         playerInputManager.onPlayerJoined += AddPlayer;
         playerInputManager.onPlayerJoined += SpawnLocation;
+        playerNumber += 1;
     }
 
     private void OnDisable()
@@ -57,14 +60,21 @@ public class CameraController : MonoBehaviour
     {
         if (spawnPointA != null && spawnPointB != null)
         {
-            if (PlayerCounter.playerCount == 1)
+            Debug.Log("Spawn points found");
+            if (playerNumber == 1)
             {
+                Debug.Log("P1 Spawned");
                 player.transform.position = spawnPointA.transform.position;
             }
-            else if (PlayerCounter.playerCount == 2)
+            else if (playerNumber == 2)
             {
+                Debug.Log("P2 Spawned");
                 player.transform.position = spawnPointB.transform.position;
             }
+        }
+        else
+        {
+            Debug.Log("No spawn points found");
         }
     }
 
