@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -16,14 +17,16 @@ namespace EE.QC
         private const string SERVER_ADDRESS = "127.0.0.1";
         private const int PORT = 5000;
 
+        #region Unity Callbacks
+
         [UsedImplicitly]
-        private void Start()
+        private async void Start()
         {
-            ConnectToServer();
+            await __M_ConnectToServerAsync();
         }
 
         [UsedImplicitly]
-        private void Update()
+        private async void Update()
         {
             if (m_client is not { Connected: true })
             {
@@ -32,13 +35,10 @@ namespace EE.QC
             }
 
             var dataToSend = DateTime.Now.ToString("HH:mm:ss.fff");
-            SendData(dataToSend);
+            await __M_SendDataAsync(dataToSend);
 
-            var response = ReceiveData();
-            if (response != null)
-            {
-                Debug.Log("Response from .exe: " + response);
-            }
+            var response = await __M_ReceiveDataAsync();
+            if (response != null) Debug.Log("Response from .exe: " + response);
         }
 
         [UsedImplicitly]
@@ -49,11 +49,16 @@ namespace EE.QC
             m_client?.Close();
         }
 
-        private void ConnectToServer()
+        #endregion
+
+        #region Internal
+
+        private async Task __M_ConnectToServerAsync()
         {
             try
             {
-                m_client = new TcpClient(SERVER_ADDRESS, PORT);
+                m_client = new TcpClient();
+                await m_client.ConnectAsync(SERVER_ADDRESS, PORT);
                 m_writer = new StreamWriter(m_client.GetStream()) { AutoFlush = true };
                 m_reader = new StreamReader(m_client.GetStream());
                 Debug.Log("Connected to .exe server.");
@@ -64,11 +69,11 @@ namespace EE.QC
             }
         }
 
-        private void SendData(string message)
+        private async Task __M_SendDataAsync(string message)
         {
             try
             {
-                m_writer.WriteLine(message);
+                await m_writer.WriteLineAsync(message);
             }
             catch (Exception e)
             {
@@ -76,11 +81,14 @@ namespace EE.QC
             }
         }
 
-        private string ReceiveData()
+        private async Task<string> __M_ReceiveDataAsync()
         {
             try
             {
-                if (m_client.Available > 0) return m_reader.ReadLine();
+                if (m_client.Available > 0)
+                {
+                    return await m_reader.ReadLineAsync();
+                }
             }
             catch (Exception e)
             {
@@ -89,5 +97,7 @@ namespace EE.QC
 
             return null;
         }
+
+        #endregion
     }
 }

@@ -1,0 +1,11 @@
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS src/*.cpp include/*.h)
+
+add_executable(Server ${MY_SOURCES})
+
+if(WIN32)
+    target_link_libraries(Server ws2_32)
+endif()
+
+target_include_directories(Server PUBLIC include)
