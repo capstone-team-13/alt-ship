@@ -68,6 +68,7 @@ public class CameraController : MonoBehaviour
             {
                 Debug.Log("P1 Spawned");
                 player.transform.position = spawnPointA.transform.position;
+
             }
             else if (playerNumber == 2)
             {
@@ -79,6 +80,11 @@ public class CameraController : MonoBehaviour
         {
             Debug.Log("No spawn points found");
         }
+        if(shipModel != null)
+        {
+            player.transform.parent = shipModel.transform;
+        }
+
     }
 
 }
