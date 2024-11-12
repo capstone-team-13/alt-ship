@@ -1,11 +1,20 @@
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS src/*.cpp include/*.h)
+file(GLOB_RECURSE SERVER_SOURCES CONFIGURE_DEPENDS src/*.cpp include/*.h)
 
-add_executable(Server ${MY_SOURCES})
+file(GLOB_RECURSE ENET_SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/extern/enet/*.c)
+add_library(enet INTERFACE)
+target_include_directories(enet INTERFACE
+    ${CMAKE_SOURCE_DIR}/extern/enet/include
+)
+target_sources(enet INTERFACE ${ENET_SOURCES})
 
-if(WIN32)
-    target_link_libraries(Server ws2_32)
-endif()
+add_executable(Server ${SERVER_SOURCES})
 
 target_include_directories(Server PUBLIC include)
+
+target_link_libraries(Server enet)
+
+if(WIN32)
+    target_link_libraries(Server ws2_32 winmm)
+endif()
