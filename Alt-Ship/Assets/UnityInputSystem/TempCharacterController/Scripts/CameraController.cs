@@ -19,6 +19,8 @@ public class CameraController : MonoBehaviour
     public Transform spawnPointA;
     public Transform spawnPointB;
 
+    public GameObject shipModel;
+
     int playerNumber = 0;
 
 
@@ -58,6 +60,7 @@ public class CameraController : MonoBehaviour
 
     public void SpawnLocation(PlayerInput player)
     {
+        player.transform.parent = shipModel.transform;
         if (spawnPointA != null && spawnPointB != null)
         {
             Debug.Log("Spawn points found");
