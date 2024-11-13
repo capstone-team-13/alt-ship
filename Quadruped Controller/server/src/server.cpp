@@ -12,7 +12,7 @@ bool Server::__M_InitializeENet() const
 ENetHost *Server::__M_CreateServer() const
 {
     ENetAddress address;
-    enet_address_set_host(&address, "127.0.0.1");
+    enet_address_set_ip(&address, "127.0.0.1");
     address.port = PORT;
 
     ENetHost *server;
@@ -20,7 +20,8 @@ ENetHost *Server::__M_CreateServer() const
                               MAX_CONNECTIONS, // allow up to N clients and/or outgoing connections
                               NUM_CHANNELS,    // allow up to N channels to be used
                               0,               // assume any amount of incoming bandwidth
-                              0);              // assume any amount of outgoing bandwidth
+                              0,               // assume any amount of outgoing bandwidth
+                              ENET_HOST_BUFFER_SIZE_MIN);
     return server;
 }
 

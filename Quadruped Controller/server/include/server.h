@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
-#include <enet/enet.h>
+#include <enet.h>
 
 class Server
 {
