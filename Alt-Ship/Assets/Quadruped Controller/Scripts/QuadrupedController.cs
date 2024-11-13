@@ -1,12 +1,26 @@
 using ENet;
 using JetBrains.Annotations;
 using System;
-using System.Collections;
 using System.IO;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
+
 
 namespace EE.QC
 {
+    public class Logger
+    {
+        public static void LogError(object error)
+        {
+            Debug.LogError($"[{DateTime.Now:HH:mm:ss}] {error}");
+        }
+
+        public static void Log(object info)
+        {
+            Debug.Log($"[{DateTime.Now:HH:mm:ss}] {info}");
+        }
+    }
+
     public class QuadrupedController : MonoBehaviour
     {
         #region Editor API
@@ -33,6 +47,7 @@ namespace EE.QC
         [UsedImplicitly]
         private void OnDestroy()
         {
+            m_server.DisconnectNow(0);
             m_client.Dispose();
             Library.Deinitialize();
         }
@@ -42,11 +57,7 @@ namespace EE.QC
         #region Internal
 
         private Host m_client;
-        private Peer m_peer;
-
-        private const int TIMEOUT_MS = 5000;
-        private bool m_isConnected = false;
-        private bool isConnecting = true;
+        private Peer m_server;
 
         private const string SERVER_ADDRESS = "127.0.0.1";
         private const int PORT = 5000;
@@ -65,14 +76,14 @@ namespace EE.QC
 
                 if (!initialized)
                 {
-                    Debug.LogError("ENet Library initialization failed.");
+                    Logger.LogError("ENet Library initialization failed.");
                     throw new InvalidOperationException("ENet Library initialization failed.");
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Exception occurred during ENet Library initialization: {ex.Message}");
-                Debug.LogError("Stack Trace: " + ex.StackTrace);
+                Logger.LogError($"Exception occurred during ENet Library initialization: {ex.Message}");
+                Logger.LogError("Stack Trace: " + ex.StackTrace);
                 throw;
             }
 
@@ -83,7 +94,7 @@ namespace EE.QC
             }
             catch (Exception ex)
             {
-                Debug.LogError("Failed to create ENet client host: " + ex.Message);
+                Logger.LogError("Failed to create ENet client host: " + ex.Message);
                 return;
             }
 
@@ -91,29 +102,8 @@ namespace EE.QC
             address.SetHost(SERVER_ADDRESS);
             address.Port = PORT;
 
-            m_peer = m_client.Connect(address);
-            Debug.Log("Attempting to connect to server...");
-            StartCoroutine(CheckConnectionTimeout());
-        }
-
-
-        private IEnumerator CheckConnectionTimeout()
-        {
-            float startTime = Time.time;
-
-            while (!m_isConnected && isConnecting && Time.time - startTime < TIMEOUT_MS / 1000f)
-            {
-                yield return null;
-            }
-
-            if (m_isConnected) yield break;
-
-            Debug.LogWarning("Connection timed out.");
-            if (m_peer.State != PeerState.Disconnected) m_peer.Reset();
-
-            m_client?.Dispose();
-            Library.Deinitialize();
-            isConnecting = false;
+            m_server = m_client.Connect(address);
+            m_server.Timeout(5, 500, 2000);
         }
 
         private void __M_CreateBufferReader()
@@ -125,11 +115,6 @@ namespace EE.QC
 
         private void __M_HandleEvents()
         {
-            if (m_client == null || !isConnecting)
-            {
-                return;
-            }
-
             try
             {
                 var noImmediateEvent = m_client.CheckEvents(out var netEvent) <= 0;
@@ -145,15 +130,16 @@ namespace EE.QC
                         break;
 
                     case ENet.EventType.Connect:
-                        __M_Log($"Connected to server - PID: {m_peer.ID}, IP: {m_peer.IP}");
+                        Logger.Log($"Connected to server - PID: {m_server.ID}, IP: {m_server.IP}");
                         break;
 
                     case ENet.EventType.Disconnect:
-                        __M_Log($"Disconnected from server - PID: {m_peer.ID}");
+                        Logger.Log($"Disconnected from server - PID: {m_server.ID}");
                         break;
 
                     case ENet.EventType.Timeout:
-                        __M_LogError($"Connection timeout - PID: {m_peer.ID}, RTT: {m_peer.RoundTripTime} ms");
+                        Logger.LogError($"Connection timeout - PID: {m_server.ID}, RTT: {m_server.RoundTripTime} ms");
+                        Logger.Log(m_server.State);
                         break;
 
                     case ENet.EventType.Receive:
@@ -169,23 +155,22 @@ namespace EE.QC
                         break;
 
                     default:
-                        __M_LogError($"Unhandled event type: {netEvent.Type}");
+                        Logger.LogError($"Unhandled event type: {netEvent.Type}");
                         break;
                 }
             }
             catch (Exception ex)
             {
-                __M_LogError($"Exception occurred while handling events: {ex.Message}");
+                Logger.LogError($"Exception occurred while handling events: {ex.Message}");
             }
         }
-
 
         private void __M_ParsePacket(ref ENet.Event netEvent)
         {
             m_readStream.Position = 0;
             netEvent.Packet.CopyTo(m_buffer);
             var packetType = (PacketType)m_reader.ReadByte();
-            __M_Log(
+            Logger.Log(
                 $"Packet received - Type: {packetType}, Length: {netEvent.Packet.Length} bytes, Channel ID: {netEvent.ChannelID}");
 
             switch (packetType)
@@ -196,27 +181,30 @@ namespace EE.QC
                         var position = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(), m_reader.ReadSingle());
                         __M_UpdatePosition(position);
                     }
-                    else __M_LogError("Not enough bytes available to read a Vector3 position.");
+                    else
+                    {
+                        Logger.LogError("Not enough bytes available to read a Vector3 position.");
+                    }
 
                     break;
+
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    try
+                    {
+                        var unknownData = m_reader.ReadString();
+                        Logger.LogError($"Unknown event type. Attempted to read data as string: {unknownData}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError($"Unknown event type and failed to read data as string: {ex.Message}");
+                    }
+                    throw new ArgumentOutOfRangeException(nameof(packetType), $"Unknown packet type: {packetType}");
             }
         }
 
         private void __M_UpdatePosition(Vector3 position)
         {
             m_body.transform.position = position;
-        }
-
-        private static void __M_Log(string info)
-        {
-            Debug.Log($"[{DateTime.Now:HH:mm:ss}] " + info);
-        }
-
-        private static void __M_LogError(string error)
-        {
-            Debug.LogError($"[{DateTime.Now:HH:mm:ss}] " + error);
         }
 
         #endregion

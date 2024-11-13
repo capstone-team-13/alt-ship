@@ -30,7 +30,7 @@ std::string Server::__M_CurrentTime() const
     auto now = std::chrono::system_clock::now();
     std::time_t time = std::chrono::system_clock::to_time_t(now);
     std::stringstream ss;
-    ss << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
+    ss << std::put_time(std::localtime(&time), "%H:%M:%S");
     return ss.str();
 }
 
@@ -68,59 +68,48 @@ Server::Server()
 
 Server::~Server()
 {
+    for (auto &client : m_clients)
+    {
+        ENetPeer *peer = client.second;
+        if (peer && peer->state == ENET_PEER_STATE_CONNECTED)
+            enet_peer_disconnect_now(peer, 0);
+    }
+
+    m_clients.clear();
     enet_host_destroy(m_server);
 }
 
 void Server::Tick()
 {
-    // ENetEvent event;
-    // while (true)
-    // {
-    //     int32_t eventSize = enet_host_service(m_server, &event, 0);
-
-    //     if (eventSize == 0)
-    //         break;
-
-    //     if (eventSize < 0)
-    //     {
-    //         __M_LogError("Encountered error while polling");
-    //         break;
-    //     }
-
-    //     switch (event.type)
-    //     {
-    //     case ENET_EVENT_TYPE_RECEIVE:
-    //         __M_Log("Client #", event.peer->incomingPeerID, " recevied message");
-    //         break;
-    //     case ENET_EVENT_TYPE_CONNECT:
-    //         __M_Log("Client #", event.peer->incomingPeerID, " connected to the server.");
-    //         m_clients[event.peer->incomingPeerID] = event.peer;
-    //         SendTo(event.peer, "Welcome to the server!");
-    //         break;
-    //     case ENET_EVENT_TYPE_DISCONNECT:
-    //         __M_Log("Client #", event.peer->incomingPeerID, " disconnected from the server.");
-    //         m_clients.erase(event.peer->incomingPeerID);
-    //         SendTo(event.peer, "Goodbye!");
-    //         break;
-    //     default:
-    //         break;
-    //     }
-    // }
-
     ENetEvent event;
-    while (enet_host_service(m_server, &event, 1000) > 0)
+    while (true)
     {
+        int32_t eventSize = enet_host_service(m_server, &event, 0);
+
+        if (eventSize == 0)
+            break;
+
+        if (eventSize < 0)
+        {
+            __M_LogError("Encountered error while polling");
+            break;
+        }
+
         switch (event.type)
         {
         case ENET_EVENT_TYPE_RECEIVE:
-            std::cout << "Received a packet of length " << event.packet->dataLength << " from client.\n";
-            enet_packet_destroy(event.packet);
+            __M_Log("Client #", event.peer->incomingPeerID, " recevied message");
             break;
         case ENET_EVENT_TYPE_CONNECT:
-            std::cout << "Client connected.\n";
+            __M_Log("Client #", event.peer->incomingPeerID, " connected to the server.");
+            m_clients[event.peer->incomingPeerID] = event.peer;
+            SendTo(event.peer, "Welcome to the server!");
             break;
         case ENET_EVENT_TYPE_DISCONNECT:
-            std::cout << "Client disconnected.\n";
+            __M_Log("Client #", event.peer->incomingPeerID, " disconnected from the server.");
+            m_clients.erase(event.peer->incomingPeerID);
+            break;
+        default:
             break;
         }
     }
