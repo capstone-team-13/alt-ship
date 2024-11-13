@@ -16,11 +16,18 @@ public class CameraController : MonoBehaviour
     private InputActionAsset inputAsset;
     private InputActionMap inputMap;
 
+    public Transform spawnPointA;
+    public Transform spawnPointB;
+
+    int playerNumber = 0;
+
 
     private void OnEnable()
     {
         Debug.Log("Hello world 1");
         playerInputManager.onPlayerJoined += AddPlayer;
+        playerInputManager.onPlayerJoined += SpawnLocation;
+        playerNumber += 1;
     }
 
     private void OnDisable()
@@ -47,6 +54,28 @@ public class CameraController : MonoBehaviour
         playerParent.GetComponentInChildren<CameraInput>().horizontal = inputMap.FindAction("Camera");
 
 
+    }
+
+    public void SpawnLocation(PlayerInput player)
+    {
+        if (spawnPointA != null && spawnPointB != null)
+        {
+            Debug.Log("Spawn points found");
+            if (playerNumber == 1)
+            {
+                Debug.Log("P1 Spawned");
+                player.transform.position = spawnPointA.transform.position;
+            }
+            else if (playerNumber == 2)
+            {
+                Debug.Log("P2 Spawned");
+                player.transform.position = spawnPointB.transform.position;
+            }
+        }
+        else
+        {
+            Debug.Log("No spawn points found");
+        }
     }
 
 }
