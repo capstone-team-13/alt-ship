@@ -19,7 +19,7 @@ public class Rudder : MonoBehaviour
         steering = actionMap.FindAction("ShipSteering");
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         rotationSign = 0.0f;
         steering.Enable();
@@ -33,7 +33,6 @@ public class Rudder : MonoBehaviour
         steering.canceled -= steeringCanceled;
         rotationSign = 0.0f;
         steering.Disable();
-
     }
 
 
@@ -63,18 +62,19 @@ public class Rudder : MonoBehaviour
         rotationSign = 0.0f;
     }
 
-
     #endregion
 
     #region API
 
     public void Interact(IInteractable interactable, GameObject interactor)
     {
-        m_steering = true;
-        interactable.InteractionName = "Start Steer";
+        m_steering = !m_steering;
+        interactable.InteractionName = m_steering ? "Stop Steering" : "Start Steer";
 
-        var playeModel = interactor.GetComponent<PlayerModel>();
-        __M_LockPlayer(playeModel);
+        var playerModel = interactor.GetComponent<PlayerModel>();
+
+        if (m_steering) __M_LockPlayer(playerModel);
+        else __M_UnLockPlayer(playerModel);
     }
 
     public void Exit(IInteractable interactable, GameObject interactor)
@@ -89,19 +89,21 @@ public class Rudder : MonoBehaviour
     #endregion
 
     #region Internal
+
     private void __M_LockPlayer(PlayerModel player)
     {
-        Debug.Log("Hello world");
-        const float newSpeed = -1;
+        const float newSpeed = 0;
         Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
         Debug.Log($"<color=#FFFF00>{player.name} Locked.</color>");
     }
 
     private void __M_UnLockPlayer(PlayerModel player)
     {
-        const float newSpeed = 0;
+        // TODO: Reference Regular Speed
+        const float newSpeed = 5;
         Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
         Debug.Log($"<color=#FFFF00>{player.name} Unlocked.</color>");
     }
+
     #endregion
 }

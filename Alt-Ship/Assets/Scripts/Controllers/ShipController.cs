@@ -14,14 +14,10 @@ public class ShipController : Controller<ShipModel>
     {
         Model.SailDirection = transform.forward;
 
-        var currentEulerAngles = transform.localEulerAngles;
-        if (currentEulerAngles.y > 180) currentEulerAngles.y -= 360;
-
-        var smoothEulerAngles =
-            Vector3.Lerp(currentEulerAngles, Model.TargetEulerAngles, Model.LerpSpeed * Time.deltaTime);
-        transform.localEulerAngles = smoothEulerAngles;
+        Quaternion currentRotation = transform.localRotation;
+        Quaternion targetRotation = Quaternion.Euler(Model.TargetEulerAngles);
+        transform.localRotation = Quaternion.Lerp(currentRotation, targetRotation, Model.LerpSpeed * Time.deltaTime);
     }
-
 
     [UsedImplicitly]
     private void FixedUpdate()
@@ -55,11 +51,6 @@ public class ShipController : Controller<ShipModel>
     private void __M_Steer(float sign)
     {
         var rotationDelta = sign * Model.RotationSpeed * Time.deltaTime;
-
-        // TODO: Angle Constraints
-        const float angleConstraint = 60.0f;
-        // Model.TargetEulerAngles.y = Mathf.Max(Model.TargetEulerAngles.y + rotationDelta, angleConstraint);
-
         Model.TargetEulerAngles.y += rotationDelta;
     }
 
