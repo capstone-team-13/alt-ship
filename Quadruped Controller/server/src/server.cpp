@@ -1,134 +1,118 @@
-#include <ws2tcpip.h>
-#include <thread>
-#include "server.h"
+// User Defined
+#include <iomanip>
+#include <server.h>
 
-bool Server::__M_InitializeWinSock() const
+bool Server::__M_InitializeENet() const
 {
-    WSADATA wsaData;
-    int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    int result = enet_initialize();
+    atexit(enet_deinitialize);
     return result == 0;
 }
 
-SOCKET Server::__M_CreateSocket() const
+ENetHost *Server::__M_CreateServer() const
 {
-    SOCKET socketId = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (socketId == INVALID_SOCKET)
-    {
-        __M_LogError("Error creating socket: ", WSAGetLastError());
-        return INVALID_SOCKET;
-    }
+    ENetAddress address;
+    enet_address_set_ip(&address, "127.0.0.1");
+    address.port = PORT;
 
-    u_long mode = 1;
-    ioctlsocket(socketId, FIONBIO, &mode);
-
-    return socketId;
+    ENetHost *server;
+    server = enet_host_create(&address,
+                              MAX_CONNECTIONS, // allow up to N clients and/or outgoing connections
+                              NUM_CHANNELS,    // allow up to N channels to be used
+                              0,               // assume any amount of incoming bandwidth
+                              0,               // assume any amount of outgoing bandwidth
+                              ENET_HOST_BUFFER_SIZE_MIN);
+    return server;
 }
 
-bool Server::__M_Bind(SOCKET &socketId) const
+std::string Server::__M_CurrentTime() const
 {
-    sockaddr_in serverAddr = {};
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    serverAddr.sin_port = htons(PORT);
-
-    if (bind(socketId, (sockaddr *)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-    {
-        __M_LogError("Bind failed: ", WSAGetLastError());
-        closesocket(socketId);
-        return false;
-    }
-
-    return true;
+    auto now = std::chrono::system_clock::now();
+    std::time_t time = std::chrono::system_clock::to_time_t(now);
+    std::stringstream ss;
+    ss << std::put_time(std::localtime(&time), "%H:%M:%S");
+    return ss.str();
 }
 
-bool Server::__M_Listen(SOCKET &socketId) const
+void Server::SendTo(ENetPeer *peer, const std::string &message)
 {
-    if (listen(socketId, SOMAXCONN) == SOCKET_ERROR)
-    {
-        __M_LogError("Listen failed: ", WSAGetLastError());
-        closesocket(socketId);
-        return false;
-    }
+    ENetPacket *packet = enet_packet_create(
+        message.c_str(),
+        message.size() + 1,
+        ENET_PACKET_FLAG_RELIABLE);
 
-    return true;
+    enet_peer_send(peer, 0, packet);
+    enet_host_flush(peer->host);
 }
 
 Server::Server()
-    : m_clients(),
-      m_buffer(std::make_unique<char[]>(BUFFER_SIZE)),
-      m_socketId(INVALID_SOCKET)
+    : m_buffer(std::make_unique<char[]>(BUFFER_SIZE))
 {
-    if (!__M_InitializeWinSock())
+    if (!__M_InitializeENet())
     {
-        __M_LogError("WinSock initialization failed.");
+        __M_LogError("An error occurred while initializing ENet.");
         return;
     }
 
-    SOCKET socketId = __M_CreateSocket();
-    if (socketId == INVALID_SOCKET || !__M_Bind(socketId) || !__M_Listen(socketId))
+    m_server = __M_CreateServer();
+    if (m_server == NULL)
     {
-        WSACleanup();
+        __M_LogError("An error occurred while trying to create an ENet server host.");
         return;
     }
 
-    m_socketId = socketId;
     m_isRunning = true;
 
-    std::cout << "[Server] Server started on port " << PORT << std::endl;
+    __M_Log("Server started on port ", PORT);
 }
 
 Server::~Server()
 {
-    for (SOCKET clientSocket : m_clients)
+    for (auto &client : m_clients)
     {
-        closesocket(clientSocket);
+        ENetPeer *peer = client.second;
+        if (peer && peer->state == ENET_PEER_STATE_CONNECTED)
+            enet_peer_disconnect_now(peer, 0);
     }
 
-    closesocket(m_socketId);
-    WSACleanup();
+    m_clients.clear();
+    enet_host_destroy(m_server);
 }
 
 void Server::Tick()
 {
-    SOCKET clientSocket = accept(m_socketId, nullptr, nullptr);
-    if (clientSocket != INVALID_SOCKET)
+    ENetEvent event;
+    while (true)
     {
-        __M_Log("Client connected.");
+        int32_t eventSize = enet_host_service(m_server, &event, 0);
 
-        // Set the client socket to non-blocking mode
-        u_long mode = 1;
-        ioctlsocket(clientSocket, FIONBIO, &mode);
+        if (eventSize == 0)
+            break;
 
-        m_clients.push_back(clientSocket);
-        __M_Log("Client Count: ", m_clients.size());
-    }
-
-    for (auto it = m_clients.begin(); it != m_clients.end();)
-    {
-        SOCKET clientId = *it;
-
-        int bytesReceived = recv(clientId, m_buffer.get(), BUFFER_SIZE, 0);
-        if (bytesReceived > 0)
+        if (eventSize < 0)
         {
-            std::string receivedMessage(m_buffer.get(), bytesReceived);
-            __M_Log("Received from client: ", receivedMessage);
-
-            std::string response = "Response from server: " + receivedMessage;
-            send(clientId, response.c_str(), response.size(), 0);
+            __M_LogError("Encountered error while polling");
+            break;
         }
-        else if (bytesReceived == SOCKET_ERROR && WSAGetLastError() == WSAEWOULDBLOCK)
+
+        switch (event.type)
         {
-            ++it;
-        }
-        else
-        {
-            __M_Log("Client disconnected.");
-            closesocket(clientId);
-            it = m_clients.erase(it);
+        case ENET_EVENT_TYPE_RECEIVE:
+            __M_Log("Client #", event.peer->incomingPeerID, " recevied message");
+            break;
+        case ENET_EVENT_TYPE_CONNECT:
+            __M_Log("Client #", event.peer->incomingPeerID, " connected to the server.");
+            m_clients[event.peer->incomingPeerID] = event.peer;
+            SendTo(event.peer, "Welcome to the server!");
+            break;
+        case ENET_EVENT_TYPE_DISCONNECT:
+            __M_Log("Client #", event.peer->incomingPeerID, " disconnected from the server.");
+            m_clients.erase(event.peer->incomingPeerID);
+            break;
+        default:
+            break;
         }
     }
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 
 bool Server::IsRunning() const

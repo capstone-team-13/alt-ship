@@ -1,101 +1,210 @@
+using ENet;
 using JetBrains.Annotations;
 using System;
 using System.IO;
-using System.Net.Sockets;
-using System.Threading.Tasks;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
+
 namespace EE.QC
 {
+    public class Logger
+    {
+        public static void LogError(object error)
+        {
+            Debug.LogError($"[{DateTime.Now:HH:mm:ss}] {error}");
+        }
+
+        public static void Log(object info)
+        {
+            Debug.Log($"[{DateTime.Now:HH:mm:ss}] {info}");
+        }
+    }
+
     public class QuadrupedController : MonoBehaviour
     {
-        private TcpClient m_client;
-        private StreamWriter m_writer;
-        private StreamReader m_reader;
+        #region Editor API
 
-        private const string SERVER_ADDRESS = "127.0.0.1";
-        private const int PORT = 5000;
+        [SerializeField] private Transform m_body;
+
+        #endregion
 
         #region Unity Callbacks
 
         [UsedImplicitly]
-        private async void Start()
+        private void Start()
         {
-            await __M_ConnectToServerAsync();
+            __M_InitializeENet();
+            __M_CreateBufferReader();
         }
 
         [UsedImplicitly]
-        private async void Update()
+        private void FixedUpdate()
         {
-            if (m_client is not { Connected: true })
-            {
-                Debug.LogError("Not connected to server.");
-                return;
-            }
-
-            var dataToSend = DateTime.Now.ToString("HH:mm:ss.fff");
-            await __M_SendDataAsync(dataToSend);
-
-            var response = await __M_ReceiveDataAsync();
-            if (response != null) Debug.Log("Response from .exe: " + response);
+            __M_HandleEvents();
         }
 
         [UsedImplicitly]
-        private void OnApplicationQuit()
+        private void OnDestroy()
         {
-            m_writer?.Close();
-            m_reader?.Close();
-            m_client?.Close();
+            m_server.DisconnectNow(0);
+            m_client.Dispose();
+            Library.Deinitialize();
         }
 
         #endregion
 
         #region Internal
 
-        private async Task __M_ConnectToServerAsync()
-        {
-            try
-            {
-                m_client = new TcpClient();
-                await m_client.ConnectAsync(SERVER_ADDRESS, PORT);
-                m_writer = new StreamWriter(m_client.GetStream()) { AutoFlush = true };
-                m_reader = new StreamReader(m_client.GetStream());
-                Debug.Log("Connected to .exe server.");
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Failed to connect to server: " + e.Message);
-            }
-        }
+        private Host m_client;
+        private Peer m_server;
 
-        private async Task __M_SendDataAsync(string message)
-        {
-            try
-            {
-                await m_writer.WriteLineAsync(message);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Failed to send data: " + e.Message);
-            }
-        }
+        private const string SERVER_ADDRESS = "127.0.0.1";
+        private const int PORT = 5000;
 
-        private async Task<string> __M_ReceiveDataAsync()
+        private const int BUFFER_SIZE = 1024;
+        private byte[] m_buffer;
+        private MemoryStream m_readStream;
+        private BinaryReader m_reader;
+
+        private void __M_InitializeENet()
         {
             try
             {
-                if (m_client.Available > 0)
+                Application.runInBackground = true;
+                var initialized = Library.Initialize();
+
+                if (!initialized)
                 {
-                    return await m_reader.ReadLineAsync();
+                    Logger.LogError("ENet Library initialization failed.");
+                    throw new InvalidOperationException("ENet Library initialization failed.");
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Debug.LogError("Failed to receive data: " + e.Message);
+                Logger.LogError($"Exception occurred during ENet Library initialization: {ex.Message}");
+                Logger.LogError("Stack Trace: " + ex.StackTrace);
+                throw;
             }
 
-            return null;
+            try
+            {
+                m_client = new Host();
+                m_client.Create();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Failed to create ENet client host: " + ex.Message);
+                return;
+            }
+
+            var address = new Address();
+            address.SetHost(SERVER_ADDRESS);
+            address.Port = PORT;
+
+            m_server = m_client.Connect(address);
+            m_server.Timeout(5, 500, 2000);
+        }
+
+        private void __M_CreateBufferReader()
+        {
+            m_buffer = new byte[BUFFER_SIZE];
+            m_readStream = new MemoryStream(m_buffer);
+            m_reader = new BinaryReader(m_readStream);
+        }
+
+        private void __M_HandleEvents()
+        {
+            try
+            {
+                var noImmediateEvent = m_client.CheckEvents(out var netEvent) <= 0;
+                if (noImmediateEvent)
+                {
+                    var noEventAfterWait = m_client.Service(15, out netEvent) <= 0;
+                    if (noEventAfterWait) return;
+                }
+
+                switch (netEvent.Type)
+                {
+                    case ENet.EventType.None:
+                        break;
+
+                    case ENet.EventType.Connect:
+                        Logger.Log($"Connected to server - PID: {m_server.ID}, IP: {m_server.IP}");
+                        break;
+
+                    case ENet.EventType.Disconnect:
+                        Logger.Log($"Disconnected from server - PID: {m_server.ID}");
+                        break;
+
+                    case ENet.EventType.Timeout:
+                        Logger.LogError($"Connection timeout - PID: {m_server.ID}, RTT: {m_server.RoundTripTime} ms");
+                        Logger.Log(m_server.State);
+                        break;
+
+                    case ENet.EventType.Receive:
+                        try
+                        {
+                            __M_ParsePacket(ref netEvent);
+                        }
+                        finally
+                        {
+                            netEvent.Packet.Dispose();
+                        }
+
+                        break;
+
+                    default:
+                        Logger.LogError($"Unhandled event type: {netEvent.Type}");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"Exception occurred while handling events: {ex.Message}");
+            }
+        }
+
+        private void __M_ParsePacket(ref ENet.Event netEvent)
+        {
+            m_readStream.Position = 0;
+            netEvent.Packet.CopyTo(m_buffer);
+            var packetType = (PacketType)m_reader.ReadByte();
+            Logger.Log(
+                $"Packet received - Type: {packetType}, Length: {netEvent.Packet.Length} bytes, Channel ID: {netEvent.ChannelID}");
+
+            switch (packetType)
+            {
+                case PacketType.PositionUpdate:
+                    if (m_reader.BaseStream.Length - m_reader.BaseStream.Position >= 12)
+                    {
+                        var position = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(), m_reader.ReadSingle());
+                        __M_UpdatePosition(position);
+                    }
+                    else
+                    {
+                        Logger.LogError("Not enough bytes available to read a Vector3 position.");
+                    }
+
+                    break;
+
+                default:
+                    try
+                    {
+                        var unknownData = m_reader.ReadString();
+                        Logger.LogError($"Unknown event type. Attempted to read data as string: {unknownData}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError($"Unknown event type and failed to read data as string: {ex.Message}");
+                    }
+                    throw new ArgumentOutOfRangeException(nameof(packetType), $"Unknown packet type: {packetType}");
+            }
+        }
+
+        private void __M_UpdatePosition(Vector3 position)
+        {
+            m_body.transform.position = position;
         }
 
         #endregion
