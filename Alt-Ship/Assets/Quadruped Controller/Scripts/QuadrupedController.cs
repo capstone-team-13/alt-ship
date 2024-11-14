@@ -175,10 +175,20 @@ namespace EE.QC
 
             switch (packetType)
             {
+                case PacketType.ConnectionSucceed:
+                    var remainingBytes = m_reader.ReadBytes(netEvent.Packet.Length - 1);
+                    var response = System.Text.Encoding.UTF8.GetString(remainingBytes);
+                    Logger.Log($"Connection Succeed: {response}");
+                    break;
+
                 case PacketType.PositionUpdate:
                     if (m_reader.BaseStream.Length - m_reader.BaseStream.Position >= 12)
                     {
-                        var position = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(), m_reader.ReadSingle());
+                        var x = m_reader.ReadSingle();
+                        var y = m_reader.ReadSingle();
+                        var z = m_reader.ReadSingle();
+                        var position = new Position(x, y, z);
+                        Logger.Log($"Position: {position}");
                         __M_UpdatePosition(position);
                     }
                     else
@@ -191,6 +201,7 @@ namespace EE.QC
                 default:
                     try
                     {
+                        m_reader.BaseStream.Position = 0;
                         var unknownData = m_reader.ReadString();
                         Logger.LogError($"Unknown event type. Attempted to read data as string: {unknownData}");
                     }
@@ -198,6 +209,7 @@ namespace EE.QC
                     {
                         Logger.LogError($"Unknown event type and failed to read data as string: {ex.Message}");
                     }
+
                     throw new ArgumentOutOfRangeException(nameof(packetType), $"Unknown packet type: {packetType}");
             }
         }
