@@ -178,7 +178,7 @@ namespace EE.QC
                 case PacketType.ConnectionSucceed:
                     var remainingBytes = m_reader.ReadBytes(netEvent.Packet.Length - 1);
                     var response = System.Text.Encoding.UTF8.GetString(remainingBytes);
-                    Logger.Log($"{response}, len: {response.Length}");
+                    Logger.Log($"Connection Succeed: {response}");
                     break;
 
                 case PacketType.PositionUpdate:
