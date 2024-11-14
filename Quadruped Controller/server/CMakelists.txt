@@ -1,20 +1,31 @@
+# Existing setup for enet
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Find and include server sources
 file(GLOB_RECURSE SERVER_SOURCES CONFIGURE_DEPENDS src/*.cpp include/*.h)
 
-file(GLOB_RECURSE ENET_SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/extern/enet/*.c)
-add_library(enet INTERFACE)
-target_include_directories(enet INTERFACE
-    ${CMAKE_SOURCE_DIR}/extern/enet/include
-)
-target_sources(enet INTERFACE ${ENET_SOURCES})
+set(ENET_SHARED ON CACHE BOOL "Create a shared library for enet")
+set(ENET_STATIC OFF CACHE BOOL "Disable static library for enet")
+set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries.")
 
+add_subdirectory(${CMAKE_SOURCE_DIR}/extern/enet ${CMAKE_BINARY_DIR}/extern/enet)
+add_subdirectory(${CMAKE_SOURCE_DIR}/extern/ODE ${CMAKE_BINARY_DIR}/extern/ODE)
+
+# Define executable and link libraries
 add_executable(Server ${SERVER_SOURCES})
-
 target_include_directories(Server PUBLIC include)
+target_link_libraries(Server PRIVATE enet ODE)
 
-target_link_libraries(Server enet)
+target_include_directories(Server PUBLIC ${CMAKE_SOURCE_DIR}/extern/enet)
 
+# Windows-specific libraries
 if(WIN32)
-    target_link_libraries(Server ws2_32 winmm)
+    target_link_libraries(Server PRIVATE ws2_32 winmm)
 endif()
+
+add_custom_command(TARGET Server POST_BUILD
+COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_FILE:enet> $<TARGET_FILE_DIR:Server>
+COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_FILE:ODE> $<TARGET_FILE_DIR:Server>
+)
