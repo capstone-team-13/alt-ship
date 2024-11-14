@@ -34,17 +34,6 @@ std::string Server::__M_CurrentTime() const
     return ss.str();
 }
 
-void Server::send(ENetPeer *peer, const Message &message)
-{
-    ENetPacket *packet = enet_packet_create(
-        message.str().c_str(),
-        message.size(),
-        ENET_PACKET_FLAG_RELIABLE);
-
-    enet_peer_send(peer, 0, packet);
-    enet_host_flush(peer->host);
-}
-
 Server::Server()
     : m_buffer(std::make_unique<char[]>(BUFFER_SIZE))
 {
@@ -113,6 +102,23 @@ void Server::tick()
             break;
         }
     }
+}
+
+void Server::send(ENetPeer *peer, const Message &message)
+{
+    ENetPacket *packet = enet_packet_create(
+        message.str().c_str(),
+        message.size(),
+        ENET_PACKET_FLAG_RELIABLE);
+
+    enet_peer_send(peer, 0, packet);
+    enet_host_flush(peer->host);
+}
+
+void Server::send(uint32_t id, const Message &message)
+{
+    if (m_clients.find(id) != m_clients.end())
+        send(m_clients[id], message);
 }
 
 bool Server::isRunning() const

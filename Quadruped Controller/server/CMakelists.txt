@@ -7,6 +7,7 @@ file(GLOB_RECURSE SERVER_SOURCES CONFIGURE_DEPENDS src/*.cpp include/*.h)
 set(ENET_SHARED ON CACHE BOOL "Create a shared library for enet")
 set(ENET_STATIC OFF CACHE BOOL "Disable static library for enet")
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries.")
+set(ODE_DOUBLE_PRECISION OFF CACHE BOOL "Disable double-precision math.")
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/enet ${CMAKE_BINARY_DIR}/extern/enet)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/ODE ${CMAKE_BINARY_DIR}/extern/ODE)

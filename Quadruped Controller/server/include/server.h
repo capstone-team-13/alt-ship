@@ -23,7 +23,6 @@ class Server
     bool __M_InitializeENet() const;
     ENetHost *__M_CreateServer() const;
     std::string __M_CurrentTime() const;
-    void send(ENetPeer *peer, const Message &message);
 
     template <typename... Args>
     void __M_Log(const Args &...args) const;
@@ -35,7 +34,8 @@ public:
     Server();
     ~Server();
     void tick();
-    void Poll();
+    void send(ENetPeer *peer, const Message &message);
+    void send(uint32_t id, const Message &message);
     bool isRunning() const;
 };
 

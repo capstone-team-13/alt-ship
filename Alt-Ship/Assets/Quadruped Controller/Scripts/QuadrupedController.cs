@@ -184,7 +184,11 @@ namespace EE.QC
                 case PacketType.PositionUpdate:
                     if (m_reader.BaseStream.Length - m_reader.BaseStream.Position >= 12)
                     {
-                        var position = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(), m_reader.ReadSingle());
+                        var x = m_reader.ReadSingle();
+                        var y = m_reader.ReadSingle();
+                        var z = m_reader.ReadSingle();
+                        var position = new Position(x, y, z);
+                        Logger.Log($"Position: {position}");
                         __M_UpdatePosition(position);
                     }
                     else

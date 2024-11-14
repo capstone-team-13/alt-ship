@@ -14,5 +14,5 @@ const std::string Message::str() const
 
 const std::size_t Message::size() const
 {
-    return m_content.size() + 1;
+    return m_content.size();
 }
