@@ -20,6 +20,16 @@ public class PlayerCommand : Command
         }
     }
 
+    public class ChangeSpeed : PlayerCommand
+    {
+        public float Speed;
+
+        public ChangeSpeed(PlayerModel player, float speed) : base(player)
+        {
+            Speed = speed;
+        }
+    }
+
     public class Grab : PlayerCommand
     {
         public Grab(PlayerModel player) : base(player)

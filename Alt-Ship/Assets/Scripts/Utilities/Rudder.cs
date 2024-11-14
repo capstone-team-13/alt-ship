@@ -1,8 +1,8 @@
 using EE.Interactions;
 using JetBrains.Annotations;
 using UnityEngine;
-using Application = EE.AMVCC.Application;
 using UnityEngine.InputSystem;
+using Application = EE.AMVCC.Application;
 
 public class Rudder : MonoBehaviour
 {
@@ -68,11 +68,40 @@ public class Rudder : MonoBehaviour
 
     #region API
 
-    public void Interact(IInteractable interactable)
+    public void Interact(IInteractable interactable, GameObject interactor)
     {
-        m_steering = !m_steering;
-        interactable.InteractionName = m_steering ? "Stop Steering" : "Start Steer";
+        m_steering = true;
+        interactable.InteractionName = "Start Steer";
+
+        var playeModel = interactor.GetComponent<PlayerModel>();
+        __M_LockPlayer(playeModel);
     }
 
+    public void Exit(IInteractable interactable, GameObject interactor)
+    {
+        m_steering = false;
+        interactable.InteractionName = "Stop Steering";
+
+        var playeModel = interactor.GetComponent<PlayerModel>();
+        __M_UnLockPlayer(playeModel);
+    }
+
+    #endregion
+
+    #region Internal
+    private void __M_LockPlayer(PlayerModel player)
+    {
+        Debug.Log("Hello world");
+        const float newSpeed = -1;
+        Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
+        Debug.Log($"<color=#FFFF00>{player.name} Locked.</color>");
+    }
+
+    private void __M_UnLockPlayer(PlayerModel player)
+    {
+        const float newSpeed = 0;
+        Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
+        Debug.Log($"<color=#FFFF00>{player.name} Unlocked.</color>");
+    }
     #endregion
 }

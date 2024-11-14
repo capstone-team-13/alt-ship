@@ -6,7 +6,8 @@ public class RangeInteractable : Interactable
 {
     #region Editor API
 
-    [Header("Range Interaction")] [SerializeField]
+    [Header("Range Interaction")]
+    [SerializeField]
     private float m_interactionRadius = 2.0f;
 
     [SerializeField] private LayerMask m_playerLayer;
@@ -31,6 +32,11 @@ public class RangeInteractable : Interactable
         var notInCoolingDown = base.CanInteract();
         var colliders = Physics.OverlapSphere(transform.position, m_interactionRadius, m_playerLayer);
         return notInCoolingDown && colliders.Length > 0;
+    }
+    protected override bool PlayerExit()
+    {
+        var distanceToPlayer = (CurrentPlayer.transform.position - transform.position).magnitude;
+        return distanceToPlayer > m_interactionRadius;
     }
 
     #endregion

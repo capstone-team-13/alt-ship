@@ -6,10 +6,11 @@ public class DirectionalInteraction : Interactable
 {
     #region Editor API
 
-    [Header("Directional Interaction")] [SerializeField]
+    [Header("Directional Interaction")]
+    [SerializeField]
     private float m_interactionRadius = 2.0f;
 
-    [SerializeField] [Range(-180, 180)] private float m_imageRotationY = 0;
+    [SerializeField][Range(-180, 180)] private float m_imageRotationY = 0;
 
     [SerializeField] private LayerMask m_playerLayer;
 
@@ -34,7 +35,10 @@ public class DirectionalInteraction : Interactable
 
     protected override bool CanInteract()
     {
-        var notInCoolingDown = base.CanInteract();
+        // Operation is not in cooling down & no player is using object
+        var baseCheck = base.CanInteract();
+        if (!baseCheck) return false;
+
         var colliders = Physics.OverlapSphere(transform.position, m_interactionRadius, m_playerLayer);
 
         var rotatedForward = __M_RotateImageForward();
@@ -48,13 +52,20 @@ public class DirectionalInteraction : Interactable
             var dotProduct = Vector3.Dot(rotatedForward, directionToAgent.normalized);
             var behindObject = dotProduct < 0;
 
-            if (!behindObject) continue;
+            if (!behindObject)
+                continue;
 
             anyAgentBehind = true;
             break;
         }
 
-        return notInCoolingDown && anyAgentBehind;
+        return anyAgentBehind;
+    }
+
+    protected override bool PlayerExit()
+    {
+        var distanceToPlayer = (CurrentPlayer.transform.position - transform.position).magnitude;
+        return distanceToPlayer > m_interactionRadius;
     }
 
     #endregion

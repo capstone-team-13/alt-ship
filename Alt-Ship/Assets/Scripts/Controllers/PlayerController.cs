@@ -1,12 +1,14 @@
-using EE.AMVCC;
+﻿using EE.AMVCC;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Application = EE.AMVCC.Application;
 
 public class PlayerController : Controller<PlayerModel>
 {
-    [Header("Concrete Reference")] [SerializeField]
+    [Header("Concrete Reference")]
+    [SerializeField]
     private Rigidbody m_rigidBody;
 
     private InputActionAsset inputAsset;
@@ -44,9 +46,9 @@ public class PlayerController : Controller<PlayerModel>
     [UsedImplicitly]
     private void Update()
     {
-        if (Model.Dead) return;
+        if (Model.Dead || Model.Speed < 0) return;
 
-        if (player.enabled)
+        if (player.enabled )
         {
             MovePlayer();
         }
@@ -68,6 +70,10 @@ public class PlayerController : Controller<PlayerModel>
 
     void MovePlayer()
     {
+        // TODO: This function calls anyway even if I handled
+        // special cases before it in Update() ↑, NEED FIXED
+        Debug.Log("@Move Player");
+
         Vector2 movementInput = PlayerCtrlInput();
 
         Vector3 camForward = cinemachineCam.transform.forward;
@@ -101,14 +107,23 @@ public class PlayerController : Controller<PlayerModel>
 
     public override void Notify<TCommand>(TCommand command)
     {
-        if (command is not PlayerCommand) return;
+        Debug.Log("Command 1:" + command);
+        if (command is not PlayerCommand playerCommand || playerCommand.Player != Model) return;
+        Debug.Log("Command 2:" + command);
 
         switch (command)
         {
             case PlayerCommand.Dead deadCommand:
-                if (deadCommand.Player != Model) return;
                 Model.Dead = true;
+            Debug.Log("Switch 1");
+                
                 break;
+            case PlayerCommand.ChangeSpeed changeSpeedCommand:
+                Model.Speed = changeSpeedCommand.Speed;
+                Debug.Log("Switch 2");
+
+                break;
+
         }
     }
 

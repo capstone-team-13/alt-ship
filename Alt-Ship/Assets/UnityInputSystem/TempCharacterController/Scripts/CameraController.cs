@@ -1,7 +1,6 @@
-using System.Collections;
+using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
@@ -23,10 +22,12 @@ public class CameraController : MonoBehaviour
 
     int playerNumber = 0;
 
-
+    [Header("Refs.")]
+    // TODO: Refactor using device manager
+    [SerializeField] private DirectionalInteraction m_interaction;
+    
     private void OnEnable()
     {
-        Debug.Log("Hello world 1");
         playerInputManager.onPlayerJoined += AddPlayer;
         playerInputManager.onPlayerJoined += SpawnLocation;
         playerNumber += 1;
@@ -34,13 +35,11 @@ public class CameraController : MonoBehaviour
 
     private void OnDisable()
     {
-        Debug.Log("Hello world 2");
         playerInputManager.onPlayerLeft -= AddPlayer;
     }
 
     public void AddPlayer(PlayerInput player)
     {
-        Debug.Log("Hello world");
         players.Add(player);
         int layerToAdd = (int)Mathf.Log(playerLayers[players.Count - 1].value, 2);
 
@@ -55,7 +54,9 @@ public class CameraController : MonoBehaviour
 
         playerParent.GetComponentInChildren<CameraInput>().horizontal = inputMap.FindAction("Camera");
 
+        Debug.Log($"{player.gameObject.name} joined with device {player.GetDevice<InputDevice>().deviceId}");
 
+        m_interaction.RegisterPlayer(player.gameObject, player.GetDevice<InputDevice>());
     }
 
     public void SpawnLocation(PlayerInput player)
@@ -63,22 +64,18 @@ public class CameraController : MonoBehaviour
         player.transform.parent = shipModel.transform;
         if (spawnPointA != null && spawnPointB != null)
         {
-            Debug.Log("Spawn points found");
             if (playerNumber == 1)
             {
-                Debug.Log("P1 Spawned");
                 player.transform.position = spawnPointA.transform.position;
 
             }
             else if (playerNumber == 2)
             {
-                Debug.Log("P2 Spawned");
                 player.transform.position = spawnPointB.transform.position;
             }
         }
         else
         {
-            Debug.Log("No spawn points found");
         }
         if(shipModel != null)
         {
