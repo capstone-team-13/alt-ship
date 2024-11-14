@@ -62,12 +62,6 @@ public class DirectionalInteraction : Interactable
         return anyAgentBehind;
     }
 
-    protected override bool PlayerExit()
-    {
-        var distanceToPlayer = (CurrentPlayer.transform.position - transform.position).magnitude;
-        return distanceToPlayer > m_interactionRadius;
-    }
-
     #endregion
 
     #region Internal

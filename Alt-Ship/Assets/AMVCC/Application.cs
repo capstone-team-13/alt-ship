@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -6,9 +7,27 @@ namespace EE.AMVCC
 {
     public class Application : MonoBehaviour
     {
-        private static Application m_instance;
+        #region Unity Callbacks
 
-        private IController[] m_controllers;
+        [UsedImplicitly]
+        protected virtual void Awake()
+        {
+            if (m_instance == null)
+            {
+                m_instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else if (m_instance != this)
+            {
+                Destroy(gameObject);
+            }
+
+            m_controllers = FindObjectsOfType<MonoBehaviour>().OfType<IController>().ToList();
+        }
+
+        #endregion
+
+        #region API
 
         public static Application Instance
         {
@@ -27,25 +46,29 @@ namespace EE.AMVCC
             }
         }
 
-        [UsedImplicitly]
-        protected virtual void Awake()
-        {
-            if (m_instance == null)
-            {
-                m_instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else if (m_instance != this)
-            {
-                Destroy(gameObject);
-            }
-
-            m_controllers = FindObjectsOfType<MonoBehaviour>().OfType<IController>().ToArray();
-        }
-
         public void Push<TCommand>(TCommand command) where TCommand : ICommand
         {
-            foreach (var controller in m_controllers) controller.Notify(command);
+            foreach (IController controller in m_controllers) controller.Notify(command);
         }
+
+        public void RegisterController(IController controller)
+        {
+            m_controllers.Add(controller);
+        }
+
+        public void UnregisterController(IController controller)
+        {
+            m_controllers.Remove(controller);
+        }
+
+        #endregion
+
+        #region Internal
+
+        private static Application m_instance;
+
+        private List<IController> m_controllers;
+
+        #endregion
     }
 }
