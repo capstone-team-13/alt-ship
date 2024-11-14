@@ -34,11 +34,11 @@ std::string Server::__M_CurrentTime() const
     return ss.str();
 }
 
-void Server::SendTo(ENetPeer *peer, const std::string &message)
+void Server::send(ENetPeer *peer, const Message &message)
 {
     ENetPacket *packet = enet_packet_create(
-        message.c_str(),
-        message.size() + 1,
+        message.str().c_str(),
+        message.size(),
         ENET_PACKET_FLAG_RELIABLE);
 
     enet_peer_send(peer, 0, packet);
@@ -79,7 +79,7 @@ Server::~Server()
     enet_host_destroy(m_server);
 }
 
-void Server::Tick()
+void Server::tick()
 {
     ENetEvent event;
     while (true)
@@ -103,7 +103,7 @@ void Server::Tick()
         case ENET_EVENT_TYPE_CONNECT:
             __M_Log("Client #", event.peer->incomingPeerID, " connected to the server.");
             m_clients[event.peer->incomingPeerID] = event.peer;
-            SendTo(event.peer, "Welcome to the server!");
+            send(event.peer, {0, "Welcome to the server!"});
             break;
         case ENET_EVENT_TYPE_DISCONNECT:
             __M_Log("Client #", event.peer->incomingPeerID, " disconnected from the server.");
@@ -115,7 +115,7 @@ void Server::Tick()
     }
 }
 
-bool Server::IsRunning() const
+bool Server::isRunning() const
 {
     return m_isRunning;
 }

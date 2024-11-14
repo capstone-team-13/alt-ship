@@ -18,9 +18,9 @@ int main()
 
     Server server;
 
-    while (server.IsRunning())
+    while (server.isRunning())
     {
-        server.Tick();
+        server.tick();
         if (quit)
             break;
     }

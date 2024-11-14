@@ -5,6 +5,7 @@
 #include <vector>
 #include <unordered_map>
 #include <enet.h>
+#include <message.h>
 
 class Server
 {
@@ -22,7 +23,7 @@ class Server
     bool __M_InitializeENet() const;
     ENetHost *__M_CreateServer() const;
     std::string __M_CurrentTime() const;
-    void SendTo(ENetPeer *peer, const std::string &message);
+    void send(ENetPeer *peer, const Message &message);
 
     template <typename... Args>
     void __M_Log(const Args &...args) const;
@@ -33,9 +34,9 @@ class Server
 public:
     Server();
     ~Server();
-    void Tick();
+    void tick();
     void Poll();
-    bool IsRunning() const;
+    bool isRunning() const;
 };
 
 template <typename... Args>
