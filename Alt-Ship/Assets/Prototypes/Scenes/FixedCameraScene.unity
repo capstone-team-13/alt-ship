@@ -1247,7 +1247,6 @@ GameObject:
   - component: {fileID: 649546765}
   - component: {fileID: 649546764}
   - component: {fileID: 649546767}
-  - component: {fileID: 649546766}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
@@ -1316,18 +1315,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &649546766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 649546763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1c8127f904ac344aac81a80a76414e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &649546767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4443,11 +4430,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 5
-  Speed: 0
+  Speed: 3
   Direction: {x: 0, y: 0, z: 1}
   SailDirection: {x: 0, y: 0, z: 0}
-  RotationSpeed: 5
-  LerpSpeed: 5
+  RotationSpeed: 10
+  LerpSpeed: 10
   TargetEulerAngles: {x: 0, y: 0, z: 0}
 --- !u!114 &1701215693
 MonoBehaviour:
