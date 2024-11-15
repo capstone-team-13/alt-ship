@@ -3,12 +3,15 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Application = EE.AMVCC.Application;
+using Cinemachine;
 
 public class Rudder : MonoBehaviour
 {
     public InputActionAsset inputActions;
     private InputAction steering;
 
+    public CinemachineVirtualCamera rudCam;
+    private CinemachineFreeLook lastPlayerCam;
 
     private bool m_steering;
     private float rotationSign;
@@ -92,6 +95,12 @@ public class Rudder : MonoBehaviour
 
     private void __M_LockPlayer(PlayerModel player)
     {
+        lastPlayerCam = player.GetComponentInChildren<CinemachineFreeLook>();
+        if(lastPlayerCam != null)
+        {
+            Debug.Log("Has loaded");
+            lastPlayerCam.Priority = 5;
+        }
         const float newSpeed = 0;
         Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
         Debug.Log($"<color=#FFFF00>{player.name} Locked.</color>");
@@ -99,6 +108,11 @@ public class Rudder : MonoBehaviour
 
     private void __M_UnLockPlayer(PlayerModel player)
     {
+        if (lastPlayerCam != null)
+        {
+            lastPlayerCam.Priority = 10;
+        }
+        lastPlayerCam = null;
         // TODO: Reference Regular Speed
         const float newSpeed = 5;
         Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
