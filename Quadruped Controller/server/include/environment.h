@@ -1,24 +1,28 @@
 #include <ode/ode.h>
-#include <iostream>
-#include <memory>
 
 class Environment
 {
     dWorldID m_world;
     dSpaceID m_space;
     dJointGroupID m_contactGroup;
-    dBodyID m_body;
-    dGeomID m_ballGeom;
-    dGeomID m_plane;
 
-    std::unique_ptr<dReal[]> m_result;
+    // dBodyID m_upperJointBody;
+    // dGeomID m_upperJointGeom;
+    // dBodyID m_lowerJointBody;
+    // dGeomID m_lowerJointGeom;
 
-    void __M_Initialize();
     static void __M_HandleCollision(void *data, dGeomID geom1, dGeomID geom2);
 
 public:
-    Environment();
-    ~Environment();
     void simulate(float timeStep);
-    const std::unique_ptr<dReal[]> &result() const;
+
+    const dWorldID &world() const;
+    const dSpaceID &space() const;
+
+protected:
+    Environment() = default;
+    virtual ~Environment();
+    virtual void onInit() = 0;
+    virtual void onSimulate() = 0;
+    void initialize();
 };

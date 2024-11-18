@@ -1,7 +1,7 @@
 #include <environment.h>
 #include <collision_info.h>
 
-void Environment::__M_Initialize()
+void Environment::initialize()
 {
     dInitODE2(0);
 
@@ -12,19 +12,7 @@ void Environment::__M_Initialize()
 
     m_contactGroup = dJointGroupCreate(0);
 
-    m_body = dBodyCreate(m_world);
-    dBodySetPosition(m_body, 0, 25, 0);
-
-    dMass mass;
-    dMassSetSphere(&mass, 1, 0.1);
-    dBodySetMass(m_body, &mass);
-
-    m_ballGeom = dCreateSphere(m_space, 0.5);
-    dGeomSetBody(m_ballGeom, m_body);
-
-    m_plane = dCreatePlane(m_space, 0, 1, 0, 0);
-
-    std::cout << "Environment initialized with a falling ball and a ground plane." << std::endl;
+    onInit();
 }
 
 void Environment::__M_HandleCollision(void *data, dGeomID geom1, dGeomID geom2)
@@ -53,11 +41,6 @@ void Environment::__M_HandleCollision(void *data, dGeomID geom1, dGeomID geom2)
     }
 }
 
-Environment::Environment() : m_world(nullptr), m_space(nullptr), m_contactGroup(nullptr), m_body(nullptr), m_plane(nullptr), m_result(std::make_unique<dReal[]>(3))
-{
-    __M_Initialize();
-}
-
 Environment::~Environment()
 {
     dWorldDestroy(m_world);
@@ -75,14 +58,15 @@ void Environment::simulate(float timeStep)
 
     dJointGroupEmpty(m_contactGroup);
 
-    const dReal *pos = dBodyGetPosition(m_body);
-
-    m_result[0] = pos[0];
-    m_result[1] = pos[1];
-    m_result[2] = pos[2];
+    onSimulate();
 }
 
-const std::unique_ptr<dReal[]> &Environment::result() const
+const dWorldID &Environment::world() const
 {
-    return m_result;
+    return m_world;
+}
+
+const dSpaceID &Environment::space() const
+{
+    return m_space;
 }
