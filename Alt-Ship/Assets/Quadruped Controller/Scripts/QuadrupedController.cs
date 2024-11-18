@@ -187,7 +187,7 @@ namespace EE.QC
                         var x = m_reader.ReadSingle();
                         var y = m_reader.ReadSingle();
                         var z = m_reader.ReadSingle();
-                        var position = new Position(x, y, z);
+                        var position = new Vector3(x, y, z);
                         Logger.Log($"Position: {position}");
                         __M_UpdatePosition(position);
                     }

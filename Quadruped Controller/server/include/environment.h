@@ -14,7 +14,7 @@ class Environment
     std::unique_ptr<dReal[]> m_result;
 
     void __M_Initialize();
-    static void nearCallback(void *data, dGeomID o1, dGeomID o2);
+    static void __M_HandleCollision(void *data, dGeomID geom1, dGeomID geom2);
 
 public:
     Environment();

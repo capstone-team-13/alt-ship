@@ -1,47 +1,55 @@
 #include <environment.h>
+#include <collision_info.h>
 
 void Environment::__M_Initialize()
 {
-    dInitODE();
+    dInitODE2(0);
 
     m_world = dWorldCreate();
+    dWorldSetGravity(m_world, 0, -9.81, 0);
+
     m_space = dHashSpaceCreate(0);
+
     m_contactGroup = dJointGroupCreate(0);
 
-    dWorldSetGravity(m_world, 0, 0, -9.81);
-
     m_body = dBodyCreate(m_world);
+    dBodySetPosition(m_body, 0, 25, 0);
+
     dMass mass;
-    dMassSetSphere(&mass, 5, 0.1);
-    mass.mass = 5.0;
+    dMassSetSphere(&mass, 1, 0.1);
     dBodySetMass(m_body, &mass);
-    dBodySetPosition(m_body, 0, 0, 50);
 
     m_ballGeom = dCreateSphere(m_space, 0.5);
     dGeomSetBody(m_ballGeom, m_body);
 
-    m_plane = dCreatePlane(m_space, 0, 0, 1, 0);
+    m_plane = dCreatePlane(m_space, 0, 1, 0, 0);
 
     std::cout << "Environment initialized with a falling ball and a ground plane." << std::endl;
 }
 
-void Environment::nearCallback(void *data, dGeomID o1, dGeomID o2)
+void Environment::__M_HandleCollision(void *data, dGeomID geom1, dGeomID geom2)
 {
-    Environment *env = static_cast<Environment *>(data);
+    auto collisonInfo = static_cast<CollisionInfo *>(data);
 
-    const int MAX_CONTACTS = 20;
-    dContact contact[MAX_CONTACTS];
-    int numc = dCollide(o1, o2, MAX_CONTACTS, &contact[0].geom, sizeof(dContact));
+    dBodyID body1 = dGeomGetBody(geom1);
+    dBodyID body2 = dGeomGetBody(geom2);
+
+    const int MAX_NUM_CONTACTS = 8;
+    dContact contacts[MAX_NUM_CONTACTS];
+
+    int numc = dCollide(geom1, geom2, MAX_NUM_CONTACTS, &contacts[0].geom, sizeof(dContact));
 
     for (int i = 0; i < numc; i++)
     {
-        contact[i].surface.mode = dContactBounce;
-        contact[i].surface.bounce = 0.5;
-        contact[i].surface.bounce_vel = 0.1;
-        contact[i].surface.mu = dInfinity;
+        contacts[i].surface.mode = dContactSoftERP | dContactSoftCFM | dContactApprox1 |
+                                   dContactSlip1 | dContactSlip2;
 
-        dJointID c = dJointCreateContact(env->m_world, env->m_contactGroup, &contact[i]);
-        dJointAttach(c, dGeomGetBody(contact[i].geom.g1), dGeomGetBody(contact[i].geom.g2));
+        contacts[i].surface.mu = 50.0;
+        contacts[i].surface.soft_erp = 0.96;
+        contacts[i].surface.soft_cfm = 2.00;
+
+        dJointID contact = dJointCreateContact(collisonInfo->world, collisonInfo->contactGroup, &contacts[i]);
+        dJointAttach(contact, body1, body2);
     }
 }
 
@@ -54,27 +62,24 @@ Environment::~Environment()
 {
     dWorldDestroy(m_world);
     dSpaceDestroy(m_space);
-    dJointGroupDestroy(m_contactGroup);
     dCloseODE();
 }
 
 void Environment::simulate(float timeStep)
 {
-    dSpaceCollide(m_space, this, &Environment::nearCallback);
+    CollisionInfo collisionInfo{m_world, m_contactGroup};
 
-    dWorldQuickStep(m_world, timeStep);
+    dSpaceCollide(m_space, &collisionInfo, &Environment::__M_HandleCollision);
+
+    dWorldStep(m_world, static_cast<dReal>(timeStep));
 
     dJointGroupEmpty(m_contactGroup);
 
     const dReal *pos = dBodyGetPosition(m_body);
-    const dReal *vel = dBodyGetLinearVel(m_body);
 
-    if (pos && vel)
-    {
-        m_result[0] = pos[0];
-        m_result[1] = pos[1];
-        m_result[2] = pos[2];
-    }
+    m_result[0] = pos[0];
+    m_result[1] = pos[1];
+    m_result[2] = pos[2];
 }
 
 const std::unique_ptr<dReal[]> &Environment::result() const
