@@ -8,6 +8,7 @@ set(ENET_SHARED ON CACHE BOOL "Create a shared library for enet")
 set(ENET_STATIC OFF CACHE BOOL "Disable static library for enet")
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries.")
 set(ODE_DOUBLE_PRECISION OFF CACHE BOOL "Disable double-precision math.")
+set(ODE_WITH_DEMOS OFF CACHE BOOL "Disable the building of ODE (Open Dynamics Engine) demo applications")
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/enet ${CMAKE_BINARY_DIR}/extern/enet)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/ODE ${CMAKE_BINARY_DIR}/extern/ODE)
