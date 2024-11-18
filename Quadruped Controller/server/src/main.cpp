@@ -1,5 +1,5 @@
 #include <csignal>
-#include <environment.h>
+#include <ball_environment.h>
 #include <iostream>
 #include <server.h>
 #include <chrono>
@@ -23,7 +23,7 @@ int main()
     std::signal(SIGINT, signal_handler);
 
     Server server;
-    Environment environment;
+    BounceBallEnvironment environment;
 
     auto lastTime = std::chrono::high_resolution_clock::now();
 
