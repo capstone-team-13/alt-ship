@@ -9,6 +9,17 @@
 
 class Server
 {
+
+#pragma region "API"
+public:
+    Server();
+    ~Server();
+    void tick();
+    void send(uint32_t id, const Message &message);
+    bool isRunning() const;
+#pragma endregion
+
+private:
     const int PORT = 5000;
     const int BUFFER_SIZE = 1024;
 
@@ -24,19 +35,14 @@ class Server
     ENetHost *__M_CreateServer() const;
     std::string __M_CurrentTime() const;
 
+    void __M_Send(ENetPeer *peer, const Message &message);
+    void __M_ParsePacket(const ENetEvent &event) const;
+
     template <typename... Args>
     void __M_Log(const Args &...args) const;
 
     template <typename... Args>
     void __M_LogError(const Args &...args) const;
-
-public:
-    Server();
-    ~Server();
-    void tick();
-    void send(ENetPeer *peer, const Message &message);
-    void send(uint32_t id, const Message &message);
-    bool isRunning() const;
 };
 
 template <typename... Args>

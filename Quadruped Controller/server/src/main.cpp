@@ -41,7 +41,7 @@ int main()
         {
             environment.simulate(FIXED_TIMESTEP);
             auto &result = environment.result();
-            std::cout << "Position: (" << result[0] << ", " << result[1] << ", " << result[2] << ")\n";
+            // std::cout << "Position: (" << result[0] << ", " << result[1] << ", " << result[2] << ")\n";
             server.send((uint32_t)0, {1, (float)result[0], (float)result[1], (float)result[2]});
             accumulatedTime -= FIXED_TIMESTEP;
         }

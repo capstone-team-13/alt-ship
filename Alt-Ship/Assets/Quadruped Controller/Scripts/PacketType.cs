@@ -2,7 +2,8 @@ namespace EE.QC
 {
     public enum PacketType : byte
     {
-        ConnectionSucceed,
-        PositionUpdate
+        CONNECTION_SUCCEED,
+        POSITION_UPDATE,
+        INVALID_EVENT
     }
 }

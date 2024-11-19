@@ -1,6 +1,7 @@
 // User Defined
 #include <iomanip>
 #include <server.h>
+#include <packet_type.h>
 
 bool Server::__M_InitializeENet() const
 {
@@ -32,6 +33,35 @@ std::string Server::__M_CurrentTime() const
     std::stringstream ss;
     ss << std::put_time(std::localtime(&time), "%H:%M:%S");
     return ss.str();
+}
+
+void Server::__M_Send(ENetPeer *peer, const Message &message)
+{
+    ENetPacket *packet = enet_packet_create(
+        message.str().c_str(),
+        message.size(),
+        ENET_PACKET_FLAG_RELIABLE);
+
+    enet_peer_send(peer, 0, packet);
+    enet_host_flush(peer->host);
+}
+
+void Server::__M_ParsePacket(const ENetEvent &event) const
+{
+    const uint8_t *data = event.packet->data;
+    const uint32_t &dataLength = event.packet->dataLength;
+
+    // length is valid
+    if (dataLength <= 0)
+        return;
+
+    // event type is valid
+    uint8_t eventType = data[0];
+    if (eventType >= EventType::INVALID_EVENT)
+        return;
+
+    // TEMP FUNCTION
+    __M_Log("Data: ", data[1]);
 }
 
 Server::Server()
@@ -87,12 +117,13 @@ void Server::tick()
         switch (event.type)
         {
         case ENET_EVENT_TYPE_RECEIVE:
-            __M_Log("Client #", event.peer->incomingPeerID, " recevied message");
+            __M_Log("Client #", event.peer->incomingPeerID, " received message");
+            __M_ParsePacket(event);
             break;
         case ENET_EVENT_TYPE_CONNECT:
             __M_Log("Client #", event.peer->incomingPeerID, " connected to the server.");
             m_clients[event.peer->incomingPeerID] = event.peer;
-            send(event.peer, {0, "Welcome to the server!"});
+            __M_Send(event.peer, {EventType::CONNECTION_SUCCEED, "Welcome to the server!"});
             break;
         case ENET_EVENT_TYPE_DISCONNECT:
             __M_Log("Client #", event.peer->incomingPeerID, " disconnected from the server.");
@@ -104,21 +135,10 @@ void Server::tick()
     }
 }
 
-void Server::send(ENetPeer *peer, const Message &message)
-{
-    ENetPacket *packet = enet_packet_create(
-        message.str().c_str(),
-        message.size(),
-        ENET_PACKET_FLAG_RELIABLE);
-
-    enet_peer_send(peer, 0, packet);
-    enet_host_flush(peer->host);
-}
-
 void Server::send(uint32_t id, const Message &message)
 {
     if (m_clients.find(id) != m_clients.end())
-        send(m_clients[id], message);
+        __M_Send(m_clients[id], message);
 }
 
 bool Server::isRunning() const
