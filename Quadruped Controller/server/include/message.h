@@ -1,16 +1,6 @@
 #include <stdint.h>
 #include <sstream>
 
-namespace MessageType
-{
-    enum Type
-    {
-        CONNECT,
-        DISCONNECT,
-        DATA,
-    };
-}
-
 class Message
 {
     uint8_t m_type;

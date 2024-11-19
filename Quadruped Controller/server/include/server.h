@@ -6,9 +6,25 @@
 #include <unordered_map>
 #include <enet.h>
 #include <message.h>
+#include <eventpp/callbacklist.h>
 
 class Server
 {
+#pragma region "API"
+public:
+    typedef eventpp::CallbackList<void(const ENetEvent &, uint8_t, const uint8_t *, uint32_t)> PacketReceivedEvent;
+
+    Server();
+    ~Server();
+    void tick();
+    void send(uint32_t id, const Message &message);
+    bool isRunning() const;
+    PacketReceivedEvent::Handle addPacketReceivedCallback(const PacketReceivedEvent::Callback &callback);
+    bool removePacketReceivedCallback(const PacketReceivedEvent::Handle &handle);
+
+#pragma endregion
+
+private:
     const int PORT = 5000;
     const int BUFFER_SIZE = 1024;
 
@@ -20,23 +36,20 @@ class Server
     bool m_isRunning;
     std::unique_ptr<char[]> m_buffer;
 
+    PacketReceivedEvent m_onReceivePacket;
+
     bool __M_InitializeENet() const;
     ENetHost *__M_CreateServer() const;
     std::string __M_CurrentTime() const;
+
+    void __M_Send(ENetPeer *peer, const Message &message);
+    void __M_ParsePacket(const ENetEvent &event) const;
 
     template <typename... Args>
     void __M_Log(const Args &...args) const;
 
     template <typename... Args>
     void __M_LogError(const Args &...args) const;
-
-public:
-    Server();
-    ~Server();
-    void tick();
-    void send(ENetPeer *peer, const Message &message);
-    void send(uint32_t id, const Message &message);
-    bool isRunning() const;
 };
 
 template <typename... Args>
