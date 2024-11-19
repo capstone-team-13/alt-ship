@@ -11,11 +11,12 @@ set(ODE_DOUBLE_PRECISION OFF CACHE BOOL "Disable double-precision math.")
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/enet ${CMAKE_BINARY_DIR}/extern/enet)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/ODE ${CMAKE_BINARY_DIR}/extern/ODE)
+add_subdirectory(${CMAKE_SOURCE_DIR}/extern/eventpp ${CMAKE_BINARY_DIR}/extern/eventpp)
 
 # Define executable and link libraries
 add_executable(Server ${SERVER_SOURCES})
 target_include_directories(Server PUBLIC include)
-target_link_libraries(Server PRIVATE enet ODE)
+target_link_libraries(Server PRIVATE enet ODE eventpp)
 
 target_include_directories(Server PUBLIC ${CMAKE_SOURCE_DIR}/extern/enet)
 

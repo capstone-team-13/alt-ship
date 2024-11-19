@@ -1,11 +1,9 @@
-using Codice.Client.Common.FsNodeReaders;
 using ENet;
 using JetBrains.Annotations;
 using System;
 using System.IO;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
-
 
 namespace EE.QC
 {
@@ -42,13 +40,23 @@ namespace EE.QC
         }
 
         [UsedImplicitly]
+        private void Update()
+        {
+            var keyCode = KeyCode.Space;
+            if (Input.GetKeyDown(keyCode))
+            {
+                Logger.Log($"{keyCode} pressed.");
+                var packet = new Packet();
+                var data = new byte[] { (byte)EventType.ADD_FORCE };
+                packet.Create(data, data.Length, PacketFlags.Reliable);
+                m_server.Send(0, ref packet);
+            }
+        }
+
+        [UsedImplicitly]
         private void FixedUpdate()
         {
             __M_HandleEvents();
-
-            var packet = new Packet();
-            packet.Create(new byte[] { 1 }, 1, PacketFlags.Reliable);
-            m_server.Send(0, ref packet);
         }
 
         [UsedImplicitly]
@@ -177,19 +185,19 @@ namespace EE.QC
             m_readStream.Position = 0;
 
             netEvent.Packet.CopyTo(m_buffer);
-            var packetType = (PacketType)m_reader.ReadByte();
-            Logger.Log(
-                $"Packet received - Type: {packetType}, Length: {netEvent.Packet.Length} bytes, Channel ID: {netEvent.ChannelID}");
+            var packetType = (EventType)m_reader.ReadByte();
+            // Logger.Log(
+            //     $"Packet received - Type: {packetType}, Length: {netEvent.Packet.Length} bytes, Channel ID: {netEvent.ChannelID}");
 
             switch (packetType)
             {
-                case PacketType.CONNECTION_SUCCEED:
+                case EventType.CONNECTION_SUCCEED:
                     var remainingBytes = m_reader.ReadBytes(netEvent.Packet.Length - 1);
                     var response = System.Text.Encoding.UTF8.GetString(remainingBytes);
                     Logger.Log($"Connection Succeed: {response}");
                     break;
 
-                case PacketType.POSITION_UPDATE:
+                case EventType.POSITION_UPDATE:
                     if (m_reader.BaseStream.Length - m_reader.BaseStream.Position >= 12)
                     {
                         var x = m_reader.ReadSingle();

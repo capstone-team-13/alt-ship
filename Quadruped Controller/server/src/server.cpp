@@ -1,12 +1,15 @@
 // User Defined
 #include <iomanip>
 #include <server.h>
-#include <packet_type.h>
+#include <event_type.h>
 
 bool Server::__M_InitializeENet() const
 {
     int result = enet_initialize();
     atexit(enet_deinitialize);
+
+    // m_onReceivePacket.append([](uint8_t eventType, const uint8_t *data, uint32_t dataLength)
+    //                          { std::cout << std::boolalpha << "Got callback 1, s is " << eventType << " b is " << dataLength << std::endl; });
     return result == 0;
 }
 
@@ -60,8 +63,8 @@ void Server::__M_ParsePacket(const ENetEvent &event) const
     if (eventType >= EventType::INVALID_EVENT)
         return;
 
-    // TEMP FUNCTION
-    __M_Log("Data: ", data[1]);
+    // Invoke callbacks
+    m_onReceivePacket(event, eventType, data, dataLength);
 }
 
 Server::Server()
@@ -144,4 +147,14 @@ void Server::send(uint32_t id, const Message &message)
 bool Server::isRunning() const
 {
     return m_isRunning;
+}
+
+Server::PacketReceivedEvent::Handle Server::addPacketReceivedCallback(const PacketReceivedEvent::Callback &callback)
+{
+    return m_onReceivePacket.append(callback);
+}
+
+bool Server::removePacketReceivedCallback(const PacketReceivedEvent::Handle &handle)
+{
+    return m_onReceivePacket.remove(handle);
 }

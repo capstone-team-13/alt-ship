@@ -5,6 +5,11 @@ BounceBallEnvironment::BounceBallEnvironment() : m_ballBody(nullptr), m_ballGeom
     initialize();
 }
 
+void BounceBallEnvironment::addForce(dReal x, dReal y, dReal z)
+{
+    dBodyAddForce(m_ballBody, x, y, z);
+}
+
 const std::unique_ptr<dReal[]> &BounceBallEnvironment::result() const
 {
     return m_result;
