@@ -107,9 +107,6 @@ public class PlayerController : Controller<PlayerModel>
         Vector3 direction = m_camera.transform.TransformDirection(movementInput);
         direction.y = 0;
 
-        //        Vector3 parentDirection = new Vector3(parentRotation.rotation.x, parentRotation.rotation.y, parentRotation.rotation.z);
-        //        parentDirection.y = 0;
-
         Quaternion inverseParentRotation = Quaternion.Inverse(parentRotation.rotation);
         direction = inverseParentRotation * direction;
 

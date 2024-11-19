@@ -79,10 +79,12 @@ public class CameraController : MonoBehaviour
             if (m_playerCount == 1)
             {
                 player.transform.position = spawnPointA.transform.position;
+                player.transform.rotation = shipModel.transform.rotation;
             }
             else if (m_playerCount == 2)
             {
                 player.transform.position = spawnPointB.transform.position;
+                player.transform.rotation = shipModel.transform.rotation;
             }
         }
         else
