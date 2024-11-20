@@ -30,7 +30,7 @@ void BounceBallEnvironment::onInit()
     m_plane = dCreatePlane(this->space(), 0, 1, 0, 0);
 }
 
-void BounceBallEnvironment::onSimulate()
+void BounceBallEnvironment::onSimulate(float timeStep)
 {
     const dReal *ballPosition = dBodyGetPosition(m_ballBody);
 

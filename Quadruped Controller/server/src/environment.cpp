@@ -60,7 +60,7 @@ void Environment::simulate(float timeStep)
 
     dJointGroupEmpty(m_contactGroup);
 
-    onSimulate();
+    onSimulate(timeStep);
 }
 
 const dWorldID &Environment::world() const

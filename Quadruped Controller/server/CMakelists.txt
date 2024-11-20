@@ -17,10 +17,15 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/extern/eigen ${CMAKE_BINARY_DIR}/extern/eig
 
 # Define executable and link libraries
 add_executable(Server ${SERVER_SOURCES})
+
+target_precompile_headers(Server PRIVATE include/pch.h)
+
 target_include_directories(Server PUBLIC include)
 target_link_libraries(Server PRIVATE enet ODE eventpp eigen)
 
 target_include_directories(Server PUBLIC ${CMAKE_SOURCE_DIR}/extern/enet)
+
+
 
 # Windows-specific libraries
 if(WIN32)

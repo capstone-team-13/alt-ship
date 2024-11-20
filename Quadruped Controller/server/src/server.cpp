@@ -43,7 +43,7 @@ void Server::__M_Send(ENetPeer *peer, const Message &message)
     ENetPacket *packet = enet_packet_create(
         message.str().c_str(),
         message.size(),
-        ENET_PACKET_FLAG_RELIABLE);
+        ENET_PACKET_FLAG_UNSEQUENCED);
 
     enet_peer_send(peer, 0, packet);
     enet_host_flush(peer->host);
@@ -106,7 +106,7 @@ void Server::tick()
     ENetEvent event;
     while (true)
     {
-        int32_t eventSize = enet_host_service(m_server, &event, 0);
+        int32_t eventSize = enet_host_service(m_server, &event, 15);
 
         if (eventSize == 0)
             break;
@@ -120,7 +120,7 @@ void Server::tick()
         switch (event.type)
         {
         case ENET_EVENT_TYPE_RECEIVE:
-            __M_Log("Client #", event.peer->incomingPeerID, " received message");
+            __M_Log("Message received from client #", event.peer->incomingPeerID);
             __M_ParsePacket(event);
             break;
         case ENET_EVENT_TYPE_CONNECT:

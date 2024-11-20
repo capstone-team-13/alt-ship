@@ -1,5 +1,6 @@
-#include <stdint.h>
-#include <sstream>
+#pragma once
+
+#include <pch.h>
 
 class Message
 {
@@ -13,7 +14,7 @@ public:
     Message(uint8_t type, Args &&...args);
 
     const std::string str() const;
-    const std::size_t size() const;
+    std::size_t size() const;
 
     Message(const Message &) = delete;
     Message &operator=(const Message &) = delete;

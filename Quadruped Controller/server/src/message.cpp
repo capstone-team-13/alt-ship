@@ -12,7 +12,7 @@ const std::string Message::str() const
     return m_content;
 }
 
-const std::size_t Message::size() const
+std::size_t Message::size() const
 {
     return m_content.size();
 }

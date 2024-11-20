@@ -1,4 +1,6 @@
-#include <ode/ode.h>
+#pragma once
+
+#include <pch.h>
 
 class Environment
 {
@@ -18,6 +20,6 @@ protected:
     Environment() = default;
     virtual ~Environment();
     virtual void onInit() = 0;
-    virtual void onSimulate() = 0;
+    virtual void onSimulate(float timeStep) = 0;
     void initialize();
 };

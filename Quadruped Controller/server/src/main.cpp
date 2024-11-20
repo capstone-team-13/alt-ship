@@ -1,9 +1,7 @@
 #include <csignal>
 #include <quadruped_environment.h>
-#include <iostream>
 #include <server.h>
 #include <chrono>
-#include <thread>
 #include <event_type.h>
 
 bool quit = false;
@@ -27,13 +25,12 @@ int main()
     QuadrupedEnvironment environment;
 
     auto handle = server.addPacketReceivedCallback(
-        [&environment](const ENetEvent &event, uint8_t eventType, const uint8_t *data, uint32_t dataLength)
+        [&environment, &server](const ENetEvent &event, uint8_t eventType, [[maybe_unused]] const uint8_t *data, [[maybe_unused]] uint32_t dataLength)
         {
             if (eventType == EventType::ADD_FORCE)
             {
-                // environment.addForce(0, 2, 0);
-                environment.addForce(10, 0, 0);
-                std::cout << "Client #" << event.peer->incomingPeerID << " added force\n";
+                environment.adjustTargetHeight();
+                server.__M_Log("Client #", event.peer->incomingPeerID, " adjusted target height\n");
             }
         });
 
@@ -53,11 +50,6 @@ int main()
             environment.simulate(FIXED_TIMESTEP);
             auto &result = environment.result();
             // TODO: Flexiable Serialize
-            // server.send((uint32_t)0,
-            //             {1, (float)result[0], (float)result[1], (float)result[2],
-            //              (float)result[3], (float)result[4], (float)result[5], (float)result[6],
-            //              (float)result[7], (float)result[8], (float)result[9],
-            //              (float)result[10], (float)result[11], (float)result[12], (float)result[13]});
             server.send((uint32_t)0,
                         {1, (float)result[0], (float)result[1], (float)result[2],
                          (float)result[3], (float)result[4], (float)result[5], (float)result[6]});

@@ -1,4 +1,4 @@
-#include <ode/ode.h>
+#pragma once
 
 struct CollisionInfo
 {
