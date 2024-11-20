@@ -26,15 +26,16 @@ int main()
     Server server;
     QuadrupedEnvironment environment;
 
-    // auto handle = server.addPacketReceivedCallback(
-    //     [&environment](const ENetEvent &event, uint8_t eventType, const uint8_t *data, uint32_t dataLength)
-    //     {
-    //         if (eventType == EventType::ADD_FORCE)
-    //         {
-    //             environment.addForce(0, 2, 0);
-    //             std::cout << "Client #" << event.peer->incomingPeerID << " added force\n";
-    //         }
-    //     });
+    auto handle = server.addPacketReceivedCallback(
+        [&environment](const ENetEvent &event, uint8_t eventType, const uint8_t *data, uint32_t dataLength)
+        {
+            if (eventType == EventType::ADD_FORCE)
+            {
+                // environment.addForce(0, 2, 0);
+                environment.addForce(10, 0, 0);
+                std::cout << "Client #" << event.peer->incomingPeerID << " added force\n";
+            }
+        });
 
     auto lastTime = std::chrono::high_resolution_clock::now();
     while (server.isRunning() && !quit)
@@ -51,7 +52,15 @@ int main()
         {
             environment.simulate(FIXED_TIMESTEP);
             auto &result = environment.result();
-            server.send((uint32_t)0, {1, (float)result[0], (float)result[1], (float)result[2], (float)result[3], (float)result[4], (float)result[5]});
+            // TODO: Flexiable Serialize
+            // server.send((uint32_t)0,
+            //             {1, (float)result[0], (float)result[1], (float)result[2],
+            //              (float)result[3], (float)result[4], (float)result[5], (float)result[6],
+            //              (float)result[7], (float)result[8], (float)result[9],
+            //              (float)result[10], (float)result[11], (float)result[12], (float)result[13]});
+            server.send((uint32_t)0,
+                        {1, (float)result[0], (float)result[1], (float)result[2],
+                         (float)result[3], (float)result[4], (float)result[5], (float)result[6]});
             accumulatedTime -= FIXED_TIMESTEP;
         }
 
