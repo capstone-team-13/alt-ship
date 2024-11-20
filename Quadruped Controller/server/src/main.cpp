@@ -4,6 +4,7 @@
 #include <server.h>
 #include <chrono>
 #include <thread>
+#include <event_type.h>
 
 bool quit = false;
 
@@ -25,8 +26,17 @@ int main()
     Server server;
     BounceBallEnvironment environment;
 
-    auto lastTime = std::chrono::high_resolution_clock::now();
+    auto handle = server.addPacketReceivedCallback(
+        [&environment](const ENetEvent &event, uint8_t eventType, const uint8_t *data, uint32_t dataLength)
+        {
+            if (eventType == EventType::ADD_FORCE)
+            {
+                environment.addForce(0, 2, 0);
+                std::cout << "Client #" << event.peer->incomingPeerID << " added force\n";
+            }
+        });
 
+    auto lastTime = std::chrono::high_resolution_clock::now();
     while (server.isRunning() && !quit)
     {
         auto currentTime = std::chrono::high_resolution_clock::now();
@@ -41,7 +51,7 @@ int main()
         {
             environment.simulate(FIXED_TIMESTEP);
             auto &result = environment.result();
-            std::cout << "Position: (" << result[0] << ", " << result[1] << ", " << result[2] << ")\n";
+            // std::cout << "Position: (" << result[0] << ", " << result[1] << ", " << result[2] << ")\n";
             server.send((uint32_t)0, {1, (float)result[0], (float)result[1], (float)result[2]});
             accumulatedTime -= FIXED_TIMESTEP;
         }

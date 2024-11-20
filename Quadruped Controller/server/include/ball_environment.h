@@ -15,6 +15,7 @@ public:
     BounceBallEnvironment();
     ~BounceBallEnvironment() = default;
 
+    void addForce(dReal x, dReal y, dReal z);
     const std::unique_ptr<dReal[]> &result() const;
 
 protected:

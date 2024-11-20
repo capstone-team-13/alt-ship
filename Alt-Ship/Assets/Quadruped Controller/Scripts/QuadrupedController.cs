@@ -5,19 +5,20 @@ using System.IO;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-
 namespace EE.QC
 {
     public class Logger
     {
-        public static void LogError(object error)
+        public static void LogError(params object[] errors)
         {
-            Debug.LogError($"[{DateTime.Now:HH:mm:ss}] {error}");
+            string message = string.Join(" ", errors);
+            Debug.LogError($"[{DateTime.Now:HH:mm:ss}] {message}");
         }
 
-        public static void Log(object info)
+        public static void Log(params object[] infos)
         {
-            Debug.Log($"[{DateTime.Now:HH:mm:ss}] {info}");
+            string message = string.Join(" ", infos);
+            Debug.Log($"[{DateTime.Now:HH:mm:ss}] {message}");
         }
     }
 
@@ -36,6 +37,20 @@ namespace EE.QC
         {
             __M_InitializeENet();
             __M_CreateBufferReader();
+        }
+
+        [UsedImplicitly]
+        private void Update()
+        {
+            var keyCode = KeyCode.Space;
+            if (Input.GetKeyDown(keyCode))
+            {
+                Logger.Log($"{keyCode} pressed.");
+                var packet = new Packet();
+                var data = new byte[] { (byte)EventType.ADD_FORCE };
+                packet.Create(data, data.Length, PacketFlags.Reliable);
+                m_server.Send(0, ref packet);
+            }
         }
 
         [UsedImplicitly]
@@ -168,27 +183,27 @@ namespace EE.QC
         private void __M_ParsePacket(ref ENet.Event netEvent)
         {
             m_readStream.Position = 0;
+
             netEvent.Packet.CopyTo(m_buffer);
-            var packetType = (PacketType)m_reader.ReadByte();
-            Logger.Log(
-                $"Packet received - Type: {packetType}, Length: {netEvent.Packet.Length} bytes, Channel ID: {netEvent.ChannelID}");
+            var packetType = (EventType)m_reader.ReadByte();
+            // Logger.Log(
+            //     $"Packet received - Type: {packetType}, Length: {netEvent.Packet.Length} bytes, Channel ID: {netEvent.ChannelID}");
 
             switch (packetType)
             {
-                case PacketType.ConnectionSucceed:
+                case EventType.CONNECTION_SUCCEED:
                     var remainingBytes = m_reader.ReadBytes(netEvent.Packet.Length - 1);
                     var response = System.Text.Encoding.UTF8.GetString(remainingBytes);
                     Logger.Log($"Connection Succeed: {response}");
                     break;
 
-                case PacketType.PositionUpdate:
+                case EventType.POSITION_UPDATE:
                     if (m_reader.BaseStream.Length - m_reader.BaseStream.Position >= 12)
                     {
                         var x = m_reader.ReadSingle();
                         var y = m_reader.ReadSingle();
                         var z = m_reader.ReadSingle();
                         var position = new Vector3(x, y, z);
-                        Logger.Log($"Position: {position}");
                         __M_UpdatePosition(position);
                     }
                     else

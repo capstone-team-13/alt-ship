@@ -11,6 +11,9 @@ public class PlayerController : Controller<PlayerModel>
     [Header("Concrete Reference")] [SerializeField]
     private Rigidbody m_rigidBody;
 
+    [SerializeField]
+    private Transform parentRotation;
+
     [SerializeField] private Camera m_camera;
 
     // TODO: Remove
@@ -53,6 +56,10 @@ public class PlayerController : Controller<PlayerModel>
             2 => playerTwoMat,
             _ => meshRenderer.material
         };
+        if (!parentRotation)
+        {
+            parentRotation = GameObject.FindWithTag("Ship").transform;
+        }
     }
 
     [UsedImplicitly]
@@ -99,6 +106,10 @@ public class PlayerController : Controller<PlayerModel>
 
         Vector3 direction = m_camera.transform.TransformDirection(movementInput);
         direction.y = 0;
+
+        Quaternion inverseParentRotation = Quaternion.Inverse(parentRotation.rotation);
+        direction = inverseParentRotation * direction;
+
 
         __M_UpdateDirection(direction);
 

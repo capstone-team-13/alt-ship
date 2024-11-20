@@ -80,9 +80,10 @@ public class Rudder : MonoBehaviour
         else __M_UnLockPlayer(playerModel);
     }
 
+    // Exit is never running
     public void Exit(IInteractable interactable, GameObject interactor)
     {
-        m_steering = false;
+        Debug.Log("Is Running");
         interactable.InteractionName = "Stop Steering";
 
         var playeModel = interactor.GetComponent<PlayerModel>();
@@ -108,6 +109,7 @@ public class Rudder : MonoBehaviour
 
     private void __M_UnLockPlayer(PlayerModel player)
     {
+        m_steering = false;
         if (lastPlayerCam != null)
         {
             lastPlayerCam.Priority = 10;
