@@ -8,22 +8,31 @@ set(ENET_SHARED ON CACHE BOOL "Create a shared library for enet")
 set(ENET_STATIC OFF CACHE BOOL "Disable static library for enet")
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries.")
 set(ODE_DOUBLE_PRECISION OFF CACHE BOOL "Disable double-precision math.")
+set(ODE_WITH_DEMOS OFF CACHE BOOL "Disable the building of ODE (Open Dynamics Engine) demo applications")
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/enet ${CMAKE_BINARY_DIR}/extern/enet)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/ODE ${CMAKE_BINARY_DIR}/extern/ODE)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/eventpp ${CMAKE_BINARY_DIR}/extern/eventpp)
+add_subdirectory(${CMAKE_SOURCE_DIR}/extern/eigen ${CMAKE_BINARY_DIR}/extern/eigen)
 
 # Define executable and link libraries
 add_executable(Server ${SERVER_SOURCES})
+
+target_precompile_headers(Server PRIVATE include/pch.h)
+
 target_include_directories(Server PUBLIC include)
-target_link_libraries(Server PRIVATE enet ODE eventpp)
+target_link_libraries(Server PRIVATE enet ODE eventpp eigen)
 
 target_include_directories(Server PUBLIC ${CMAKE_SOURCE_DIR}/extern/enet)
+
+
 
 # Windows-specific libraries
 if(WIN32)
     target_link_libraries(Server PRIVATE ws2_32 winmm)
 endif()
+
+target_compile_options(Server PUBLIC -Wall -Wextra -Wpedantic -Wfatal-errors -fdiagnostics-color=always)
 
 add_custom_command(TARGET Server POST_BUILD
 COMMAND ${CMAKE_COMMAND} -E copy_if_different

@@ -1,5 +1,6 @@
+#pragma once
+
 #include <environment.h>
-#include <memory>
 
 class BounceBallEnvironment final : public Environment
 {
@@ -20,5 +21,5 @@ public:
 
 protected:
     void onInit() override;
-    void onSimulate() override;
+    void onSimulate(float timeStep) override;
 };

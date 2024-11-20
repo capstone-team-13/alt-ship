@@ -1,10 +1,6 @@
+#pragma once
+
 #include <chrono>
-#include <iostream>
-#include <sstream>
-#include <memory>
-#include <vector>
-#include <unordered_map>
-#include <enet.h>
 #include <message.h>
 #include <eventpp/callbacklist.h>
 
@@ -45,6 +41,8 @@ private:
     void __M_Send(ENetPeer *peer, const Message &message);
     void __M_ParsePacket(const ENetEvent &event) const;
 
+    // TODO: Refactor as a logger class
+public:
     template <typename... Args>
     void __M_Log(const Args &...args) const;
 

@@ -1,14 +1,12 @@
 #include <csignal>
-#include <ball_environment.h>
-#include <iostream>
+#include <quadruped_environment.h>
 #include <server.h>
 #include <chrono>
-#include <thread>
 #include <event_type.h>
 
 bool quit = false;
 
-constexpr double FIXED_TIMESTEP = 0.02;
+constexpr double FIXED_TIMESTEP = 0.01;
 constexpr double TARGET_FRAME_TIME = 1.0 / 60.0;
 double accumulatedTime = 0.0;
 
@@ -24,15 +22,15 @@ int main()
     std::signal(SIGINT, signal_handler);
 
     Server server;
-    BounceBallEnvironment environment;
+    QuadrupedEnvironment environment;
 
     auto handle = server.addPacketReceivedCallback(
-        [&environment](const ENetEvent &event, uint8_t eventType, const uint8_t *data, uint32_t dataLength)
+        [&environment, &server](const ENetEvent &event, uint8_t eventType, [[maybe_unused]] const uint8_t *data, [[maybe_unused]] uint32_t dataLength)
         {
             if (eventType == EventType::ADD_FORCE)
             {
-                environment.addForce(0, 2, 0);
-                std::cout << "Client #" << event.peer->incomingPeerID << " added force\n";
+                environment.adjustTargetHeight();
+                server.__M_Log("Client #", event.peer->incomingPeerID, " adjusted target height\n");
             }
         });
 
@@ -51,8 +49,10 @@ int main()
         {
             environment.simulate(FIXED_TIMESTEP);
             auto &result = environment.result();
-            // std::cout << "Position: (" << result[0] << ", " << result[1] << ", " << result[2] << ")\n";
-            server.send((uint32_t)0, {1, (float)result[0], (float)result[1], (float)result[2]});
+            // TODO: Flexiable Serialize
+            server.send((uint32_t)0,
+                        {1, (float)result[0], (float)result[1], (float)result[2],
+                         (float)result[3], (float)result[4], (float)result[5], (float)result[6]});
             accumulatedTime -= FIXED_TIMESTEP;
         }
 

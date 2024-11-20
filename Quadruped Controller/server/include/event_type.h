@@ -1,4 +1,4 @@
-#include <stdint.h>
+#pragma once
 
 enum EventType : uint8_t
 {
