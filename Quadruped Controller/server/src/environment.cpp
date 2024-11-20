@@ -32,9 +32,11 @@ void Environment::__M_HandleCollision(void *data, dGeomID geom1, dGeomID geom2)
         contacts[i].surface.mode = dContactSoftERP | dContactSoftCFM | dContactApprox1 |
                                    dContactSlip1 | dContactSlip2;
 
-        contacts[i].surface.mu = 50.0;
-        contacts[i].surface.soft_erp = 0.96;
-        contacts[i].surface.soft_cfm = 2.00;
+        contacts[i].surface.mu = 1.0;
+        contacts[i].surface.soft_erp = 0.2;
+        contacts[i].surface.soft_cfm = 1e-4;
+        contacts[i].surface.slip1 = 0.01;
+        contacts[i].surface.slip2 = 0.01;
 
         dJointID contact = dJointCreateContact(collisonInfo->world, collisonInfo->contactGroup, &contacts[i]);
         dJointAttach(contact, body1, body2);

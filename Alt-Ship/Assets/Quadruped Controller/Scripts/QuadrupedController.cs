@@ -26,7 +26,9 @@ namespace EE.QC
     {
         #region Editor API
 
-        [SerializeField] private Transform m_body;
+
+        [SerializeField] private Transform m_upperJoint;
+        [SerializeField] private Transform m_lowerJoint;
 
         #endregion
 
@@ -118,7 +120,7 @@ namespace EE.QC
             address.Port = PORT;
 
             m_server = m_client.Connect(address);
-            m_server.Timeout(5, 500, 2000);
+            // m_server.Timeout(5, 500, 2000);
         }
 
         private void __M_CreateBufferReader()
@@ -200,11 +202,9 @@ namespace EE.QC
                 case EventType.POSITION_UPDATE:
                     if (m_reader.BaseStream.Length - m_reader.BaseStream.Position >= 12)
                     {
-                        var x = m_reader.ReadSingle();
-                        var y = m_reader.ReadSingle();
-                        var z = m_reader.ReadSingle();
-                        var position = new Vector3(x, y, z);
-                        __M_UpdatePosition(position);
+                        var upperJointPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(), m_reader.ReadSingle());
+                        var lowerJointPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(), m_reader.ReadSingle());
+                        __M_UpdatePosition(new[]{ upperJointPosition , lowerJointPosition });
                     }
                     else
                     {
@@ -229,9 +229,10 @@ namespace EE.QC
             }
         }
 
-        private void __M_UpdatePosition(Vector3 position)
+        private void __M_UpdatePosition(Vector3[] position)
         {
-            m_body.transform.position = position;
+            m_upperJoint.transform.position = position[0];
+            m_lowerJoint.transform.position = position[1];
         }
 
         #endregion

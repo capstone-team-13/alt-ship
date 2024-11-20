@@ -6,11 +6,6 @@ class Environment
     dSpaceID m_space;
     dJointGroupID m_contactGroup;
 
-    // dBodyID m_upperJointBody;
-    // dGeomID m_upperJointGeom;
-    // dBodyID m_lowerJointBody;
-    // dGeomID m_lowerJointGeom;
-
     static void __M_HandleCollision(void *data, dGeomID geom1, dGeomID geom2);
 
 public:

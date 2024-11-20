@@ -1,5 +1,5 @@
 #include <csignal>
-#include <ball_environment.h>
+#include <quadruped_environment.h>
 #include <iostream>
 #include <server.h>
 #include <chrono>
@@ -8,7 +8,7 @@
 
 bool quit = false;
 
-constexpr double FIXED_TIMESTEP = 0.02;
+constexpr double FIXED_TIMESTEP = 0.01;
 constexpr double TARGET_FRAME_TIME = 1.0 / 60.0;
 double accumulatedTime = 0.0;
 
@@ -24,17 +24,17 @@ int main()
     std::signal(SIGINT, signal_handler);
 
     Server server;
-    BounceBallEnvironment environment;
+    QuadrupedEnvironment environment;
 
-    auto handle = server.addPacketReceivedCallback(
-        [&environment](const ENetEvent &event, uint8_t eventType, const uint8_t *data, uint32_t dataLength)
-        {
-            if (eventType == EventType::ADD_FORCE)
-            {
-                environment.addForce(0, 2, 0);
-                std::cout << "Client #" << event.peer->incomingPeerID << " added force\n";
-            }
-        });
+    // auto handle = server.addPacketReceivedCallback(
+    //     [&environment](const ENetEvent &event, uint8_t eventType, const uint8_t *data, uint32_t dataLength)
+    //     {
+    //         if (eventType == EventType::ADD_FORCE)
+    //         {
+    //             environment.addForce(0, 2, 0);
+    //             std::cout << "Client #" << event.peer->incomingPeerID << " added force\n";
+    //         }
+    //     });
 
     auto lastTime = std::chrono::high_resolution_clock::now();
     while (server.isRunning() && !quit)
@@ -51,8 +51,7 @@ int main()
         {
             environment.simulate(FIXED_TIMESTEP);
             auto &result = environment.result();
-            // std::cout << "Position: (" << result[0] << ", " << result[1] << ", " << result[2] << ")\n";
-            server.send((uint32_t)0, {1, (float)result[0], (float)result[1], (float)result[2]});
+            server.send((uint32_t)0, {1, (float)result[0], (float)result[1], (float)result[2], (float)result[3], (float)result[4], (float)result[5]});
             accumulatedTime -= FIXED_TIMESTEP;
         }
 
