@@ -21,6 +21,10 @@ public class SailFunction : MonoBehaviour
     private bool isRaising;
     private bool isLowering;
 
+    public CinemachineVirtualCamera sailCam;
+    private CinemachineFreeLook lastPlayerCam;
+
+    public LineRenderer sailIndicator;
 
     private void Awake()
     {
@@ -40,10 +44,9 @@ public class SailFunction : MonoBehaviour
         {
             shipModel.Speed -= 1f * Time.deltaTime;
         }
-        else
-        {
-            return;
-        }
+        shipModel.Speed = Mathf.Clamp(shipModel.Speed, 0f, 5f);
+        sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -1, 0));
+
     }
 
 
@@ -73,6 +76,13 @@ public class SailFunction : MonoBehaviour
 
     private void __M_LockPlayer(PlayerModel player)
     {
+        lastPlayerCam = player.GetComponentInChildren<CinemachineFreeLook>();
+        if (lastPlayerCam != null)
+        {
+            Debug.Log("Has loaded");
+            lastPlayerCam.Priority = 5;
+        }
+
         const float newSpeed = 0;
         Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
         Debug.Log($"<color=#FFFF00>{player.name} Locked.</color>");
@@ -84,6 +94,12 @@ public class SailFunction : MonoBehaviour
         sailing.canceled -= NotPullingSail;
         sailing.Disable();
         m_sailing = false;
+
+        if (lastPlayerCam != null)
+        {
+            lastPlayerCam.Priority = 10;
+        }
+        lastPlayerCam = null;
 
         // TODO: Reference Regular Speed
         const float newSpeed = 5;
