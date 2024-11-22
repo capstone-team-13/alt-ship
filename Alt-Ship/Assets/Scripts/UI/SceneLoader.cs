@@ -13,9 +13,9 @@ public class SceneLoader : MonoBehaviour
 
     private static readonly string[] m_sceneNames =
     {
-        "GameStart",
+        "Start",
         "Level Selection",
-        "Level #1"
+        "Luka's Greybox"
     };
 
     [SerializeField] private SceneName m_sceneName = SceneName.Undefined;
