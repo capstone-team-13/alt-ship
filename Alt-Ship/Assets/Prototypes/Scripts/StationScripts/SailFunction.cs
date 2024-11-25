@@ -24,7 +24,8 @@ public class SailFunction : MonoBehaviour
     private bool isRaising;
     private bool isLowering;
 
-    public CinemachineVirtualCamera sailCam;
+    public CinemachineVirtualCamera sailCam1;
+    public CinemachineVirtualCamera sailCam2;
     private CinemachineFreeLook lastPlayerCam;
 
     public LineRenderer sailIndicator;
@@ -79,11 +80,25 @@ public class SailFunction : MonoBehaviour
 
     private void __M_LockPlayer(PlayerModel player)
     {
+        float playerNum = 0;
+
+        if (player.transform.GetComponent<PlayerController>() != null)
+        {
+            playerNum = player.transform.GetComponent<PlayerController>().playerNum;
+        }
+
         lastPlayerCam = player.GetComponentInChildren<CinemachineFreeLook>();
-        if (lastPlayerCam != null)
+
+        if (lastPlayerCam != null && playerNum == 1)
         {
             Debug.Log("Has loaded");
             lastPlayerCam.Priority = 5;
+            sailCam1.Priority = 10;
+        }
+        else if(lastPlayerCam != null && playerNum == 2)
+        {
+            lastPlayerCam.Priority = 5;
+            sailCam2.Priority = 10;
         }
 
         const float newSpeed = 0;
@@ -98,9 +113,25 @@ public class SailFunction : MonoBehaviour
         sailing.Disable();
         m_sailing = false;
 
-        if (lastPlayerCam != null)
+        float playerNum = 0;
+
+        if (player.transform.GetComponent<PlayerController>() != null)
+        {
+            playerNum = player.transform.GetComponent<PlayerController>().playerNum;
+        }
+
+        lastPlayerCam = player.GetComponentInChildren<CinemachineFreeLook>();
+
+        if (lastPlayerCam != null && playerNum == 1)
+        {
+            Debug.Log("Has loaded");
+            lastPlayerCam.Priority = 10;
+            sailCam1.Priority = 5;
+        }
+        else if (lastPlayerCam != null && playerNum == 2)
         {
             lastPlayerCam.Priority = 10;
+            sailCam2.Priority = 5;
         }
         lastPlayerCam = null;
 

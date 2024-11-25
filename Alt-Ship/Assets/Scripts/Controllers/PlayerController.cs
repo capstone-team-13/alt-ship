@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Application = EE.AMVCC.Application;
+using Cinemachine;
 
 public class PlayerController : Controller<PlayerModel>
 {
@@ -20,6 +21,11 @@ public class PlayerController : Controller<PlayerModel>
     public Material playerOneMat;
     public Material playerTwoMat;
     public MeshRenderer meshRenderer;
+
+    public float playerNum = 0;
+
+    [SerializeField]
+    private CinemachineFreeLook playerFreeLook;
 
     #endregion
 
@@ -48,6 +54,25 @@ public class PlayerController : Controller<PlayerModel>
     private void Awake()
     {
         ++m_playerCount;
+
+        if (playerNum == 0)
+        {
+            playerNum = m_playerCount;
+        }
+
+        if (playerNum == 1)
+        {
+            playerFreeLook.gameObject.layer = 11;
+            m_camera.cullingMask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", "Water", "UI", "Detectable", "Goal", "Player1");
+            m_camera.gameObject.layer = 11;
+        }
+        else if(playerNum == 2)
+        {
+            m_camera.cullingMask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", "Water", "UI", "Detectable", "Goal", "Player2");
+            playerFreeLook.gameObject.layer = 12;
+            m_camera.gameObject.layer = 12;
+        }
+
         m_player = GetComponent<PlayerInput>().actions.FindActionMap("PlayerMovement");
 
         meshRenderer.material = m_playerCount switch
@@ -104,6 +129,8 @@ public class PlayerController : Controller<PlayerModel>
     {
         Vector3 movementInput = __M_GetPlayerInput();
 
+        
+
         Vector3 direction = m_camera.transform.TransformDirection(movementInput);
         direction.y = 0;
 
@@ -112,6 +139,9 @@ public class PlayerController : Controller<PlayerModel>
 
 
         __M_UpdateDirection(direction);
+
+        // Remove if players rotation matters
+        transform.rotation = parentRotation.rotation;
 
         transform.Translate(Model.Velocity * Time.deltaTime);
     }

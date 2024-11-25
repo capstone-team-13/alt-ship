@@ -10,7 +10,8 @@ public class Rudder : MonoBehaviour
     public InputActionAsset inputActions;
     private InputAction steering;
 
-    public CinemachineVirtualCamera rudCam;
+    public CinemachineVirtualCamera rudCam1;
+    public CinemachineVirtualCamera rudCam2;
     private CinemachineFreeLook lastPlayerCam;
 
     private bool m_steering;
@@ -96,12 +97,27 @@ public class Rudder : MonoBehaviour
 
     private void __M_LockPlayer(PlayerModel player)
     {
+        float playerNum = 0;
+
+        if (player.transform.GetComponent<PlayerController>() != null)
+        {
+            playerNum = player.transform.GetComponent<PlayerController>().playerNum;
+        }
+
         lastPlayerCam = player.GetComponentInChildren<CinemachineFreeLook>();
-        if(lastPlayerCam != null)
+
+        if (lastPlayerCam != null && playerNum == 1)
         {
             Debug.Log("Has loaded");
             lastPlayerCam.Priority = 5;
+            rudCam1.Priority = 10;
         }
+        else if (lastPlayerCam != null && playerNum == 2)
+        {
+            lastPlayerCam.Priority = 5;
+            rudCam2.Priority = 10;
+        }
+
         const float newSpeed = 0;
         Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
         Debug.Log($"<color=#FFFF00>{player.name} Locked.</color>");
@@ -109,16 +125,36 @@ public class Rudder : MonoBehaviour
 
     private void __M_UnLockPlayer(PlayerModel player)
     {
+        Debug.Log("Rudder Player has Unlocked Start");
+
         m_steering = false;
-        if (lastPlayerCam != null)
+        float playerNum = 0;
+
+        if (player.transform.GetComponent<PlayerController>() != null)
+        {
+            playerNum = player.transform.GetComponent<PlayerController>().playerNum;
+        }
+
+        lastPlayerCam = player.GetComponentInChildren<CinemachineFreeLook>();
+
+        if (lastPlayerCam != null && playerNum == 1)
+        {
+            Debug.Log("Has loaded");
+            lastPlayerCam.Priority = 10;
+            rudCam1.Priority = 5;
+        }
+        else if (lastPlayerCam != null && playerNum == 2)
         {
             lastPlayerCam.Priority = 10;
+            rudCam2.Priority = 5;
         }
+
         lastPlayerCam = null;
         // TODO: Reference Regular Speed
         const float newSpeed = 5;
         Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
         Debug.Log($"<color=#FFFF00>{player.name} Unlocked.</color>");
+        Debug.Log("Rudder Player has Unlocked Finish");
     }
 
     #endregion
