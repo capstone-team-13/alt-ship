@@ -16,6 +16,9 @@ public class SailFunction : MonoBehaviour
 
     public float sailPositionSpeed = 0.1f;
 
+    [Range(0f, 20f)]
+    public float maxSpeed;
+
     public ShipModel shipModel;
 
     private bool isRaising;
@@ -44,7 +47,7 @@ public class SailFunction : MonoBehaviour
         {
             shipModel.Speed -= 1f * Time.deltaTime;
         }
-        shipModel.Speed = Mathf.Clamp(shipModel.Speed, 0f, 5f);
+        shipModel.Speed = Mathf.Clamp(shipModel.Speed, 0f, maxSpeed);
         sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -1, 0));
 
     }
