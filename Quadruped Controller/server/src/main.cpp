@@ -4,14 +4,12 @@
 #include <chrono>
 #include <event_type.h>
 
-bool quit = false;
+std::atomic<bool> quit = false;
 
 constexpr double FIXED_TIMESTEP = 0.01;
 
-constexpr auto FIXED_DELTA_TIME = std::chrono::duration<double>(FIXED_TIMESTEP);
-constexpr auto TARGET_FRAME_TIME = std::chrono::duration<double>(1.0 / 60.0);
-
-double accumulatedTime = 0.0;
+constexpr auto FIXED_DELTA_TIME = std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::duration<double>(FIXED_TIMESTEP));
+constexpr auto TARGET_FRAME_TIME = std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::duration<double>(1.0 / 60.0));
 
 Server server;
 QuadrupedEnvironment environment;
@@ -24,36 +22,58 @@ void signal_handler(int32_t signal)
 
 void fixedUpdate()
 {
+    auto nextTime = std::chrono::steady_clock::now();
     while (server.isRunning() && !quit)
     {
-        auto startTime = std::chrono::steady_clock::now();
+        nextTime += FIXED_DELTA_TIME;
 
-        std::cout << "[Fixed Update] Running...\n";
+        if (server.clientSize() > 0)
+            environment.simulate(FIXED_TIMESTEP);
 
-        environment.simulate(FIXED_TIMESTEP);
-        auto &result = environment.result();
-        // TODO: Flexiable Serialize
-        server.send((uint32_t)0,
-                    {1, (float)result[0], (float)result[1], (float)result[2],
-                     (float)result[3], (float)result[4], (float)result[5], (float)result[6]});
-        accumulatedTime -= FIXED_TIMESTEP;
-
-        auto elapsed = std::chrono::steady_clock::now() - startTime;
-        std::this_thread::sleep_for(FIXED_DELTA_TIME - elapsed);
+        std::this_thread::sleep_until(nextTime);
     }
 }
 
 void update()
 {
+    auto nextTime = std::chrono::steady_clock::now();
+    bool hasChanged = true;
+
+    std::vector<float> previousResult(7, 0.0f);
+    constexpr float threshold = 0.01f;
+
     while (server.isRunning() && !quit)
     {
-        auto start = std::chrono::steady_clock::now();
-
-        std::cout << "[Tick] Running...\n";
+        nextTime += TARGET_FRAME_TIME;
 
         server.tick();
 
-        std::this_thread::sleep_until(start + TARGET_FRAME_TIME);
+        if (server.clientSize() > 0)
+        {
+            auto &currentResult = environment.result();
+
+            hasChanged = false;
+            for (size_t i = 0; i < previousResult.size(); ++i)
+            {
+                if (std::fabs(currentResult[i] - previousResult[i]) > threshold)
+                {
+                    hasChanged = true;
+                    break;
+                }
+            }
+
+            if (hasChanged)
+            {
+                server.send(0, {EventType::POSITION_UPDATE, (float)currentResult[0], (float)currentResult[1], (float)currentResult[2],
+                                (float)currentResult[3], (float)currentResult[4], (float)currentResult[5], (float)currentResult[6]});
+                server.__M_Log("Sent ", (float)currentResult[0], ", ", (float)currentResult[1], ", ", (float)currentResult[2]);
+
+                for (size_t i = 0; i < previousResult.size(); ++i)
+                    previousResult[i] = currentResult[i];
+            }
+        }
+
+        std::this_thread::sleep_until(nextTime);
     }
 }
 
@@ -66,7 +86,7 @@ int main()
                                   { fixedUpdate(); });
 
     auto handle = server.addPacketReceivedCallback(
-        [](const ENetEvent &event, uint8_t eventType, [[maybe_unused]] const uint8_t *data, [[maybe_unused]] uint32_t dataLength)
+        [](const ENetEvent &event, uint8_t eventType, const uint8_t *data, uint32_t dataLength)
         {
             if (eventType == EventType::ADD_FORCE)
             {
@@ -78,5 +98,7 @@ int main()
     update();
 
     fixedUpdateThread.join();
+
+    server.__M_Log("Exited.");
     return 0;
 }

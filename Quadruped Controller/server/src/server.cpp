@@ -113,7 +113,7 @@ void Server::tick()
 
         if (eventSize < 0)
         {
-            __M_LogError("Encountered error while polling");
+            __M_LogError("Error: ENetHost encountered an issue or has stopped.");
             break;
         }
 
@@ -157,4 +157,9 @@ Server::PacketReceivedEvent::Handle Server::addPacketReceivedCallback(const Pack
 bool Server::removePacketReceivedCallback(const PacketReceivedEvent::Handle &handle)
 {
     return m_onReceivePacket.remove(handle);
+}
+
+uint32_t Server::clientSize() const
+{
+    return m_clients.size();
 }

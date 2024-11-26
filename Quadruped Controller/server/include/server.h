@@ -17,6 +17,7 @@ public:
     bool isRunning() const;
     PacketReceivedEvent::Handle addPacketReceivedCallback(const PacketReceivedEvent::Callback &callback);
     bool removePacketReceivedCallback(const PacketReceivedEvent::Handle &handle);
+    uint32_t clientSize() const;
 
 #pragma endregion
 
