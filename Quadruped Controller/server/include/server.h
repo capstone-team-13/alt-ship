@@ -29,7 +29,7 @@ private:
 
     ENetHost *m_server;
     std::unordered_map<uint32_t, ENetPeer *> m_clients;
-    bool m_isRunning;
+    std::atomic<bool> m_isRunning;
     std::unique_ptr<char[]> m_buffer;
 
     PacketReceivedEvent m_onReceivePacket;
