@@ -17,6 +17,7 @@ public:
     bool isRunning() const;
     PacketReceivedEvent::Handle addPacketReceivedCallback(const PacketReceivedEvent::Callback &callback);
     bool removePacketReceivedCallback(const PacketReceivedEvent::Handle &handle);
+    uint32_t clientSize() const;
 
 #pragma endregion
 
@@ -29,7 +30,7 @@ private:
 
     ENetHost *m_server;
     std::unordered_map<uint32_t, ENetPeer *> m_clients;
-    bool m_isRunning;
+    std::atomic<bool> m_isRunning;
     std::unique_ptr<char[]> m_buffer;
 
     PacketReceivedEvent m_onReceivePacket;
