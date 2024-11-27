@@ -43,15 +43,14 @@ namespace EE.QC
         [UsedImplicitly]
         private void Update()
         {
-            var keyCode = KeyCode.Space;
-            if (Input.GetKeyDown(keyCode))
-            {
-                Logger.Log($"{keyCode} pressed.");
-                var packet = new Packet();
-                var data = new[] { (byte)EventType.ADD_FORCE };
-                packet.Create(data, data.Length, PacketFlags.Unsequenced);
-                m_server.Send(0, ref packet);
-            }
+            const KeyCode keyCode = KeyCode.Space;
+            
+            if (!Input.GetKeyDown(keyCode)) return;
+            Logger.Log($"{keyCode} pressed.");
+            var packet = new Packet();
+            var data = new[] { (byte)EventType.ADD_FORCE };
+            packet.Create(data, data.Length, PacketFlags.Unsequenced);
+            m_server.Send(0, ref packet);
         }
 
         [UsedImplicitly]
@@ -119,7 +118,7 @@ namespace EE.QC
             address.Port = PORT;
 
             m_server = m_client.Connect(address);
-            // m_server.Timeout(5, 500, 2000);
+            m_server.Timeout(5000, 2000, 5000);
         }
 
         private void __M_CreateBufferReader()
@@ -136,7 +135,7 @@ namespace EE.QC
                 var noImmediateEvent = m_client.CheckEvents(out var netEvent) <= 0;
                 if (noImmediateEvent)
                 {
-                    var noEventAfterWait = m_client.Service(15, out netEvent) <= 0;
+                    var noEventAfterWait = m_client.Service(1, out netEvent) <= 0;
                     if (noEventAfterWait) return;
                 }
 
@@ -205,14 +204,16 @@ namespace EE.QC
                             m_reader.ReadSingle());
                         var upperJointRotation = new Quaternion(m_reader.ReadSingle(), m_reader.ReadSingle(),
                             m_reader.ReadSingle(), m_reader.ReadSingle());
-                        var lowerJointPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
-                            m_reader.ReadSingle());
-                        var lowerJointRotation = new Quaternion(m_reader.ReadSingle(), m_reader.ReadSingle(),
-                            m_reader.ReadSingle(), m_reader.ReadSingle());
+                        // var lowerJointPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
+                        //     m_reader.ReadSingle());
+                        // var lowerJointRotation = new Quaternion(m_reader.ReadSingle(), m_reader.ReadSingle(),
+                        //     m_reader.ReadSingle(), m_reader.ReadSingle());
+                        
+                        Logger.Log($"Position Updated {upperJointPosition}");
 
                         __M_UpdatePosition(
-                            new[] { upperJointPosition, lowerJointPosition },
-                            new[] { upperJointRotation, lowerJointRotation });
+                            new[] { upperJointPosition },
+                            new[] { upperJointRotation});
                     }
                     else
                     {
@@ -240,9 +241,9 @@ namespace EE.QC
         private void __M_UpdatePosition(Vector3[] positions, Quaternion[] rotations)
         {
             m_upperJoint.transform.position = positions[0];
-            m_lowerJoint.transform.position = positions[1];
+            // m_lowerJoint.transform.position = positions[1];
             m_upperJoint.transform.rotation = rotations[0];
-            m_lowerJoint.transform.rotation = rotations[1];
+            // m_lowerJoint.transform.rotation = rotations[1];
         }
 
         #endregion
