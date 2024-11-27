@@ -28,6 +28,7 @@ namespace EE.QC
 
         [SerializeField] private Transform m_upperJoint;
         [SerializeField] private Transform m_lowerJoint;
+        [SerializeField] private Transform m_endEffector;
 
         #endregion
 
@@ -44,7 +45,7 @@ namespace EE.QC
         private void Update()
         {
             const KeyCode keyCode = KeyCode.Space;
-            
+
             if (!Input.GetKeyDown(keyCode)) return;
             Logger.Log($"{keyCode} pressed.");
             var packet = new Packet();
@@ -204,16 +205,18 @@ namespace EE.QC
                             m_reader.ReadSingle());
                         var upperJointRotation = new Quaternion(m_reader.ReadSingle(), m_reader.ReadSingle(),
                             m_reader.ReadSingle(), m_reader.ReadSingle());
-                        // var lowerJointPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
-                        //     m_reader.ReadSingle());
-                        // var lowerJointRotation = new Quaternion(m_reader.ReadSingle(), m_reader.ReadSingle(),
-                        //     m_reader.ReadSingle(), m_reader.ReadSingle());
-                        
+                        var lowerJointPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
+                            m_reader.ReadSingle());
+                        var lowerJointRotation = new Quaternion(m_reader.ReadSingle(), m_reader.ReadSingle(),
+                            m_reader.ReadSingle(), m_reader.ReadSingle());
+                        var endEffectorPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
+                            m_reader.ReadSingle());
+
                         Logger.Log($"Position Updated {upperJointPosition}");
 
                         __M_UpdatePosition(
-                            new[] { upperJointPosition },
-                            new[] { upperJointRotation});
+                            new[] { upperJointPosition, lowerJointPosition, endEffectorPosition },
+                            new[] { upperJointRotation, lowerJointRotation });
                     }
                     else
                     {
@@ -241,9 +244,10 @@ namespace EE.QC
         private void __M_UpdatePosition(Vector3[] positions, Quaternion[] rotations)
         {
             m_upperJoint.transform.position = positions[0];
-            // m_lowerJoint.transform.position = positions[1];
+            m_lowerJoint.transform.position = positions[1];
+            m_endEffector.transform.position = positions[2];
             m_upperJoint.transform.rotation = rotations[0];
-            // m_lowerJoint.transform.rotation = rotations[1];
+            m_lowerJoint.transform.rotation = rotations[1];
         }
 
         #endregion

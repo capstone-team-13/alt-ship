@@ -6,7 +6,7 @@ void Environment::initialize()
     dInitODE2(0);
 
     m_world = dWorldCreate();
-    dWorldSetGravity(m_world, 0, -9.81, 0);
+    // dWorldSetGravity(m_world, 0, -9.81, 0);
 
     m_space = dHashSpaceCreate(0);
 
@@ -56,11 +56,11 @@ void Environment::simulate(float timeStep)
 
     dSpaceCollide(m_space, &collisionInfo, &Environment::__M_HandleCollision);
 
-    dWorldStep(m_world, static_cast<dReal>(timeStep));
-
-    dJointGroupEmpty(m_contactGroup);
+    dWorldStep(m_world, timeStep);
 
     onSimulate(timeStep);
+
+    dJointGroupEmpty(m_contactGroup);
 }
 
 const dWorldID &Environment::world() const

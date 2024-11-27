@@ -4,30 +4,42 @@
 
 class QuadrupedEnvironment final : public Environment
 {
-    // Plane
-    dGeomID m_planeGeom;
+    using Vector2f = Eigen::Vector2f;
+    using Vector3f = Eigen::Vector3f;
+    using Matrix2f = Eigen::Matrix2f;
 
     dBodyID m_upperJointBody;
     dGeomID m_upperJointGeom;
-    // dBodyID m_lowerJointBody;
-    // dGeomID m_lowerJointGeom;
+    dJointID m_upperHingeJoint;
 
-    dReal m_springConstant = 130;
-    dReal m_dampingConstant = 50;
-    Eigen::Vector3f m_targetHeight{0, 1, 0};
+    dBodyID m_lowerJointBody;
+    dGeomID m_lowerJointGeom;
+    dJointID m_lowerHingeJoint;
 
-    dJointID m_hingeJoint;
+    // Plane
+    dGeomID m_planeGeom;
 
     std::unique_ptr<dReal[]> m_result;
 
-    Eigen::Vector3f __M__CalculateVirtualForce() const;
+    dReal m_springConstant = 1000;
+    dReal m_dampingConstant = 50;
+    Vector3f m_targetHeight{0, 3, 0};
+
+    Vector2f m_length{2, 2};
+    Vector2f m_theta{0, 0};
+
+    Vector3f m_previousEndEffectorPosition{0, 0, 0};
+
+    Vector3f __M__CalculateVirtualForce(Vector3f currentPosition, Vector3f currentVelocity) const;
+    Vector3f __M_CalculateForwardKinematic() const;
+    Matrix2f __M_MakeJacobianTransport() const;
 
 public:
     QuadrupedEnvironment();
     ~QuadrupedEnvironment() = default;
 
     void adjustTargetHeight();
-    void addForce(Eigen::Vector3f force);
+    void addForce(Vector3f force);
     const std::unique_ptr<dReal[]> &result() const;
 
 protected:
