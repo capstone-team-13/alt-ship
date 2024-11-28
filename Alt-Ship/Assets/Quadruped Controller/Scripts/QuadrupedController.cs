@@ -28,6 +28,7 @@ namespace EE.QC
 
         [SerializeField] private Transform m_upperJoint;
         [SerializeField] private Transform m_lowerJoint;
+        [SerializeField] private Transform m_endEffector;
 
         #endregion
 
@@ -44,13 +45,23 @@ namespace EE.QC
         private void Update()
         {
             const KeyCode keyCode = KeyCode.Space;
-            
-            if (!Input.GetKeyDown(keyCode)) return;
-            Logger.Log($"{keyCode} pressed.");
-            var packet = new Packet();
-            var data = new[] { (byte)EventType.ADD_FORCE };
-            packet.Create(data, data.Length, PacketFlags.Unsequenced);
-            m_server.Send(0, ref packet);
+            if (Input.GetKeyDown(keyCode))
+            {
+                Logger.Log($"{keyCode} pressed.");
+                var packet = new Packet();
+                var data = new[] { (byte)EventType.ADD_FORCE };
+                packet.Create(data, data.Length, PacketFlags.Unsequenced);
+                m_server.Send(0, ref packet);
+            }
+
+            float lerpSpeed = 5.0f * Time.deltaTime;
+
+            m_upperJoint.transform.position = Vector3.Lerp(m_upperJoint.transform.position, desiredPositions[0], lerpSpeed);
+            m_lowerJoint.transform.position = Vector3.Lerp(m_lowerJoint.transform.position, desiredPositions[1], lerpSpeed);
+            m_endEffector.transform.position = Vector3.Lerp(m_endEffector.transform.position, desiredPositions[2], lerpSpeed);
+
+            m_upperJoint.transform.rotation = Quaternion.Slerp(m_upperJoint.transform.rotation, desiredRotations[0], lerpSpeed);
+            m_lowerJoint.transform.rotation = Quaternion.Slerp(m_lowerJoint.transform.rotation, desiredRotations[1], lerpSpeed);
         }
 
         [UsedImplicitly]
@@ -81,6 +92,9 @@ namespace EE.QC
         private byte[] m_buffer;
         private MemoryStream m_readStream;
         private BinaryReader m_reader;
+
+        private Vector3[] desiredPositions = new Vector3[3];
+        private Quaternion[] desiredRotations = new Quaternion[3];
 
         private void __M_InitializeENet()
         {
@@ -202,18 +216,20 @@ namespace EE.QC
                     {
                         var upperJointPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
                             m_reader.ReadSingle());
-                        var upperJointRotation = new Quaternion(m_reader.ReadSingle(), m_reader.ReadSingle(),
+                        var upperJointRotation = new Rotation(m_reader.ReadSingle(), m_reader.ReadSingle(),
                             m_reader.ReadSingle(), m_reader.ReadSingle());
-                        // var lowerJointPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
-                        //     m_reader.ReadSingle());
-                        // var lowerJointRotation = new Quaternion(m_reader.ReadSingle(), m_reader.ReadSingle(),
-                        //     m_reader.ReadSingle(), m_reader.ReadSingle());
-                        
+                        var lowerJointPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
+                            m_reader.ReadSingle());
+                        var lowerJointRotation = new Rotation(m_reader.ReadSingle(), m_reader.ReadSingle(),
+                            m_reader.ReadSingle(), m_reader.ReadSingle());
+                        var endEffectorPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
+                            m_reader.ReadSingle());
+
                         Logger.Log($"Position Updated {upperJointPosition}");
 
                         __M_UpdatePosition(
-                            new[] { upperJointPosition },
-                            new[] { upperJointRotation});
+                            new[] { upperJointPosition, lowerJointPosition, endEffectorPosition },
+                            new Quaternion[] { upperJointRotation, lowerJointRotation });
                     }
                     else
                     {
@@ -240,10 +256,8 @@ namespace EE.QC
 
         private void __M_UpdatePosition(Vector3[] positions, Quaternion[] rotations)
         {
-            m_upperJoint.transform.position = positions[0];
-            // m_lowerJoint.transform.position = positions[1];
-            m_upperJoint.transform.rotation = rotations[0];
-            // m_lowerJoint.transform.rotation = rotations[1];
+            desiredPositions = positions;
+            desiredRotations = rotations;
         }
 
         #endregion

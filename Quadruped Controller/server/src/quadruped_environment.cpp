@@ -1,25 +1,74 @@
 #include <quadruped_environment.h>
 
-Eigen::Vector3f QuadrupedEnvironment::__M__CalculateVirtualForce() const
+Eigen::Vector3f QuadrupedEnvironment::__M__CalculateDesiredPosition()
 {
-    const dReal *position = dBodyGetPosition(m_upperJointBody);
-    const dReal *velocity = dBodyGetLinearVel(m_upperJointBody);
 
-    Eigen::Vector3f posEigen = Eigen::Vector3f(position[0], position[1], position[2]);
-    Eigen::Vector3f velEigen = Eigen::Vector3f(velocity[0], velocity[1], velocity[2]);
+    std::cout << "Times: " << elapsedTime << ", " << period * dutyCycle << std::endl;
 
-    Eigen::Vector3f springForce = static_cast<float>(m_springConstant) * (m_targetHeight - posEigen);
+    float sigma = elapsedTime <= period * dutyCycle
+                      // Swing Phase
+                      ? 2.0f * M_PI * elapsedTime / (dutyCycle * period)
+                      // Stance Phase
+                      : 2.0f * M_PI * (elapsedTime - period * dutyCycle) / (period * (1 - dutyCycle));
 
-    Eigen::Vector3f convergenceForce = m_dampingConstant * (-velEigen);
+    float x, y, z;
 
-    return springForce + convergenceForce;
+    x = elapsedTime <= period * dutyCycle
+            ? (endX - startX) * ((sigma - sin(sigma)) / (2 * M_PI)) + startX
+            : (startX - endX) * ((sigma - sin(sigma)) / (2 * M_PI)) + endX;
+
+    y = (liftHeight * (1 - cos(sigma)) / 2.0f) - 0.325f;
+    z = 0.18;
+
+    return Vector3f(x, y, z);
+}
+
+Eigen::Vector3f QuadrupedEnvironment::__M_CalculateForwardKinematic() const
+{
+    auto &l1 = m_length[0];
+    auto &l2 = m_length[1];
+    auto &theta1 = m_theta[0];
+    auto &theta2 = m_theta[1];
+
+    Vector3f localPosition = Vector3f(
+        l1 * cos(theta1) + l2 * cos(theta1 + theta2),
+        l1 * sin(theta1) + l2 * sin(theta1 + theta2),
+        0);
+
+    // TODO: Global Position
+    return localPosition;
+}
+
+Eigen::Matrix2f QuadrupedEnvironment::__M_MakeJacobianTransport() const
+{
+    Matrix2f jacobianTransport;
+
+    auto &l1 = m_length[0];
+    auto &l2 = m_length[1];
+    auto &theta1 = m_theta[0];
+    auto &theta2 = m_theta[1];
+
+    jacobianTransport(0, 0) = -l2 * sin(theta1 + theta2) - l1 * sin(theta1);
+    jacobianTransport(0, 1) = l2 * cos(theta1 + theta2) + l1 * cos(theta1);
+    jacobianTransport(1, 0) = -l2 * sin(theta1 + theta2);
+    jacobianTransport(1, 1) = l2 * cos(theta1 + theta2);
+
+    return jacobianTransport;
+}
+
+Eigen::Vector3f QuadrupedEnvironment::__M__CalculateVirtualForce(Vector3f currentPosition, Vector3f currentVelocity) const
+{
+    Vector3f springForce = static_cast<float>(m_springConstant) * (m_targetHeight - currentPosition);
+    Vector3f convergenceForce = m_dampingConstant * currentVelocity;
+
+    return springForce - convergenceForce;
 }
 
 QuadrupedEnvironment::QuadrupedEnvironment()
-    : m_upperJointBody(nullptr), m_upperJointGeom(nullptr),
-      //   m_lowerJointBody(nullptr), m_lowerJointGeom(nullptr),
-      m_hingeJoint(nullptr), m_planeGeom(nullptr),
-      m_result(std::make_unique<dReal[]>(14))
+    : m_upperJointBody(nullptr), m_upperJointGeom(nullptr), m_upperHingeJoint(nullptr),
+      m_lowerJointBody(nullptr), m_lowerJointGeom(nullptr), m_lowerHingeJoint(nullptr),
+      m_planeGeom(nullptr),
+      m_result(std::make_unique<dReal[]>(17))
 {
     initialize();
 }
@@ -29,7 +78,7 @@ void QuadrupedEnvironment::adjustTargetHeight()
     m_targetHeight[1] = m_targetHeight[1] + 1;
 }
 
-void QuadrupedEnvironment::addForce(Eigen::Vector3f force)
+void QuadrupedEnvironment::addForce(Vector3f force)
 {
     dBodyAddForce(m_upperJointBody, force[0], force[1], force[2]);
 }
@@ -41,69 +90,90 @@ const std::unique_ptr<dReal[]> &QuadrupedEnvironment::result() const
 
 void QuadrupedEnvironment::onInit()
 {
-    dVector3 boxDemension{1.0f, 1.0f, 1.0f};
+    constexpr dVector3 boxDimension{2.0f, 0.5f, 0.5f};
 
+    // Upper Body
     m_upperJointBody = dBodyCreate(this->world());
-    dBodySetPosition(m_upperJointBody, 0, 1, 0);
-    // dQuaternion upperJointQuat;
-    // dQFromAxisAndAngle(upperJointQuat, 0, 0, 1, M_PI / 4);
-    // dBodySetQuaternion(m_upperJointBody, upperJointQuat);
-
+    dBodySetPosition(m_upperJointBody, 1, 0, 0);
     dMass upperJointMass;
-    dMassSetBox(&upperJointMass, 1, boxDemension[0], boxDemension[1], boxDemension[2]);
+    dMassSetBox(&upperJointMass, 1, boxDimension[0], boxDimension[1], boxDimension[2]);
     dBodySetMass(m_upperJointBody, &upperJointMass);
-
-    // m_lowerJointBody = dBodyCreate(this->world());
-    // dBodySetPosition(m_lowerJointBody, 0, 10, 0);
-    // dQuaternion lowerJointQuat;
-    // dQFromAxisAndAngle(lowerJointQuat, 0, 0, 1, -M_PI / 4);
-    // dBodySetQuaternion(m_lowerJointBody, lowerJointQuat);
-
-    // dMass lowerJointMass;
-    // dMassSetBox(&lowerJointMass, 1, boxDemension[0], boxDemension[1], boxDemension[2]);
-    // dBodySetMass(m_lowerJointBody, &lowerJointMass);
-
-    m_upperJointGeom = dCreateBox(this->space(), boxDemension[0], boxDemension[1], boxDemension[2]);
+    m_upperJointGeom = dCreateBox(this->space(), boxDimension[0], boxDimension[1], boxDimension[2]);
     dGeomSetBody(m_upperJointGeom, m_upperJointBody);
 
-    // m_lowerJointGeom = dCreateBox(this->space(), boxDemension[0], boxDemension[1], boxDemension[2]);
-    // dGeomSetBody(m_lowerJointGeom, m_lowerJointBody);
+    m_upperHingeJoint = dJointCreateHinge(this->world(), nullptr);
+    dJointAttach(m_upperHingeJoint, m_upperJointBody, nullptr);
+    dJointSetHingeAnchor(m_upperHingeJoint, 0, 0, 0);
+    dJointSetHingeAxis(m_upperHingeJoint, 0, 0, 1);
 
-    m_planeGeom = dCreatePlane(this->space(), 0, 1, 0, 0);
+    // Lower Body
+    m_lowerJointBody = dBodyCreate(this->world());
+    dBodySetPosition(m_lowerJointBody, 3, 0, 0);
+    dMass lowerJointMass;
+    dMassSetBox(&lowerJointMass, 1, boxDimension[0], boxDimension[1], boxDimension[2]);
+    dBodySetMass(m_lowerJointBody, &lowerJointMass);
+    m_lowerJointGeom = dCreateBox(this->space(), boxDimension[0], boxDimension[1], boxDimension[2]);
+    dGeomSetBody(m_lowerJointGeom, m_lowerJointBody);
 
-    // m_hingeJoint = dJointCreateHinge(this->world(), nullptr);
-    // dJointAttach(m_hingeJoint, m_upperJointBody, m_lowerJointBody);
-    // dJointSetHingeAnchor(m_hingeJoint, 0, 10.5f, 0); // TODO: Anchor Variable
-    // dJointSetHingeAxis(m_hingeJoint, 1, 0, 0);
+    m_lowerHingeJoint = dJointCreateHinge(this->world(), nullptr);
+    dJointAttach(m_lowerHingeJoint, m_lowerJointBody, m_upperJointBody);
+    dJointSetHingeAnchor(m_lowerHingeJoint, 2, 0, 0);
+    dJointSetHingeAxis(m_lowerHingeJoint, 0, 0, 1);
+
+    // m_planeGeom = dCreatePlane(this->space(), 0, -4, 0, 0);
 }
 
 void QuadrupedEnvironment::onSimulate(float timeStep)
 {
-    auto force = __M__CalculateVirtualForce();
+    m_theta[0] = __M_GetEulerAnglesFromQuaternion(m_upperJointBody)[2];
+    m_theta[1] = __M_GetEulerAnglesFromQuaternion(m_lowerJointBody)[2] - m_theta[0];
 
-    addForce(force);
+    auto endEffectorPosition = __M_CalculateForwardKinematic();
+    auto endEffectorVelocity = (endEffectorPosition - m_previousEndEffectorPosition) / timeStep;
 
-    dBodySetAngularVel(m_upperJointBody, 0.0, 0.0, 0.0);
+    auto desiredPosition = __M__CalculateDesiredPosition();
+    m_targetHeight[0] = desiredPosition[0];
+    m_targetHeight[1] = -4 + desiredPosition[1];
+
+    auto virtualForce = __M__CalculateVirtualForce(endEffectorPosition, endEffectorVelocity);
+    auto jacobianTransport = __M_MakeJacobianTransport();
+
+    Vector2f torque = jacobianTransport * Vector2f(virtualForce[0], virtualForce[1]);
+
+    dJointAddHingeTorque(m_upperHingeJoint, torque[0]);
+    dJointAddHingeTorque(m_lowerHingeJoint, torque[1]);
+
+    m_previousEndEffectorPosition = endEffectorPosition;
+
+    elapsedTime += timeStep;
+    elapsedTime = fmod(elapsedTime, period);
 
     const dReal *upperJointPosition = dBodyGetPosition(m_upperJointBody);
     const dReal *upperJointQuaternion = dBodyGetQuaternion(m_upperJointBody);
 
-    // const dReal *lowerJointPosition = dBodyGetPosition(m_lowerJointBody);
-    // const dReal *lowerJointQuaternion = dBodyGetQuaternion(m_lowerJointBody);
+    const dReal *lowerJointPosition = dBodyGetPosition(m_lowerJointBody);
+    const dReal *lowerJointQuaternion = dBodyGetQuaternion(m_lowerJointBody);
 
-    m_result[0] = upperJointPosition[0];
-    m_result[1] = upperJointPosition[1];
-    m_result[2] = upperJointPosition[2];
-    m_result[3] = upperJointQuaternion[0];
-    m_result[4] = upperJointQuaternion[1];
-    m_result[5] = upperJointQuaternion[2];
-    m_result[6] = upperJointQuaternion[3];
+    // TODO: Data Structure
+    {
+        m_result[0] = upperJointPosition[0];
+        m_result[1] = upperJointPosition[1];
+        m_result[2] = upperJointPosition[2];
+        m_result[3] = upperJointQuaternion[0];
+        m_result[4] = upperJointQuaternion[1];
+        m_result[5] = upperJointQuaternion[2];
+        m_result[6] = upperJointQuaternion[3];
 
-    // m_result[7] = lowerJointPosition[0];
-    // m_result[8] = lowerJointPosition[1];
-    // m_result[9] = lowerJointPosition[2];
-    // m_result[10] = lowerJointQuaternion[0];
-    // m_result[11] = lowerJointQuaternion[1];
-    // m_result[12] = lowerJointQuaternion[2];
-    // m_result[13] = lowerJointQuaternion[3];
+        m_result[7] = lowerJointPosition[0];
+        m_result[8] = lowerJointPosition[1];
+        m_result[9] = lowerJointPosition[2];
+        m_result[10] = lowerJointQuaternion[0];
+        m_result[11] = lowerJointQuaternion[1];
+        m_result[12] = lowerJointQuaternion[2];
+        m_result[13] = lowerJointQuaternion[3];
+
+        m_result[14] = endEffectorPosition[0];
+        m_result[15] = endEffectorPosition[1];
+        m_result[16] = endEffectorPosition[2];
+    }
 }
