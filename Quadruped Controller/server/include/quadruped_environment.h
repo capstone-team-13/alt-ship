@@ -19,11 +19,12 @@ class QuadrupedEnvironment final : public Environment
     // Plane
     dGeomID m_planeGeom;
 
-    std::unique_ptr<dReal[]> m_result;
+    std::unique_ptr<dReal[]>
+        m_result;
 
-    dReal m_springConstant = 1000;
-    dReal m_dampingConstant = 50;
-    Vector3f m_targetHeight{0, 3, 0};
+    dReal m_springConstant = 5;
+    dReal m_dampingConstant = 1;
+    Vector3f m_targetHeight{0, -3, 0};
 
     Vector2f m_length{2, 2};
     Vector2f m_theta{0, 0};
@@ -33,6 +34,40 @@ class QuadrupedEnvironment final : public Environment
     Vector3f __M__CalculateVirtualForce(Vector3f currentPosition, Vector3f currentVelocity) const;
     Vector3f __M_CalculateForwardKinematic() const;
     Matrix2f __M_MakeJacobianTransport() const;
+
+    Vector3f __M_QuaternionToEuler(const dQuaternion quaternion)
+    {
+        dReal roll, pitch, yaw;
+
+        dReal w = quaternion[0];
+        dReal x = quaternion[1];
+        dReal y = quaternion[2];
+        dReal z = quaternion[3];
+
+        dReal ysqr = y * y;
+
+        dReal t0 = +2.0 * (w * x + y * z);
+        dReal t1 = +1.0 - 2.0 * (x * x + ysqr);
+        roll = std::atan2(t0, t1);
+
+        dReal t2 = +2.0 * (w * y - z * x);
+        t2 = t2 > 1.0 ? 1.0 : t2;
+        t2 = t2 < -1.0 ? -1.0 : t2;
+        pitch = std::asin(t2);
+
+        dReal t3 = +2.0 * (w * z + x * y);
+        dReal t4 = +1.0 - 2.0 * (ysqr + z * z);
+        yaw = std::atan2(t3, t4);
+
+        return Vector3f(roll, pitch, yaw);
+    }
+
+    Vector3f __M_GetEulerAnglesFromQuaternion(dBodyID body)
+    {
+        const dReal *quat = dBodyGetQuaternion(body);
+        dQuaternion q = {quat[0], quat[1], quat[2], quat[3]};
+        return __M_QuaternionToEuler(q);
+    }
 
 public:
     QuadrupedEnvironment();

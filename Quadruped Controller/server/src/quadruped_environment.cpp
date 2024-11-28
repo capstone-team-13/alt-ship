@@ -3,33 +3,41 @@
 Eigen::Vector3f QuadrupedEnvironment::__M__CalculateVirtualForce(Vector3f currentPosition, Vector3f currentVelocity) const
 {
     Vector3f springForce = static_cast<float>(m_springConstant) * (m_targetHeight - currentPosition);
-    Vector3f convergenceForce = m_dampingConstant * (-currentVelocity);
+    Vector3f convergenceForce = m_dampingConstant * currentVelocity;
 
-    return springForce + convergenceForce;
+    return springForce - convergenceForce;
 }
 
 Eigen::Vector3f QuadrupedEnvironment::__M_CalculateForwardKinematic() const
 {
-    Vector3f localPosition = Eigen::Vector3f(
-        m_length[0] * sin(m_theta[0]) + m_length[1] * sin(m_theta[1]),
-        -(m_length[0] * cos(m_theta[0]) + m_length[1] * cos(m_theta[1])),
+    auto &l1 = m_length[0];
+    auto &l2 = m_length[1];
+    auto &theta1 = m_theta[0];
+    auto &theta2 = m_theta[1];
+
+    Vector3f localPosition = Vector3f(
+        l1 * cos(theta1) + l2 * cos(theta1 - theta2),
+        l1 * sin(theta1) + l2 * sin(theta1 - theta2),
         0);
 
-    const dReal *temp = dBodyGetPosition(m_upperJointBody);
-    Vector3f upperJointPosition = Vector3f(temp[0], temp[1], temp[2]);
-
-    // World Position
-    // return localPosition + upperJointPosition;
+    // TODO: Global Position
     return localPosition;
 }
 
 Eigen::Matrix2f QuadrupedEnvironment::__M_MakeJacobianTransport() const
 {
     Matrix2f jacobianTransport;
-    jacobianTransport(0, 0) = -m_length[0] * sin(m_theta[0]);
-    jacobianTransport(0, 1) = m_length[0] * cos(m_theta[0]);
-    jacobianTransport(1, 0) = -m_length[1] * sin(m_theta[1]);
-    jacobianTransport(1, 1) = m_length[1] * cos(m_theta[1]);
+
+    auto &l1 = m_length[0];
+    auto &l2 = m_length[1];
+    auto &theta1 = m_theta[0];
+    auto &theta2 = m_theta[1];
+
+    jacobianTransport(0, 0) = -l1 * sin(theta1) - l2 * sin(theta1 - theta2);
+    jacobianTransport(0, 1) = l1 * cos(theta1) + l2 * cos(theta1 - theta2);
+    jacobianTransport(1, 0) = l2 * sin(theta1 - theta2);
+    jacobianTransport(1, 1) = -l2 * cos(theta1 - theta2);
+
     return jacobianTransport;
 }
 
@@ -59,26 +67,19 @@ const std::unique_ptr<dReal[]> &QuadrupedEnvironment::result() const
 
 void QuadrupedEnvironment::onInit()
 {
-    constexpr dVector3 boxDemension{0.5f, 2.0f, 0.5f};
+    constexpr dVector3 boxDimension{0.5f, 2.0f, 0.5f};
 
     // Upper Body
     m_upperJointBody = dBodyCreate(this->world());
     dBodySetPosition(m_upperJointBody, 0, -1, 0);
     dMass upperJointMass;
-    dMassSetBox(&upperJointMass, 1, boxDemension[0], boxDemension[1], boxDemension[2]);
+    dMassSetBox(&upperJointMass, 1, boxDimension[0], boxDimension[1], boxDimension[2]);
     dBodySetMass(m_upperJointBody, &upperJointMass);
-    m_upperJointGeom = dCreateBox(this->space(), boxDemension[0], boxDemension[1], boxDemension[2]);
+    m_upperJointGeom = dCreateBox(this->space(), boxDimension[0], boxDimension[1], boxDimension[2]);
     dGeomSetBody(m_upperJointGeom, m_upperJointBody);
 
-    dBodyID originBody = dBodyCreate(this->world());
-    dMass originMass;
-    dMassSetZero(&originMass);
-    dMassSetSphereTotal(&originMass, 1, 1);
-    dBodySetMass(originBody, &originMass);
-    dBodySetPosition(originBody, 0, 0, 0);
-
     m_upperHingeJoint = dJointCreateHinge(this->world(), nullptr);
-    dJointAttach(m_upperHingeJoint, m_upperJointBody, originBody);
+    dJointAttach(m_upperHingeJoint, m_upperJointBody, nullptr);
     dJointSetHingeAnchor(m_upperHingeJoint, 0, 0, 0);
     dJointSetHingeAxis(m_upperHingeJoint, 0, 0, 1);
 
@@ -86,9 +87,9 @@ void QuadrupedEnvironment::onInit()
     m_lowerJointBody = dBodyCreate(this->world());
     dBodySetPosition(m_lowerJointBody, 0, -3, 0);
     dMass lowerJointMass;
-    dMassSetBox(&lowerJointMass, 1, boxDemension[0], boxDemension[1], boxDemension[2]);
+    dMassSetBox(&lowerJointMass, 1, boxDimension[0], boxDimension[1], boxDimension[2]);
     dBodySetMass(m_lowerJointBody, &lowerJointMass);
-    m_lowerJointGeom = dCreateBox(this->space(), boxDemension[0], boxDemension[1], boxDemension[2]);
+    m_lowerJointGeom = dCreateBox(this->space(), boxDimension[0], boxDimension[1], boxDimension[2]);
     dGeomSetBody(m_lowerJointGeom, m_lowerJointBody);
 
     m_lowerHingeJoint = dJointCreateHinge(this->world(), nullptr);
@@ -96,29 +97,28 @@ void QuadrupedEnvironment::onInit()
     dJointSetHingeAnchor(m_lowerHingeJoint, 0, -2, 0);
     dJointSetHingeAxis(m_lowerHingeJoint, 0, 0, 1);
 
-    float upperTorque = 100.0f;
-    // float lowerTorque = -5.0f;
-    dJointAddHingeTorque(m_upperHingeJoint, upperTorque);
-    // dJointAddHingeTorque(m_lowerHingeJoint, lowerTorque);
+    // m_planeGeom = dCreatePlane(this->space(), 0, -4, 0, 0);
+
+    // dJointAddHingeTorque(m_upperHingeJoint, 150);
+    // dJointAddHingeTorque(m_lowerHingeJoint, -150);
 }
 
 void QuadrupedEnvironment::onSimulate(float timeStep)
 {
-    const dReal *rot1 = dBodyGetRotation(m_upperJointBody);
-    m_theta[0] = atan2(rot1[7], rot1[8]);
-    const dReal *rot2 = dBodyGetRotation(m_lowerJointBody);
-    m_theta[1] = atan2(rot2[7], rot2[8]);
+    m_theta[0] = __M_GetEulerAnglesFromQuaternion(m_upperJointBody)[2];
+    m_theta[1] = __M_GetEulerAnglesFromQuaternion(m_lowerJointBody)[2];
 
     auto endEffectorPosition = __M_CalculateForwardKinematic();
-    // auto endEffectorVelocity = (m_previousEndEffectorPosition - endEffectorPosition) / timeStep;
+    auto endEffectorVelocity = (endEffectorPosition - m_previousEndEffectorPosition) / timeStep;
 
-    // auto virtualForce = __M__CalculateVirtualForce(endEffectorPosition, endEffectorVelocity);
-    // auto jacobianTransport = __M_MakeJacobianTransport();
+    auto virtualForce = __M__CalculateVirtualForce(endEffectorPosition, endEffectorVelocity);
+    auto jacobian = __M_MakeJacobianTransport();
 
-    // Vector2f torque = jacobianTransport * Vector2f(virtualForce[0], virtualForce[1]);
+    Vector2f torque = jacobian * Vector2f(virtualForce[0], virtualForce[1]);
+    std::cout << torque[0] << ", " << torque[1] << std::endl;
 
-    // dJointAddHingeTorque(m_upperHingeJoint, torque[0]);
-    // dJointAddHingeTorque(m_lowerHingeJoint, torque[1]);
+    dJointAddHingeTorque(m_upperHingeJoint, torque[0]);
+    dJointAddHingeTorque(m_lowerHingeJoint, torque[1]);
 
     m_previousEndEffectorPosition = endEffectorPosition;
 

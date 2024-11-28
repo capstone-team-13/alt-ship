@@ -203,11 +203,11 @@ namespace EE.QC
                     {
                         var upperJointPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
                             m_reader.ReadSingle());
-                        var upperJointRotation = new Quaternion(m_reader.ReadSingle(), m_reader.ReadSingle(),
+                        var upperJointRotation = new Rotation(m_reader.ReadSingle(), m_reader.ReadSingle(),
                             m_reader.ReadSingle(), m_reader.ReadSingle());
                         var lowerJointPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
                             m_reader.ReadSingle());
-                        var lowerJointRotation = new Quaternion(m_reader.ReadSingle(), m_reader.ReadSingle(),
+                        var lowerJointRotation = new Rotation(m_reader.ReadSingle(), m_reader.ReadSingle(),
                             m_reader.ReadSingle(), m_reader.ReadSingle());
                         var endEffectorPosition = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(),
                             m_reader.ReadSingle());
@@ -216,7 +216,7 @@ namespace EE.QC
 
                         __M_UpdatePosition(
                             new[] { upperJointPosition, lowerJointPosition, endEffectorPosition },
-                            new[] { upperJointRotation, lowerJointRotation });
+                            new Quaternion[] { upperJointRotation, lowerJointRotation });
                     }
                     else
                     {

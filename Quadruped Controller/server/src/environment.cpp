@@ -6,7 +6,7 @@ void Environment::initialize()
     dInitODE2(0);
 
     m_world = dWorldCreate();
-    // dWorldSetGravity(m_world, 0, -9.81, 0);
+    dWorldSetGravity(m_world, 0, -9.81, 0);
 
     m_space = dHashSpaceCreate(0);
 
@@ -21,6 +21,9 @@ void Environment::__M_HandleCollision(void *data, dGeomID geom1, dGeomID geom2)
 
     dBodyID body1 = dGeomGetBody(geom1);
     dBodyID body2 = dGeomGetBody(geom2);
+
+    if (body1 && body2 && dAreConnectedExcluding(body1, body2, dJointTypeContact))
+        return;
 
     const int MAX_NUM_CONTACTS = 8;
     dContact contacts[MAX_NUM_CONTACTS];
