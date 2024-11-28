@@ -16,8 +16,8 @@ Eigen::Vector3f QuadrupedEnvironment::__M_CalculateForwardKinematic() const
     auto &theta2 = m_theta[1];
 
     Vector3f localPosition = Vector3f(
-        l1 * cos(theta1) + l2 * cos(theta1 - theta2),
-        l1 * sin(theta1) + l2 * sin(theta1 - theta2),
+        l1 * cos(theta1) + l2 * cos(theta1 + theta2),
+        l1 * sin(theta1) + l2 * sin(theta1 + theta2),
         0);
 
     // TODO: Global Position
@@ -33,10 +33,10 @@ Eigen::Matrix2f QuadrupedEnvironment::__M_MakeJacobianTransport() const
     auto &theta1 = m_theta[0];
     auto &theta2 = m_theta[1];
 
-    jacobianTransport(0, 0) = -l1 * sin(theta1) - l2 * sin(theta1 - theta2);
-    jacobianTransport(0, 1) = l1 * cos(theta1) + l2 * cos(theta1 - theta2);
-    jacobianTransport(1, 0) = l2 * sin(theta1 - theta2);
-    jacobianTransport(1, 1) = -l2 * cos(theta1 - theta2);
+    jacobianTransport(0, 0) = -l2 * sin(theta1 + theta2) - l1 * sin(theta1);
+    jacobianTransport(0, 1) = l2 * cos(theta1 + theta2) + l1 * cos(theta1);
+    jacobianTransport(1, 0) = -l2 * sin(theta1 + theta2);
+    jacobianTransport(1, 1) = l2 * cos(theta1 + theta2);
 
     return jacobianTransport;
 }
@@ -67,11 +67,11 @@ const std::unique_ptr<dReal[]> &QuadrupedEnvironment::result() const
 
 void QuadrupedEnvironment::onInit()
 {
-    constexpr dVector3 boxDimension{0.5f, 2.0f, 0.5f};
+    constexpr dVector3 boxDimension{2.0f, 0.5f, 0.5f};
 
     // Upper Body
     m_upperJointBody = dBodyCreate(this->world());
-    dBodySetPosition(m_upperJointBody, 0, -1, 0);
+    dBodySetPosition(m_upperJointBody, 1, 0, 0);
     dMass upperJointMass;
     dMassSetBox(&upperJointMass, 1, boxDimension[0], boxDimension[1], boxDimension[2]);
     dBodySetMass(m_upperJointBody, &upperJointMass);
@@ -85,7 +85,7 @@ void QuadrupedEnvironment::onInit()
 
     // Lower Body
     m_lowerJointBody = dBodyCreate(this->world());
-    dBodySetPosition(m_lowerJointBody, 0, -3, 0);
+    dBodySetPosition(m_lowerJointBody, 3, 0, 0);
     dMass lowerJointMass;
     dMassSetBox(&lowerJointMass, 1, boxDimension[0], boxDimension[1], boxDimension[2]);
     dBodySetMass(m_lowerJointBody, &lowerJointMass);
@@ -94,19 +94,16 @@ void QuadrupedEnvironment::onInit()
 
     m_lowerHingeJoint = dJointCreateHinge(this->world(), nullptr);
     dJointAttach(m_lowerHingeJoint, m_lowerJointBody, m_upperJointBody);
-    dJointSetHingeAnchor(m_lowerHingeJoint, 0, -2, 0);
+    dJointSetHingeAnchor(m_lowerHingeJoint, 2, 0, 0);
     dJointSetHingeAxis(m_lowerHingeJoint, 0, 0, 1);
 
     // m_planeGeom = dCreatePlane(this->space(), 0, -4, 0, 0);
-
-    // dJointAddHingeTorque(m_upperHingeJoint, 150);
-    // dJointAddHingeTorque(m_lowerHingeJoint, -150);
 }
 
 void QuadrupedEnvironment::onSimulate(float timeStep)
 {
     m_theta[0] = __M_GetEulerAnglesFromQuaternion(m_upperJointBody)[2];
-    m_theta[1] = __M_GetEulerAnglesFromQuaternion(m_lowerJointBody)[2];
+    m_theta[1] = __M_GetEulerAnglesFromQuaternion(m_lowerJointBody)[2] - m_theta[0];
 
     auto endEffectorPosition = __M_CalculateForwardKinematic();
     auto endEffectorVelocity = (endEffectorPosition - m_previousEndEffectorPosition) / timeStep;
@@ -115,7 +112,6 @@ void QuadrupedEnvironment::onSimulate(float timeStep)
     auto jacobian = __M_MakeJacobianTransport();
 
     Vector2f torque = jacobian * Vector2f(virtualForce[0], virtualForce[1]);
-    std::cout << torque[0] << ", " << torque[1] << std::endl;
 
     dJointAddHingeTorque(m_upperHingeJoint, torque[0]);
     dJointAddHingeTorque(m_lowerHingeJoint, torque[1]);

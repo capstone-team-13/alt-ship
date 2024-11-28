@@ -22,9 +22,9 @@ class QuadrupedEnvironment final : public Environment
     std::unique_ptr<dReal[]>
         m_result;
 
-    dReal m_springConstant = 5;
-    dReal m_dampingConstant = 1;
-    Vector3f m_targetHeight{0, -3, 0};
+    dReal m_springConstant = 16;
+    dReal m_dampingConstant = 6;
+    Vector3f m_targetHeight{0, -2, 0};
 
     Vector2f m_length{2, 2};
     Vector2f m_theta{0, 0};

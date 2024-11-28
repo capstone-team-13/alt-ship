@@ -62,28 +62,18 @@ void update()
                 }
             }
 
-            // if (hasChanged)
-            // {
-            //     server.send(0, {EventType::POSITION_UPDATE, (float)currentResult[0], (float)currentResult[1], (float)currentResult[2],
-            //                     (float)currentResult[3], (float)currentResult[4], (float)currentResult[5], (float)currentResult[6],
-            //                     (float)currentResult[7], (float)currentResult[8], (float)currentResult[9],
-            //                     (float)currentResult[10], (float)currentResult[11], (float)currentResult[12], (float)currentResult[13],
-            //                     (float)currentResult[14], (float)currentResult[15], (float)currentResult[16]});
-            //     server.__M_Log("Sent ", (float)currentResult[0], ", ", (float)currentResult[1], ", ", (float)currentResult[2]);
+            if (hasChanged)
+            {
+                server.send(0, {EventType::POSITION_UPDATE, (float)currentResult[0], (float)currentResult[1], (float)currentResult[2],
+                                (float)currentResult[3], (float)currentResult[4], (float)currentResult[5], (float)currentResult[6],
+                                (float)currentResult[7], (float)currentResult[8], (float)currentResult[9],
+                                (float)currentResult[10], (float)currentResult[11], (float)currentResult[12], (float)currentResult[13],
+                                (float)currentResult[14], (float)currentResult[15], (float)currentResult[16]});
+                server.__M_Log("Sent ", (float)currentResult[0], ", ", (float)currentResult[1], ", ", (float)currentResult[2]);
 
-            //     for (size_t i = 0; i < previousResult.size(); ++i)
-            //         previousResult[i] = currentResult[i];
-            // }
-
-            server.send(0, {EventType::POSITION_UPDATE, (float)currentResult[0], (float)currentResult[1], (float)currentResult[2],
-                            (float)currentResult[3], (float)currentResult[4], (float)currentResult[5], (float)currentResult[6],
-                            (float)currentResult[7], (float)currentResult[8], (float)currentResult[9],
-                            (float)currentResult[10], (float)currentResult[11], (float)currentResult[12], (float)currentResult[13],
-                            (float)currentResult[14], (float)currentResult[15], (float)currentResult[16]});
-            server.__M_Log("Sent ", (float)currentResult[0], ", ", (float)currentResult[1], ", ", (float)currentResult[2]);
-
-            for (size_t i = 0; i < previousResult.size(); ++i)
-                previousResult[i] = currentResult[i];
+                for (size_t i = 0; i < previousResult.size(); ++i)
+                    previousResult[i] = currentResult[i];
+            }
         }
 
         std::this_thread::sleep_until(nextTime);
