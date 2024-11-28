@@ -31,10 +31,21 @@ class QuadrupedEnvironment final : public Environment
 
     Vector3f m_previousEndEffectorPosition{0, 0, 0};
 
-    Vector3f __M__CalculateVirtualForce(Vector3f currentPosition, Vector3f currentVelocity) const;
+    // TODO: TEST ONLY
+    const float multiplier = 1.75f;
+    const float period = 0.512f * multiplier;
+    const float dutyCycle = 0.5f * multiplier;
+    float elapsedTime = 0.0f;
+    const float startX = -1.0f * multiplier;
+    const float endX = 1.0f * multiplier;
+    const float liftHeight = 4.0f;
+
+    Vector3f __M__CalculateDesiredPosition();
     Vector3f __M_CalculateForwardKinematic() const;
     Matrix2f __M_MakeJacobianTransport() const;
+    Vector3f __M__CalculateVirtualForce(Vector3f currentPosition, Vector3f currentVelocity) const;
 
+    // TODO: Utility File
     Vector3f __M_QuaternionToEuler(const dQuaternion quaternion)
     {
         dReal roll, pitch, yaw;
@@ -61,7 +72,7 @@ class QuadrupedEnvironment final : public Environment
 
         return Vector3f(roll, pitch, yaw);
     }
-
+    // TODO: Utility File
     Vector3f __M_GetEulerAnglesFromQuaternion(dBodyID body)
     {
         const dReal *quat = dBodyGetQuaternion(body);

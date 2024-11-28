@@ -1,11 +1,26 @@
 #include <quadruped_environment.h>
 
-Eigen::Vector3f QuadrupedEnvironment::__M__CalculateVirtualForce(Vector3f currentPosition, Vector3f currentVelocity) const
+Eigen::Vector3f QuadrupedEnvironment::__M__CalculateDesiredPosition()
 {
-    Vector3f springForce = static_cast<float>(m_springConstant) * (m_targetHeight - currentPosition);
-    Vector3f convergenceForce = m_dampingConstant * currentVelocity;
 
-    return springForce - convergenceForce;
+    std::cout << "Times: " << elapsedTime << ", " << period * dutyCycle << std::endl;
+
+    float sigma = elapsedTime <= period * dutyCycle
+                      // Swing Phase
+                      ? 2.0f * M_PI * elapsedTime / (dutyCycle * period)
+                      // Stance Phase
+                      : 2.0f * M_PI * (elapsedTime - period * dutyCycle) / (period * (1 - dutyCycle));
+
+    float x, y, z;
+
+    x = elapsedTime <= period * dutyCycle
+            ? (endX - startX) * ((sigma - sin(sigma)) / (2 * M_PI)) + startX
+            : (startX - endX) * ((sigma - sin(sigma)) / (2 * M_PI)) + endX;
+
+    y = (liftHeight * (1 - cos(sigma)) / 2.0f) - 0.325f;
+    z = 0.18;
+
+    return Vector3f(x, y, z);
 }
 
 Eigen::Vector3f QuadrupedEnvironment::__M_CalculateForwardKinematic() const
@@ -39,6 +54,14 @@ Eigen::Matrix2f QuadrupedEnvironment::__M_MakeJacobianTransport() const
     jacobianTransport(1, 1) = l2 * cos(theta1 + theta2);
 
     return jacobianTransport;
+}
+
+Eigen::Vector3f QuadrupedEnvironment::__M__CalculateVirtualForce(Vector3f currentPosition, Vector3f currentVelocity) const
+{
+    Vector3f springForce = static_cast<float>(m_springConstant) * (m_targetHeight - currentPosition);
+    Vector3f convergenceForce = m_dampingConstant * currentVelocity;
+
+    return springForce - convergenceForce;
 }
 
 QuadrupedEnvironment::QuadrupedEnvironment()
@@ -108,15 +131,22 @@ void QuadrupedEnvironment::onSimulate(float timeStep)
     auto endEffectorPosition = __M_CalculateForwardKinematic();
     auto endEffectorVelocity = (endEffectorPosition - m_previousEndEffectorPosition) / timeStep;
 
-    auto virtualForce = __M__CalculateVirtualForce(endEffectorPosition, endEffectorVelocity);
-    auto jacobian = __M_MakeJacobianTransport();
+    auto desiredPosition = __M__CalculateDesiredPosition();
+    m_targetHeight[0] = desiredPosition[0];
+    m_targetHeight[1] = -4 + desiredPosition[1];
 
-    Vector2f torque = jacobian * Vector2f(virtualForce[0], virtualForce[1]);
+    auto virtualForce = __M__CalculateVirtualForce(endEffectorPosition, endEffectorVelocity);
+    auto jacobianTransport = __M_MakeJacobianTransport();
+
+    Vector2f torque = jacobianTransport * Vector2f(virtualForce[0], virtualForce[1]);
 
     dJointAddHingeTorque(m_upperHingeJoint, torque[0]);
     dJointAddHingeTorque(m_lowerHingeJoint, torque[1]);
 
     m_previousEndEffectorPosition = endEffectorPosition;
+
+    elapsedTime += timeStep;
+    elapsedTime = fmod(elapsedTime, period);
 
     const dReal *upperJointPosition = dBodyGetPosition(m_upperJointBody);
     const dReal *upperJointQuaternion = dBodyGetQuaternion(m_upperJointBody);
@@ -124,23 +154,26 @@ void QuadrupedEnvironment::onSimulate(float timeStep)
     const dReal *lowerJointPosition = dBodyGetPosition(m_lowerJointBody);
     const dReal *lowerJointQuaternion = dBodyGetQuaternion(m_lowerJointBody);
 
-    m_result[0] = upperJointPosition[0];
-    m_result[1] = upperJointPosition[1];
-    m_result[2] = upperJointPosition[2];
-    m_result[3] = upperJointQuaternion[0];
-    m_result[4] = upperJointQuaternion[1];
-    m_result[5] = upperJointQuaternion[2];
-    m_result[6] = upperJointQuaternion[3];
+    // TODO: Data Structure
+    {
+        m_result[0] = upperJointPosition[0];
+        m_result[1] = upperJointPosition[1];
+        m_result[2] = upperJointPosition[2];
+        m_result[3] = upperJointQuaternion[0];
+        m_result[4] = upperJointQuaternion[1];
+        m_result[5] = upperJointQuaternion[2];
+        m_result[6] = upperJointQuaternion[3];
 
-    m_result[7] = lowerJointPosition[0];
-    m_result[8] = lowerJointPosition[1];
-    m_result[9] = lowerJointPosition[2];
-    m_result[10] = lowerJointQuaternion[0];
-    m_result[11] = lowerJointQuaternion[1];
-    m_result[12] = lowerJointQuaternion[2];
-    m_result[13] = lowerJointQuaternion[3];
+        m_result[7] = lowerJointPosition[0];
+        m_result[8] = lowerJointPosition[1];
+        m_result[9] = lowerJointPosition[2];
+        m_result[10] = lowerJointQuaternion[0];
+        m_result[11] = lowerJointQuaternion[1];
+        m_result[12] = lowerJointQuaternion[2];
+        m_result[13] = lowerJointQuaternion[3];
 
-    m_result[14] = endEffectorPosition[0];
-    m_result[15] = endEffectorPosition[1];
-    m_result[16] = endEffectorPosition[2];
+        m_result[14] = endEffectorPosition[0];
+        m_result[15] = endEffectorPosition[1];
+        m_result[16] = endEffectorPosition[2];
+    }
 }
