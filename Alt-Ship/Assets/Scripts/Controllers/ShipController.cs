@@ -7,7 +7,14 @@ public class ShipController : Controller<ShipModel>
     [Header("Concrete Reference")] [SerializeField]
     private Rigidbody m_rigidBody;
 
+    [SerializeField] private GameObject mainSail;
+
     #region Unity Callbacks
+
+    private void Awake()
+    {
+        mainSail.SetActive(false);
+    }
 
     [UsedImplicitly]
     private void Update()
@@ -23,8 +30,11 @@ public class ShipController : Controller<ShipModel>
     private void FixedUpdate()
     {
         // TODO: Add Current Velocity
-        var newVelocity = Model.Speed * Model.SailDirection;
-        m_rigidBody.velocity = newVelocity;
+        //var newVelocity = Model.Speed * Model.SailDirection;
+        //m_rigidBody.velocity = newVelocity;
+
+        shipMovement();
+
     }
 
     #endregion
@@ -52,6 +62,14 @@ public class ShipController : Controller<ShipModel>
     {
         var rotationDelta = sign * Model.RotationSpeed * Time.deltaTime;
         Model.TargetEulerAngles.y += rotationDelta;
+    }
+
+    private void shipMovement()
+    {
+        Debug.Log(m_rigidBody.velocity);
+        m_rigidBody.AddForce(Model.Speed * Model.SailDirection, ForceMode.Force);
+        var newVelocity = Model.Speed * Model.SailDirection;
+        m_rigidBody.velocity = newVelocity;
     }
 
     #endregion
