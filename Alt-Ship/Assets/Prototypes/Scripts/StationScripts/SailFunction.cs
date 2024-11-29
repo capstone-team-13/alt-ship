@@ -91,7 +91,7 @@ public class SailFunction : MonoBehaviour
 
         if (lastPlayerCam != null && playerNum == 1)
         {
-            Debug.Log("Has loaded");
+        //    Debug.Log("Has loaded");
             lastPlayerCam.Priority = 5;
             sailCam1.Priority = 10;
         }
@@ -124,7 +124,7 @@ public class SailFunction : MonoBehaviour
 
         if (lastPlayerCam != null && playerNum == 1)
         {
-            Debug.Log("Has loaded");
+        //    Debug.Log("Has loaded");
             lastPlayerCam.Priority = 10;
             sailCam1.Priority = 5;
         }

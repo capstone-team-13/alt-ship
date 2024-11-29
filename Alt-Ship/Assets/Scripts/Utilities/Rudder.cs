@@ -57,7 +57,7 @@ public class Rudder : MonoBehaviour
 
         if (rotationSign != 0f)
         {
-            Debug.Log("Steering");
+  //          Debug.Log("Steering");
             Application.Instance.Push(new ShipCommand.Steer(rotationSign));
         }
     }
@@ -119,7 +119,7 @@ public class Rudder : MonoBehaviour
             //
             if (pOneSail.GetComponentInChildren<MeshRenderer>().material)
             {
-                Debug.Log("Is triggering");
+         //       Debug.Log("Is triggering");
                 MeshRenderer materialTest = pOneSail.GetComponentInChildren<MeshRenderer>();
                 materialTest.material = transparent;
             }
