@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Application = EE.AMVCC.Application;
 using Cinemachine;
-
+using UnityEngine.Rendering;
 public class Rudder : MonoBehaviour
 {
     public InputActionAsset inputActions;
@@ -13,6 +13,12 @@ public class Rudder : MonoBehaviour
     public CinemachineVirtualCamera rudCam1;
     public CinemachineVirtualCamera rudCam2;
     private CinemachineFreeLook lastPlayerCam;
+
+    [SerializeField] private GameObject pOneSail;
+    [SerializeField] private GameObject pTwoSail;
+
+    [SerializeField] private Material standard;
+    [SerializeField] private Material transparent;
 
     private bool m_steering;
     private float rotationSign;
@@ -108,14 +114,26 @@ public class Rudder : MonoBehaviour
 
         if (lastPlayerCam != null && playerNum == 1)
         {
-            Debug.Log("Has loaded");
             lastPlayerCam.Priority = 5;
             rudCam1.Priority = 10;
+            //
+            if (pOneSail.GetComponentInChildren<MeshRenderer>().material)
+            {
+                Debug.Log("Is triggering");
+                MeshRenderer materialTest = pOneSail.GetComponentInChildren<MeshRenderer>();
+                materialTest.material = transparent;
+            }
         }
         else if (lastPlayerCam != null && playerNum == 2)
         {
             lastPlayerCam.Priority = 5;
             rudCam2.Priority = 10;
+            //
+            if (pTwoSail.GetComponentInChildren<MeshRenderer>().material)
+            {
+                MeshRenderer materialTest = pTwoSail.GetComponentInChildren<MeshRenderer>();
+                materialTest.material = transparent;
+            }
         }
 
         const float newSpeed = 0;
@@ -139,14 +157,25 @@ public class Rudder : MonoBehaviour
 
         if (lastPlayerCam != null && playerNum == 1)
         {
-            Debug.Log("Has loaded");
             lastPlayerCam.Priority = 10;
             rudCam1.Priority = 5;
+            //
+            if (pOneSail.GetComponentInChildren<MeshRenderer>().material)
+            {
+                MeshRenderer materialTest = pOneSail.GetComponentInChildren<MeshRenderer>();
+                materialTest.material = standard;
+            }
         }
         else if (lastPlayerCam != null && playerNum == 2)
         {
             lastPlayerCam.Priority = 10;
             rudCam2.Priority = 5;
+            //
+            if (pTwoSail.GetComponentInChildren<MeshRenderer>().material)
+            {
+                MeshRenderer materialTest = pTwoSail.GetComponentInChildren<MeshRenderer>();
+                materialTest.material = standard;
+            }
         }
 
         lastPlayerCam = null;

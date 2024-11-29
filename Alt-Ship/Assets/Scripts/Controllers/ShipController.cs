@@ -7,7 +7,14 @@ public class ShipController : Controller<ShipModel>
     [Header("Concrete Reference")] [SerializeField]
     private Rigidbody m_rigidBody;
 
+    [SerializeField] private GameObject mainSail;
+
     #region Unity Callbacks
+
+    private void Awake()
+    {
+        mainSail.SetActive(false);
+    }
 
     [UsedImplicitly]
     private void Update()
