@@ -31,4 +31,9 @@ public class SceneLoader : MonoBehaviour
         var sceneIndex = (int)m_sceneName;
         SceneManager.LoadScene(m_sceneNames[sceneIndex]);
     }
+
+    public void CloseGame()
+    {
+        Application.Quit();
+    }
 }
