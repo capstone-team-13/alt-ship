@@ -11,6 +11,7 @@ public class SailFunction : MonoBehaviour
     public InputActionAsset inputActions;
 
     private InputAction sailing;
+    private PlayerInput playerInput;
 
     private bool m_sailing = false;
 
@@ -32,12 +33,6 @@ public class SailFunction : MonoBehaviour
     private Vector3 recentPosition;
 
     public LineRenderer sailIndicator;
-
-    private void Awake()
-    {
-        var actionMap = inputActions.FindActionMap("Sail");
-        sailing = actionMap.FindAction("Pulling");
-    }
 
     private void Update()
     {
@@ -64,10 +59,12 @@ public class SailFunction : MonoBehaviour
 
     public void Interact(IInteractable interactable, GameObject interactor)
     {
-
-        sailing.Enable();
-        sailing.performed += PullingSail;
-        sailing.canceled += NotPullingSail;
+        playerInput = interactor.GetComponent<PlayerInput>();
+        if (playerInput != null)
+        {
+            inputActions = playerInput.actions;
+            NewPlayerStarted();
+        }
 
         m_sailing = !m_sailing;
         interactable.InteractionName = m_sailing ? "Stop Interacting" : "Start Interacting";
@@ -122,9 +119,7 @@ public class SailFunction : MonoBehaviour
 
     private void __M_UnLockPlayer(PlayerModel player)
     {
-        sailing.performed -= PullingSail;
-        sailing.canceled -= NotPullingSail;
-        sailing.Disable();
+
         m_sailing = false;
 
         float playerNum = 0;
@@ -150,6 +145,8 @@ public class SailFunction : MonoBehaviour
 
         playerTransform = null;
         lastPlayerCam = null;
+
+        StationAbandonded();
 
         // TODO: Reference Regular Speed
         const float newSpeed = 5;
@@ -180,6 +177,26 @@ public class SailFunction : MonoBehaviour
     {
         isRaising = false;
         isLowering = false;
+    }
+
+    private void NewPlayerStarted()
+    {
+        var actionMap = inputActions.FindActionMap("Sail");
+        sailing = actionMap.FindAction("Pulling");
+
+        sailing.Enable();
+        sailing.performed += PullingSail;
+        sailing.canceled += NotPullingSail;
+    }
+
+    private void StationAbandonded()
+    {
+        sailing.performed -= PullingSail;
+        sailing.canceled -= NotPullingSail;
+        sailing.Disable();
+
+        playerInput = null;
+        inputActions = null;
     }
 
 }

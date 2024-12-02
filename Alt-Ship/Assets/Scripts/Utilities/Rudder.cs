@@ -26,7 +26,6 @@ public class Rudder : MonoBehaviour
     [SerializeField] private DirectionalInteraction m_interactable;
 
     private Transform playerTransform;
-
     private Vector3 recentPosition;
 
     private bool m_steering;

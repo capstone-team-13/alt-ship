@@ -6,5 +6,5 @@ public class CannonModel : Model
     public Rigidbody Projectile;
     public Transform ShootAt;
 
-    public float InitialForce = 10.0f;
+    public float InitialForce = 1.0f;
 }
