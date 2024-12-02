@@ -10,6 +10,8 @@ public class Rudder : MonoBehaviour
     public InputActionAsset inputActions;
     private InputAction steering;
 
+    private PlayerInput playerInput;
+
     public CinemachineVirtualCamera rudCam1;
     public CinemachineVirtualCamera rudCam2;
     private CinemachineFreeLook lastPlayerCam;
@@ -20,35 +22,15 @@ public class Rudder : MonoBehaviour
     [SerializeField] private Material standard;
     [SerializeField] private Material transparent;
 
+    // TODO: Temp solution
+    [SerializeField] private DirectionalInteraction m_interactable;
+
     private Transform playerTransform;
 
     private Vector3 recentPosition;
 
     private bool m_steering;
     private float rotationSign;
-
-    private void Awake()
-    {
-        var actionMap = inputActions.FindActionMap("Steering");
-        steering = actionMap.FindAction("ShipSteering");
-    }
-
-    private void OnEnable()
-    {
-        rotationSign = 0.0f;
-        steering.Enable();
-        steering.performed += steeringBoat;
-        steering.canceled += steeringCanceled;
-    }
-
-    private void OnDisable()
-    {
-        steering.performed -= steeringBoat;
-        steering.canceled -= steeringCanceled;
-        rotationSign = 0.0f;
-        steering.Disable();
-    }
-
 
     #region Unity Callbacks
 
@@ -61,11 +43,11 @@ public class Rudder : MonoBehaviour
 
         if (rotationSign != 0f)
         {
-  //          Debug.Log("Steering");
+            //          Debug.Log("Steering");
             Application.Instance.Push(new ShipCommand.Steer(rotationSign));
         }
 
-        if(playerTransform != null && playerTransform.position != recentPosition)
+        if (playerTransform != null && playerTransform.position != recentPosition)
         {
             playerTransform.localPosition = recentPosition;
         }
@@ -88,13 +70,25 @@ public class Rudder : MonoBehaviour
 
     public void Interact(IInteractable interactable, GameObject interactor)
     {
+        playerInput = interactor.GetComponent<PlayerInput>();
+        if (playerInput != null)
+        {
+            inputActions = playerInput.actions;
+            NewPlayerStarted();
+        }
+
         m_steering = !m_steering;
         interactable.InteractionName = m_steering ? "Stop Steering" : "Start Steer";
 
         var playerModel = interactor.GetComponent<PlayerModel>();
 
         if (m_steering) __M_LockPlayer(playerModel);
-        else __M_UnLockPlayer(playerModel);
+        else
+        {
+            __M_UnLockPlayer(playerModel);
+            m_interactable.__M_Reset();
+        }
+
     }
 
     // Exit is never running
@@ -113,7 +107,7 @@ public class Rudder : MonoBehaviour
 
     private void __M_LockPlayer(PlayerModel player)
     {
-        if(playerTransform == null)
+        if (playerTransform == null)
         {
             playerTransform = player.transform;
             recentPosition = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y, player.transform.localPosition.z);
@@ -198,12 +192,39 @@ public class Rudder : MonoBehaviour
         playerTransform = null;
         // Camera End
 
+        StationAbandonded();
+
         // TODO: Reference Regular Speed
         const float newSpeed = 5;
         Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
+        // TODO: Remove
         Debug.Log($"<color=#FFFF00>{player.name} Unlocked.</color>");
         Debug.Log("Rudder Player has Unlocked Finish");
     }
 
     #endregion
+
+    private void NewPlayerStarted()
+    {
+        var actionMap = inputActions.FindActionMap("Steering");
+        steering = actionMap.FindAction("ShipSteering");
+
+        rotationSign = 0.0f;
+        steering.Enable();
+        steering.performed += steeringBoat;
+        steering.canceled += steeringCanceled;
+    }
+
+    private void StationAbandonded()
+    {
+        steering.performed -= steeringBoat;
+        steering.canceled -= steeringCanceled;
+        rotationSign = 0.0f;
+        steering.Disable();
+
+        playerInput = null;
+        inputActions = null;
+    }
+
+
 }
