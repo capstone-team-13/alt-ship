@@ -28,6 +28,9 @@ public class SailFunction : MonoBehaviour
     public CinemachineVirtualCamera sailCam2;
     private CinemachineFreeLook lastPlayerCam;
 
+    private Transform playerTransform;
+    private Vector3 recentPosition;
+
     public LineRenderer sailIndicator;
 
     private void Awake()
@@ -50,6 +53,11 @@ public class SailFunction : MonoBehaviour
         }
         shipModel.Speed = Mathf.Clamp(shipModel.Speed, 0f, maxSpeed);
         sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -1, 0));
+
+        if (playerTransform != null && playerTransform.position != recentPosition)
+        {
+            playerTransform.localPosition = recentPosition;
+        }
 
     }
 
@@ -80,6 +88,12 @@ public class SailFunction : MonoBehaviour
 
     private void __M_LockPlayer(PlayerModel player)
     {
+        if (playerTransform == null)
+        {
+            playerTransform = player.transform;
+            recentPosition = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y, player.transform.localPosition.z);
+        }
+
         float playerNum = 0;
 
         if (player.transform.GetComponent<PlayerController>() != null)
@@ -133,6 +147,8 @@ public class SailFunction : MonoBehaviour
             lastPlayerCam.Priority = 10;
             sailCam2.Priority = 5;
         }
+
+        playerTransform = null;
         lastPlayerCam = null;
 
         // TODO: Reference Regular Speed

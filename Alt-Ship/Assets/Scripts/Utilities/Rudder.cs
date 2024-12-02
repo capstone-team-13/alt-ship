@@ -20,6 +20,10 @@ public class Rudder : MonoBehaviour
     [SerializeField] private Material standard;
     [SerializeField] private Material transparent;
 
+    private Transform playerTransform;
+
+    private Vector3 recentPosition;
+
     private bool m_steering;
     private float rotationSign;
 
@@ -60,6 +64,12 @@ public class Rudder : MonoBehaviour
   //          Debug.Log("Steering");
             Application.Instance.Push(new ShipCommand.Steer(rotationSign));
         }
+
+        if(playerTransform != null && playerTransform.position != recentPosition)
+        {
+            playerTransform.localPosition = recentPosition;
+        }
+
     }
 
     private void steeringBoat(InputAction.CallbackContext context)
@@ -103,8 +113,14 @@ public class Rudder : MonoBehaviour
 
     private void __M_LockPlayer(PlayerModel player)
     {
-        float playerNum = 0;
+        if(playerTransform == null)
+        {
+            playerTransform = player.transform;
+            recentPosition = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y, player.transform.localPosition.z);
+        }
 
+        // Camera Start
+        float playerNum = 0;
         if (player.transform.GetComponent<PlayerController>() != null)
         {
             playerNum = player.transform.GetComponent<PlayerController>().playerNum;
@@ -119,7 +135,6 @@ public class Rudder : MonoBehaviour
             //
             if (pOneSail.GetComponentInChildren<MeshRenderer>().material)
             {
-         //       Debug.Log("Is triggering");
                 MeshRenderer materialTest = pOneSail.GetComponentInChildren<MeshRenderer>();
                 materialTest.material = transparent;
             }
@@ -135,6 +150,7 @@ public class Rudder : MonoBehaviour
                 materialTest.material = transparent;
             }
         }
+        // Camera End
 
         const float newSpeed = 0;
         Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
@@ -146,8 +162,9 @@ public class Rudder : MonoBehaviour
         Debug.Log("Rudder Player has Unlocked Start");
 
         m_steering = false;
-        float playerNum = 0;
 
+        // Camera Start
+        float playerNum = 0;
         if (player.transform.GetComponent<PlayerController>() != null)
         {
             playerNum = player.transform.GetComponent<PlayerController>().playerNum;
@@ -177,8 +194,10 @@ public class Rudder : MonoBehaviour
                 materialTest.material = standard;
             }
         }
-
         lastPlayerCam = null;
+        playerTransform = null;
+        // Camera End
+
         // TODO: Reference Regular Speed
         const float newSpeed = 5;
         Application.Instance.Push(new PlayerCommand.ChangeSpeed(player, newSpeed));
