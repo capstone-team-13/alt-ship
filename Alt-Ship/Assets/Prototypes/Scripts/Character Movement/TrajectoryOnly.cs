@@ -6,42 +6,31 @@ namespace EE.Prototype.CM
 {
     public class TrajectoryOnly : MonoBehaviour
     {
-        [Header("Configs")] [SerializeField] private float stepTime = 0.25f;
-        [SerializeField] private float m_liftHeight = 0.3f;
-        [SerializeField] private float m_stepLength = 0.5f;
-        [SerializeField] private float m_legLiftHeight = 0.5f;
-        [SerializeField] private float m_swingPhasePeriod = 2f;
-        [SerializeField] private LayerMask m_rayCastLayer;
+        #region Editor API
+
+        [Header("Configs")] [SerializeField] private LayerMask m_rayCastLayerMask;
 
         [Header("Refs.")] [SerializeField] private Transform m_base;
-        [SerializeField] private Transform m_grabPivot;
         [SerializeField] private Transform[] m_foots;
 
-        private Vector3 m_startFrom;
+        #endregion
 
-        private Vector3[] m_startPositions;
-
-        private Vector3[] m_targetPositions;
-
-        private Vector3[] m_baseToFoot;
-
-        private int m_activeFootIndex;
-        private bool m_isMoving;
-        private float m_timeSinceLastStep;
-        private int m_resetFootIndex;
+        #region API
 
         public Transform Base => m_base;
-        public Transform GrabPivot => m_grabPivot;
+
+        #endregion
+
+        #region Unity Callbacks
 
         [UsedImplicitly]
         private void Awake()
         {
             var length = m_foots.Length;
-            m_startPositions = new Vector3[length];
             m_targetPositions = new Vector3[length];
 
             for (var i = 0; i < m_foots.Length; i++)
-                m_startPositions[i] = m_targetPositions[i] = m_foots[i].position;
+                m_targetPositions[i] = m_foots[i].position;
         }
 
         [UsedImplicitly]
@@ -57,62 +46,93 @@ namespace EE.Prototype.CM
         private void Update()
         {
             var input = __M_GetUserInput();
-
             m_base.Translate(input * (2.0f * Time.deltaTime));
-
-            if (input.magnitude != 0.0f)
-            {
-                m_isMoving = true;
-                __M_Move();
-            }
-            else if (m_isMoving) Reset();
-
-            // __M_Move();
+            __M_Move();
         }
 
+        [UsedImplicitly]
+        private void OnDrawGizmosSelected()
+        {
+            if (!Application.isPlaying) return;
+
+            Gizmos.color = Color.green;
+
+            for (var i = 0; i < m_foots.Length; i++)
+            {
+                // var rayOrigin = foot.position + Vector3.up * 1.0f;
+                var rayOrigin = new Vector3(m_base.position.x + m_baseToFoot[i].x, m_base.position.y,
+                    m_base.position.z);
+                var rayDirection = Vector3.down;
+                const float rayDistance = 10.0f;
+
+                // Draw the raycast line for each foot
+                Gizmos.DrawLine(rayOrigin, rayOrigin + rayDirection * rayDistance);
+
+                // Check if the ray hits and visualize
+                if (!Physics.Raycast(rayOrigin, rayDirection, out var hit, rayDistance, m_rayCastLayerMask)) continue;
+
+                Gizmos.color = Color.green;
+                Gizmos.DrawSphere(rayOrigin, 0.1f);
+
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(hit.point, 0.1f);
+            }
+        }
+
+        #endregion
+
+        #region Internal
+
+        private Vector3[] m_targetPositions;
+
+        private Vector3[] m_baseToFoot;
+
+        private int m_activeFootIndex;
+        private int m_resetFootIndex;
 
         private void __M_Move()
         {
-            // var gait = __M_GenerateGaitPath(0);
-            // m_base.transform.position = m_startFrom + gait;
-            //
-            // if (!(Time.time % m_swingPhasePeriod + 0.002 >= m_swingPhasePeriod)) return;
-            // m_startFrom = m_base.transform.position;
-            // Debug.Log("T");
+            __M_UpdateFootTargets();
 
-            UpdateFootTargets();
+            __M_SmoothlyMoveFeetToTargets();
 
-            SmoothlyMoveFeetToTargets();
-
-            UpdateActiveFootIndexIfNeeded();
+            __M_UpdateActiveFootIndexIfNeeded();
         }
 
-        private void UpdateFootTargets()
+        private void __M_UpdateFootTargets()
         {
+            const float rayDistance = 10.0f;
+
             for (var i = 0; i < m_foots.Length; i++)
             {
-                var foot = m_foots[i];
-                var rayOrigin = foot.position + Vector3.up * 1.0f;
+                var rayOrigin = new Vector3(m_base.position.x + m_baseToFoot[i].x, m_base.position.y,
+                    m_base.position.z);
                 var rayDirection = Vector3.down;
-                var rayDistance = 1 + m_legLiftHeight;
 
-                if (Physics.Raycast(rayOrigin, rayDirection, out var hit, rayDistance, m_rayCastLayer))
+                if (Physics.Raycast(rayOrigin, rayDirection, out var hitInfo, rayDistance, m_rayCastLayerMask))
                 {
-                    var hitPoint = hit.point;
+                    var hitPoint = hitInfo.point;
                     var regularPoint = m_base.position + m_baseToFoot[i];
 
+                    // Choose the closer position between the hit point and the regular point
                     m_targetPositions[i] =
                         Vector3.Distance(m_base.position, hitPoint) < Vector3.Distance(m_base.position, regularPoint)
                             ? hitPoint
                             : regularPoint;
 
-                    foot.rotation = Quaternion.LookRotation(foot.forward, hit.normal);
+                    // Align foot rotation with the hit normal
+                    // foot.rotation = Quaternion.LookRotation(foot.forward, hitInfo.normal);
                 }
-                else m_targetPositions[i] = m_base.position + m_baseToFoot[i];
+                else
+                {
+                    var basePosition = m_base.position + m_baseToFoot[i];
+                    // Default to base position if no hit is detected
+                    m_targetPositions[i] = basePosition;
+                }
             }
         }
 
-        private void SmoothlyMoveFeetToTargets()
+        private void __M_SmoothlyMoveFeetToTargets()
         {
             // for (var i = 0; i < m_foots.Length; i++)
             //     m_foots[i].position = Vector3.Lerp(m_foots[i].position, m_targetPositions[i], Time.deltaTime * 5f);
@@ -120,57 +140,34 @@ namespace EE.Prototype.CM
                 m_targetPositions[m_activeFootIndex], Time.deltaTime * 5f);
         }
 
-        private void UpdateActiveFootIndexIfNeeded()
+        private void __M_UpdateActiveFootIndexIfNeeded()
         {
             var theOtherFootIndex = (m_activeFootIndex + 1) % m_foots.Length;
             var activeFoot = m_foots[m_activeFootIndex];
 
             // Check if it's time to switch the active foot
-            if (IsActiveFootReachedTarget(activeFoot) || IsOtherFootTooFar(theOtherFootIndex))
+            if (__M_IsActiveFootReachedTarget(activeFoot) || __M_IsOtherFootTooFar(theOtherFootIndex) ||
+                __M_AreFeetTooClose(m_activeFootIndex, theOtherFootIndex))
                 m_activeFootIndex = (m_activeFootIndex + 1) % m_foots.Length;
         }
 
-        private bool IsActiveFootReachedTarget(Transform activeFoot)
+        private bool __M_IsActiveFootReachedTarget(Transform activeFoot)
         {
             return (activeFoot.position - m_targetPositions[m_activeFootIndex]).magnitude < 0.1f;
         }
 
-        private bool IsOtherFootTooFar(int otherFootIndex)
+        private bool __M_IsOtherFootTooFar(int otherFootIndex)
         {
             return (m_foots[otherFootIndex].position - m_base.position).magnitude >= 3.0f;
         }
 
-        private void Reset()
+        private bool __M_AreFeetTooClose(int footIndex, int otherFootIndex)
         {
-            var foot = m_foots[m_resetFootIndex];
-            var basePosition = m_base.position + m_baseToFoot[m_resetFootIndex];
-            var rayOrigin = m_base.position;
-            var rayDirection = (basePosition - rayOrigin).normalized;
-            var rayDistance = Vector3.Distance(rayOrigin, basePosition);
-
-            Vector3 targetPosition;
-
-            if (Physics.Raycast(rayOrigin, rayDirection, out var hit, rayDistance, m_rayCastLayer))
-            {
-                targetPosition = hit.point;
-            }
-            else
-            {
-                targetPosition = basePosition;
-            }
-
-            foot.position = Vector3.Lerp(foot.position, targetPosition, Time.deltaTime * 5.0f);
-
-            if (!((foot.position - targetPosition).magnitude < 0.1f)) return;
-
-            m_resetFootIndex = (m_resetFootIndex + 1) % m_foots.Length;
-
-            if (m_resetFootIndex == 0) m_isMoving = false;
+            return (m_foots[footIndex].position - m_foots[otherFootIndex].position).magnitude <= 0.75f;
         }
 
-
         [System.Diagnostics.Contracts.Pure]
-        private Vector3 __M_GetUserInput()
+        private static Vector3 __M_GetUserInput()
         {
             var horizontal = Input.GetAxis("Horizontal");
             var vertical = Input.GetAxis("Vertical");
@@ -180,39 +177,6 @@ namespace EE.Prototype.CM
             return movement;
         }
 
-        private Vector3 __M_GenerateGaitPath(float timeSinceLastStep)
-        {
-            timeSinceLastStep = Time.time % m_swingPhasePeriod;
-            var x = m_stepLength * (timeSinceLastStep / m_swingPhasePeriod -
-                                    0.5f * Mathf.Sin(2.0f * Mathf.PI * timeSinceLastStep / m_swingPhasePeriod));
-            var y = m_legLiftHeight *
-                    (0.5f - 0.5f * Mathf.Cos(2.0f * Mathf.PI * timeSinceLastStep / m_swingPhasePeriod));
-            return new Vector3(x, y, 0);
-        }
-
-        [UsedImplicitly]
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.green;
-
-            foreach (var foot in m_foots)
-            {
-                var rayOrigin = foot.position + Vector3.up * 1.0f;
-                var rayDirection = Vector3.down;
-                var rayDistance = 1 + m_legLiftHeight;
-
-                // Draw the raycast line for each foot
-                Gizmos.DrawLine(rayOrigin, rayOrigin + rayDirection * rayDistance);
-
-                // Check if the ray hits and visualize
-                if (!Physics.Raycast(rayOrigin, rayDirection, out var hit, rayDistance, m_rayCastLayer)) continue;
-
-                Gizmos.color = Color.green;
-                Gizmos.DrawSphere(rayOrigin, 0.1f);
-
-                Gizmos.color = Color.red;
-                Gizmos.DrawSphere(hit.point, 0.1f);
-            }
-        }
+        #endregion
     }
 }
