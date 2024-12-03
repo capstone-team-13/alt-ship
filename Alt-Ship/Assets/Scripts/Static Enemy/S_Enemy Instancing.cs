@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class S_EnemyInstancing : MonoBehaviour
 {
- 
-    public GameObject enemyModel;    
-    public float spawnRadius = 10f;   
-    public Transform ship;          
+
+    public GameObject enemyModel;
+    public float spawnRadius = 10f;
+    public Transform ship;
 
     private bool shipInRange = false;
 
@@ -22,7 +22,7 @@ public class S_EnemyInstancing : MonoBehaviour
     {
         if (other.CompareTag("Ship"))
         {
-            
+
             shipInRange = true;
 
             if (shipInRange)
@@ -36,9 +36,9 @@ public class S_EnemyInstancing : MonoBehaviour
     {
         if (other.CompareTag("Ship"))
         {
-            
+
             shipInRange = false;
-            
+
         }
     }
 
@@ -47,7 +47,7 @@ public class S_EnemyInstancing : MonoBehaviour
         Vector3 spawnPosition = transform.position;
         spawnPosition.y = 10f;
         enemyModel.SetActive(true);
-        
+
     }
 
     void RotateTo()
@@ -58,6 +58,7 @@ public class S_EnemyInstancing : MonoBehaviour
         }
     }
 
+
 }
 
-  
+
