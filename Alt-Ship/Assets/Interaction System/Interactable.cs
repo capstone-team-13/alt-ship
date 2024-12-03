@@ -55,7 +55,8 @@ namespace EE.Interactions
 
         protected virtual bool CanInteract()
         {
-            var notInCoolingDown = Time.time - m_lastInteractTime > m_interactionCoolingDown;
+            var notInCoolingDown = Time.time - m_lastInteractTime 
+                                   > m_interactionCoolingDown;
 
             // Reset current player to null if interacting with the same player again
             // This replaces the check for current player not equal to performing player   
