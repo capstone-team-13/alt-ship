@@ -13,6 +13,7 @@ public class NewCannonController : MonoBehaviour
 
     private InputAction firing;
     private InputAction tilting;
+    private InputAction turning;
     private PlayerInput playerInput;
 
     public CinemachineVirtualCamera cannonCam1;
@@ -29,33 +30,70 @@ public class NewCannonController : MonoBehaviour
     public float fireForce;
 
     [Range(-7f, 7f)]
-    public float zRotation;
+    public float pitch;
+
+    [Range(-7f, 7f)]
+    public float yaw;
 
     [Range(0f, 5f)]
-    public float rotateRate;
+    public float verticalRotateRate;
+
+    [Range(0f, 5f)]
+    public float horizontalRotateRate;
 
     private bool isRaising;
     private bool isLowering;
 
+    private bool leftTurning;
+    private bool rightTurning;
+
     public Transform barrelTransform;
-    
+    public Transform bodyTransform;
+
+    public GameObject particles;
+
+    private float currentDirection;
+
     private bool m_manning = false;
+
+    private void Awake()
+    {
+        currentDirection = bodyTransform.localEulerAngles.y;
+    }
 
     private void Update()
     {
         if (!m_manning) return;
 
+        Debug.Log("1");
         if (isRaising)
         {
-            zRotation += rotateRate * Time.deltaTime;
+            Debug.Log("2");
+            pitch += verticalRotateRate * Time.deltaTime;
         }
         else if (isLowering)
         {
-            zRotation -= rotateRate * Time.deltaTime;
+            Debug.Log("3");
+            pitch -= verticalRotateRate * Time.deltaTime;
         }
-        zRotation = Mathf.Clamp(zRotation, -7, 7);
-        barrelTransform.eulerAngles = new Vector3(barrelTransform.eulerAngles.x, barrelTransform.eulerAngles.y, zRotation);
 
+        pitch = Mathf.Clamp(pitch, -7, 7);
+        barrelTransform.localEulerAngles = new Vector3(barrelTransform.localEulerAngles.x, barrelTransform.localEulerAngles.y, pitch);
+
+        if (leftTurning)
+        {
+            Debug.Log("4");
+            yaw += horizontalRotateRate * Time.deltaTime;
+        }
+        else if (rightTurning) 
+        {
+            Debug.Log("5");
+            yaw -= horizontalRotateRate * Time.deltaTime;
+        }
+        yaw = Mathf.Clamp(yaw, -7, 7);
+        bodyTransform.localEulerAngles = new Vector3(bodyTransform.localEulerAngles.x, yaw + currentDirection, bodyTransform.localEulerAngles.z);
+
+        Debug.Log("6");
         if (playerTransform != null && playerTransform.position != recentPosition)
         {
             playerTransform.localPosition = recentPosition;
@@ -162,14 +200,17 @@ public class NewCannonController : MonoBehaviour
 
     private void FiringCannon(InputAction.CallbackContext context)
     {
-        Debug.Log("Cannon Setup");
-        Rigidbody launchedBall = Instantiate(cannonBall, shootAt.transform.position, Quaternion.identity);
-        launchedBall.AddForce(shootAt.transform.forward * fireForce, ForceMode.Impulse);
+        if (!particles.activeSelf)
+        {
+            Debug.Log("Cannon Setup");
+            Rigidbody launchedBall = Instantiate(cannonBall, shootAt.transform.position, Quaternion.identity);
+            launchedBall.AddForce(shootAt.transform.forward * fireForce, ForceMode.Impulse);
+        }
+            particles.SetActive(true);
     }
 
     private void TiltingCannon(InputAction.CallbackContext context)
     {
-
         if (context.ReadValue<float>() > 0)
         {
             isRaising = true;
@@ -186,10 +227,35 @@ public class NewCannonController : MonoBehaviour
             isRaising = false;
             isLowering = false;
         }
-
     }
 
-    private void stopTilting(InputAction.CallbackContext context)
+    private void TurningCannon(InputAction.CallbackContext context)
+    {
+        if (context.ReadValue<float>() > 0)
+        {
+            leftTurning = true;
+            rightTurning = false;
+
+        }
+        else if (context.ReadValue<float>() < 0)
+        {
+            rightTurning = true;
+            leftTurning = false;
+        }
+        else
+        {
+            leftTurning = false;
+            rightTurning = false;
+        }
+    }
+
+    private void StopTurning(InputAction.CallbackContext context)
+    {
+        leftTurning = false;
+        rightTurning = false;
+    }
+
+    private void StopTilting(InputAction.CallbackContext context)
     {
         isRaising = false;
         isLowering = false;
@@ -201,12 +267,17 @@ public class NewCannonController : MonoBehaviour
         var actionMap = inputActions.FindActionMap("CannonFire");
         firing = actionMap.FindAction("Fire");
         tilting = actionMap.FindAction("Tilt");
+        turning = actionMap.FindAction("Turn");
+
+        turning.Enable();
         tilting.Enable();
         firing.Enable();
 
         firing.performed += FiringCannon;
         tilting.performed += TiltingCannon;
-        tilting.canceled += stopTilting;
+        tilting.canceled += StopTilting;
+        turning.performed += TurningCannon;
+        turning.canceled += StopTurning;
     }
 
     private void StationAbandonded()
@@ -214,7 +285,10 @@ public class NewCannonController : MonoBehaviour
         firing.performed -= FiringCannon;
         tilting.performed -= TiltingCannon;
         tilting.canceled -= TiltingCannon;
+        turning.performed -= TurningCannon;
+        turning.canceled -= StopTurning;
 
+        turning.Disable();
         firing.Disable();
         tilting.Disable();
 
