@@ -9,7 +9,7 @@ public class EnemyAI : MonoBehaviour
     public float rotationSpeed = 5f; // Speed of enemy rotation
     public float stoppingDistance = 1.5f; // Minimum distance to stop near the sheep
 
-    private Rigidbody rb; // Rigidbody for physics-based movement
+    private Rigidbody rb; // Rigidbody for the physics-based movement
 
     void Start()
     {
