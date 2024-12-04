@@ -12,6 +12,7 @@ namespace EE.Prototype.CM
 
         [Header("Refs.")] [SerializeField] private Transform m_base;
         [SerializeField] private Transform[] m_foots;
+        [SerializeField] private Transform[] m_footStarts;
 
         #endregion
 
@@ -120,8 +121,10 @@ namespace EE.Prototype.CM
                             ? hitPoint
                             : regularPoint;
 
+
+                    var foot = m_foots[i];
                     // Align foot rotation with the hit normal
-                    // foot.rotation = Quaternion.LookRotation(foot.forward, hitInfo.normal);
+                    foot.rotation = Quaternion.LookRotation(foot.forward, hitInfo.normal);
                 }
                 else
                 {
@@ -134,8 +137,6 @@ namespace EE.Prototype.CM
 
         private void __M_SmoothlyMoveFeetToTargets()
         {
-            // for (var i = 0; i < m_foots.Length; i++)
-            //     m_foots[i].position = Vector3.Lerp(m_foots[i].position, m_targetPositions[i], Time.deltaTime * 5f);
             m_foots[m_activeFootIndex].position = Vector3.Lerp(m_foots[m_activeFootIndex].position,
                 m_targetPositions[m_activeFootIndex], Time.deltaTime * 5f);
         }
@@ -158,12 +159,12 @@ namespace EE.Prototype.CM
 
         private bool __M_IsOtherFootTooFar(int otherFootIndex)
         {
-            return (m_foots[otherFootIndex].position - m_base.position).magnitude >= 3.0f;
+            return (m_foots[otherFootIndex].position - m_base.position).magnitude >= 2.75f;
         }
 
         private bool __M_AreFeetTooClose(int footIndex, int otherFootIndex)
         {
-            return (m_foots[footIndex].position - m_foots[otherFootIndex].position).magnitude <= 0.75f;
+            return (m_foots[footIndex].position - m_foots[otherFootIndex].position).magnitude <= 0.25f;
         }
 
         [System.Diagnostics.Contracts.Pure]
