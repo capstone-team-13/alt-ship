@@ -4,29 +4,34 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    public Transform sheepTarget; // Assign the sheep GameObject or parent GameObject
-    public float moveSpeed = 3f;
+    public Transform target; // The sheep the enemy will follow
+    public float moveSpeed = 5f; // Speed of enemy movement
+    public float rotationSpeed = 5f; // Speed of enemy rotation
+    public float stoppingDistance = 1.5f; // Minimum distance to stop near the sheep
+
+    private Rigidbody rb; // Rigidbody for the physics-based movement
 
     void Start()
     {
-        GameObject sheep = GameObject.FindWithTag("Sheep"); // Tag the sheep with "Sheep"
-        if (sheep != null)
-        {
-            sheepTarget = sheep.transform;
-        }
+        rb = GetComponent<Rigidbody>();
     }
 
-
-    void Update()
+    void FixedUpdate()
     {
-        if (sheepTarget != null)
-        {
-            // Move towards the sheep
-            Vector3 direction = (sheepTarget.position - transform.position).normalized;
-            transform.position += direction * moveSpeed * Time.deltaTime;
+        if (target == null) return;
 
-            // Optional: Face the target
-            transform.LookAt(sheepTarget);
+        // Calculate direction to the target
+        Vector3 direction = (target.position - transform.position).normalized;
+
+        // Prevent enemies from constantly spinning around
+        if (Vector3.Distance(transform.position, target.position) > stoppingDistance)
+        {
+            // Move the enemy toward the target
+            rb.MovePosition(transform.position + direction * moveSpeed * Time.fixedDeltaTime);
+
+            // Smoothly rotate toward the target
+            Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
+            rb.MoveRotation(Quaternion.Slerp(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime));
         }
     }
 }
