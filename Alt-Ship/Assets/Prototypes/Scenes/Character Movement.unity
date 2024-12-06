@@ -1623,7 +1623,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -4109,6 +4109,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTiltAngle: 10
   tiltSpeed: 10
+  m_body: {fileID: 1932686703}
+  m_rayCastLayer:
+    serializedVersion: 2
+    m_Bits: 6391
 --- !u!1 &1854491594
 GameObject:
   m_ObjectHideFlags: 0
@@ -4990,7 +4994,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.5
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
