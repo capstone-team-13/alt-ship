@@ -9,7 +9,7 @@ QuadrupedEnvironment::QuadrupedEnvironment()
     initialize();
 }
 
-const LegFrame &QuadrupedEnvironment::states() const
+const std::array<LegFrame, 4> &QuadrupedEnvironment::states() const
 {
     return m_states;
 }
@@ -55,11 +55,21 @@ void QuadrupedEnvironment::onSimulate(float timeStep)
     Leg &currentLeg = m_frontLeft;
     currentLeg.simulate(timeStep);
 
+    m_frontLeft.simulate(timeStep);
+    m_backLeft.simulate(timeStep);
+    m_backRight.simulate(timeStep);
+    m_frontRight.simulate(timeStep);
+
     Leg::elapsedTime += timeStep;
     Leg::elapsedTime = fmod(Leg::elapsedTime, Leg::config.period);
 
-    m_states = currentLeg.state;
-    m_states.generateBinaryStream();
+    m_states[0] = m_frontLeft.state;
+    m_states[1] = m_backLeft.state;
+    m_states[2] = m_backRight.state;
+    m_states[3] = m_frontRight.state;
+
+    for (auto &state : m_states)
+        state.generateBinaryStream();
 
     body[0] = dBodyGetPosition(m_body);
     body[1] = dBodyGetQuaternion(m_body);

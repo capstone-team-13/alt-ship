@@ -131,6 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 50963499}
+  - component: {fileID: 50963500}
   m_Layer: 0
   m_Name: Front Left
   m_TagString: Untagged
@@ -156,6 +157,21 @@ Transform:
   - {fileID: 1562818603}
   m_Father: {fileID: 506402131}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &50963500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50963498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75930ec49519b084183a24d7f6bd4785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_hipJoint: {fileID: 551973859}
+  m_upperJoint: {fileID: 754244765}
+  m_lowerJoint: {fileID: 1562818603}
 --- !u!1 &184492865
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,13 +181,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 184492866}
+  - component: {fileID: 184492867}
   m_Layer: 0
   m_Name: Back Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &184492866
 Transform:
   m_ObjectHideFlags: 0
@@ -190,6 +207,21 @@ Transform:
   - {fileID: 1115946616}
   m_Father: {fileID: 506402131}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &184492867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184492865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75930ec49519b084183a24d7f6bd4785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_hipJoint: {fileID: 1904945202}
+  m_upperJoint: {fileID: 2082157354}
+  m_lowerJoint: {fileID: 1115946616}
 --- !u!1 &330120160
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,13 +314,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 416040979}
+  - component: {fileID: 416040980}
   m_Layer: 0
   m_Name: Front Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &416040979
 Transform:
   m_ObjectHideFlags: 0
@@ -307,6 +340,21 @@ Transform:
   - {fileID: 2007695609}
   m_Father: {fileID: 506402131}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &416040980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416040978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75930ec49519b084183a24d7f6bd4785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_hipJoint: {fileID: 526585998}
+  m_upperJoint: {fileID: 330120161}
+  m_lowerJoint: {fileID: 2007695609}
 --- !u!1 &506402130
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,6 +411,11 @@ MonoBehaviour:
   m_upperJoint: {fileID: 754244765}
   m_lowerJoint: {fileID: 1562818603}
   m_endEffector: {fileID: 1583727961}
+  m_legs:
+  - {fileID: 50963500}
+  - {fileID: 819049428}
+  - {fileID: 184492867}
+  - {fileID: 416040980}
 --- !u!1 &526585997
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,13 +674,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 819049427}
+  - component: {fileID: 819049428}
   m_Layer: 0
   m_Name: Back Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &819049427
 Transform:
   m_ObjectHideFlags: 0
@@ -646,6 +700,21 @@ Transform:
   - {fileID: 927938356}
   m_Father: {fileID: 506402131}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &819049428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 819049426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75930ec49519b084183a24d7f6bd4785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_hipJoint: {fileID: 1252523597}
+  m_upperJoint: {fileID: 1304913922}
+  m_lowerJoint: {fileID: 927938356}
 --- !u!1 &878117343
 GameObject:
   m_ObjectHideFlags: 0

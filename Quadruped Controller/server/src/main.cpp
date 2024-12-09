@@ -49,7 +49,10 @@ void update()
             const auto &body = environment.body;
             const auto &currentState = environment.states();
 
-            server.send(0, {EventType::POSITION_UPDATE, currentState.toString()});
+            server.send(0, {EventType::FL_UPDATE, currentState[0].toString()});
+            server.send(0, {EventType::BL_UPDATE, currentState[1].toString()});
+            server.send(0, {EventType::BR_UPDATE, currentState[2].toString()});
+            server.send(0, {EventType::FR_UPDATE, currentState[3].toString()});
             server.send(0, {EventType::BODY_UPDATE,
                             (float)body[0][0], (float)body[0][1], (float)body[0][2],
                             (float)body[1][0], (float)body[1][1], (float)body[1][2], (float)body[1][3]});
@@ -67,15 +70,15 @@ int main()
     std::thread fixedUpdateThread([&]()
                                   { fixedUpdate(); });
 
-    auto handle = server.addPacketReceivedCallback(
-        [](const ENetEvent &event, uint8_t eventType, const uint8_t *data, uint32_t dataLength)
-        {
-            if (eventType == EventType::ADD_FORCE)
-            {
-                // environment.adjustTargetHeight();
-                server.__M_Log("Client #", event.peer->incomingPeerID, " adjusted target height");
-            }
-        });
+    // auto handle = server.addPacketReceivedCallback(
+    //     [](const ENetEvent &event, uint8_t eventType, const uint8_t *data, uint32_t dataLength)
+    //     {
+    //         // if (eventType == EventType::ADD_FORCE)
+    //         // {
+    //         //     // environment.adjustTargetHeight();
+    //         //     server.__M_Log("Client #", event.peer->incomingPeerID, " adjusted target height");
+    //         // }
+    //     });
 
     update();
 

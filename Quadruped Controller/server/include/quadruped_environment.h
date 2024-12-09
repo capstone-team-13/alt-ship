@@ -16,13 +16,13 @@ class QuadrupedEnvironment final : public Environment
     // Plane
     dGeomID m_planeGeom;
 
-    LegFrame m_states;
+    std::array<LegFrame, 4> m_states;
 
 public:
     QuadrupedEnvironment();
     ~QuadrupedEnvironment() = default;
 
-    const LegFrame &states() const;
+    const std::array<LegFrame, 4> &states() const;
 
     const dReal *plane() const;
 

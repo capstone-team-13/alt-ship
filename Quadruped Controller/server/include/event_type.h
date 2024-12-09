@@ -3,8 +3,10 @@
 enum EventType : uint8_t
 {
     CONNECTION_SUCCEED,
-    POSITION_UPDATE,
+    FL_UPDATE,
+    BL_UPDATE,
+    BR_UPDATE,
+    FR_UPDATE,
     BODY_UPDATE,
-    ADD_FORCE,
     INVALID_EVENT
 };

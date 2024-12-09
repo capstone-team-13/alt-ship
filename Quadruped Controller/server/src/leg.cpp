@@ -115,7 +115,6 @@ void Leg::__M_CreateBox(dBodyID &body, dGeomID &geom, const Vector3f &dimension)
 
 void Leg::__M_ConfigBox(dBodyID &body, const Vector3f &position, const dReal density, const Vector3f &dimension) const
 {
-
     assert(body && "Error: Invalid body.");
 
     assert(dimension[0] > 0 && dimension[1] > 0 && dimension[2] > 0 && "Error: Invalid box dimensions.");
