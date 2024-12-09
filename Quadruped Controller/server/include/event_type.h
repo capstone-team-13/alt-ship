@@ -7,6 +7,7 @@ enum EventType : uint8_t
     BL_UPDATE,
     BR_UPDATE,
     FR_UPDATE,
+    END_EFFECTOR_UPDATE,
     BODY_UPDATE,
     INVALID_EVENT
 };

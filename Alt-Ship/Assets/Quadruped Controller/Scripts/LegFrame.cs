@@ -11,8 +11,6 @@ namespace EE.QC
 
         public void Update(BinaryReader reader)
         {
-            Debug.Log("Update");
-
             for (var i = 0; i < positions.Length; i++)
                 positions[i] = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 

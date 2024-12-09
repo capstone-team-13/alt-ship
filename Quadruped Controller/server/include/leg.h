@@ -26,6 +26,7 @@ struct LegFrame
     };
 
     const dReal *infos[6];
+    Vector3f endEffector;
 
     std::vector<uint8_t> binaryStream;
 
@@ -54,6 +55,7 @@ struct LegFrame
     void update(const std::initializer_list<const dReal *> args)
     {
         size_t count = args.size();
+
         if (count > 6)
         {
             std::cerr << "Error: Too many inputs, maximum allowed is 6." << std::endl;

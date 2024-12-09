@@ -50,12 +50,17 @@ void update()
             const auto &currentState = environment.states();
 
             server.send(0, {EventType::FL_UPDATE, currentState[0].toString()});
-            server.send(0, {EventType::BL_UPDATE, currentState[1].toString()});
-            server.send(0, {EventType::BR_UPDATE, currentState[2].toString()});
-            server.send(0, {EventType::FR_UPDATE, currentState[3].toString()});
-            server.send(0, {EventType::BODY_UPDATE,
-                            (float)body[0][0], (float)body[0][1], (float)body[0][2],
-                            (float)body[1][0], (float)body[1][1], (float)body[1][2], (float)body[1][3]});
+            // server.send(0, {EventType::BL_UPDATE, currentState[1].toString()});
+            // server.send(0, {EventType::BR_UPDATE, currentState[2].toString()});
+            // server.send(0, {EventType::FR_UPDATE, currentState[3].toString()});
+            // server.send(0, {EventType::END_EFFECTOR_UPDATE,
+            //                 (float)currentState[0].endEffector[0], (float)currentState[0].endEffector[1], (float)currentState[0].endEffector[2],
+            //                 (float)currentState[1].endEffector[0], (float)currentState[1].endEffector[1], (float)currentState[1].endEffector[2],
+            //                 (float)currentState[2].endEffector[0], (float)currentState[2].endEffector[1], (float)currentState[2].endEffector[2],
+            //                 (float)currentState[3].endEffector[0], (float)currentState[3].endEffector[1], (float)currentState[3].endEffector[2]});
+            // server.send(0, {EventType::BODY_UPDATE,
+            //                 (float)body[0][0], (float)body[0][1], (float)body[0][2],
+            //                 (float)body[1][0], (float)body[1][1], (float)body[1][2], (float)body[1][3]});
 
             std::this_thread::sleep_until(nextTime);
         }

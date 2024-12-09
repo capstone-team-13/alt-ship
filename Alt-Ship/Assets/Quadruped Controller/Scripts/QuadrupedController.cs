@@ -30,6 +30,7 @@ namespace EE.QC
 
         [SerializeField] private Transform m_body;
         [SerializeField] private LegReference[] m_legs;
+        [SerializeField] private Transform[] m_endEffectors;
 
         #endregion
 
@@ -148,7 +149,6 @@ namespace EE.QC
             try
             {
                 int eventSize = m_client.CheckEvents(out var netEvent);
-                Debug.Log($"Event size from CheckEvents: {eventSize}");
                 var noImmediateEvent = eventSize <= 0;
                 if (noImmediateEvent)
                 {
@@ -227,6 +227,15 @@ namespace EE.QC
 
                 case EventType.FR_UPDATE:
                     m_frames[3].Update(m_reader);
+                    break;
+
+                case EventType.END_EFFECTOR_UPDATE:
+                    foreach (var endEffector in m_endEffectors)
+                    {
+                        endEffector.position = new Vector3(m_reader.ReadSingle(),
+                            m_reader.ReadSingle(), m_reader.ReadSingle());
+                    }
+
                     break;
 
                 case EventType.BODY_UPDATE:
