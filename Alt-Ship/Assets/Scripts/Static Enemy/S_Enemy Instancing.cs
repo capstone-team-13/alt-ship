@@ -13,10 +13,10 @@ public class S_EnemyInstancing : MonoBehaviour
     private bool shipInRange = false;
 
 
-    //private void Update()
-    //{
-        //RotateTo();
-    //}
+    private void Update()
+    {
+        RotateTo();
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -50,13 +50,14 @@ public class S_EnemyInstancing : MonoBehaviour
 
     }
 
-    //void RotateTo()
-    //{
-        //if (enemyModel.activeSelf)
-        //{
-            //enemyModel.transform.LookAt(ship.position);
-        //}
-   //}
+    void RotateTo()
+    {
+        if (enemyModel.activeSelf)
+        {
+            enemyModel.transform.LookAt(ship.position);
+            enemyModel.transform.eulerAngles = new Vector3(0f, enemyModel.transform.eulerAngles.y - 90f,0f);
+        }
+   }
 
 
 }
