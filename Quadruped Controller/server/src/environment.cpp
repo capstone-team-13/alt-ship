@@ -6,7 +6,7 @@ void Environment::initialize()
     dInitODE2(0);
 
     m_world = dWorldCreate();
-    dWorldSetGravity(m_world, 0, -9.81, 0);
+    // dWorldSetGravity(m_world, 0, -9.81, 0);
 
     m_space = dHashSpaceCreate(0);
 
