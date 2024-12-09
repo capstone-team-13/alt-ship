@@ -8,14 +8,25 @@ namespace EE.Prototype.PC
         [SerializeField] private BodyController m_body;
         [SerializeField] private LegManager m_leg;
 
+        private INotifiable[] m_pieces;
+
+        private void Start()
+        {
+            m_pieces = GetComponentsInChildren<INotifiable>();
+        }
+
         [UsedImplicitly]
         private void FixedUpdate()
         {
             Vector3 userInput = _M_GetInput();
-            m_body.Move(userInput);
+            // m_body.Move(userInput);
 
-            bool jumpPressed = Input.GetAxis("Jump") > 0;
-            if (jumpPressed) m_body.Jump();
+            var jumpInput = Input.GetAxis("Jump");
+            bool jumpPressed = jumpInput > 0;
+            // if (jumpPressed) m_body.Jump();
+
+            foreach (INotifiable piece in m_pieces)
+                piece.Notify(userInput, jumpInput);
         }
 
         #region Internal
