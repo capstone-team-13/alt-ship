@@ -37,10 +37,6 @@ void fixedUpdate()
 void update()
 {
     auto nextTime = std::chrono::steady_clock::now();
-    bool hasChanged = true;
-
-    std::vector<float> previousResult(7, 0.0f);
-    constexpr float threshold = 0.01f;
 
     while (server.isRunning() && !quit)
     {
@@ -50,33 +46,16 @@ void update()
 
         if (server.clientSize() > 0)
         {
-            auto &currentResult = environment.result();
+            const auto &body = environment.body;
+            const auto &currentState = environment.states();
 
-            hasChanged = false;
-            for (size_t i = 0; i < previousResult.size(); ++i)
-            {
-                if (std::fabs(currentResult[i] - previousResult[i]) > threshold)
-                {
-                    hasChanged = true;
-                    break;
-                }
-            }
+            server.send(0, {EventType::POSITION_UPDATE, currentState.toString()});
+            server.send(0, {EventType::BODY_UPDATE,
+                            (float)body[0][0], (float)body[0][1], (float)body[0][2],
+                            (float)body[1][0], (float)body[1][1], (float)body[1][2], (float)body[1][3]});
 
-            if (hasChanged)
-            {
-                server.send(0, {EventType::POSITION_UPDATE, (float)currentResult[0], (float)currentResult[1], (float)currentResult[2],
-                                (float)currentResult[3], (float)currentResult[4], (float)currentResult[5], (float)currentResult[6],
-                                (float)currentResult[7], (float)currentResult[8], (float)currentResult[9],
-                                (float)currentResult[10], (float)currentResult[11], (float)currentResult[12], (float)currentResult[13],
-                                (float)currentResult[14], (float)currentResult[15], (float)currentResult[16]});
-                server.__M_Log("Sent ", (float)currentResult[0], ", ", (float)currentResult[1], ", ", (float)currentResult[2]);
-
-                for (size_t i = 0; i < previousResult.size(); ++i)
-                    previousResult[i] = currentResult[i];
-            }
+            std::this_thread::sleep_until(nextTime);
         }
-
-        std::this_thread::sleep_until(nextTime);
     }
 }
 
@@ -93,7 +72,7 @@ int main()
         {
             if (eventType == EventType::ADD_FORCE)
             {
-                environment.adjustTargetHeight();
+                // environment.adjustTargetHeight();
                 server.__M_Log("Client #", event.peer->incomingPeerID, " adjusted target height");
             }
         });

@@ -34,7 +34,6 @@ public class ShipController : Controller<ShipModel>
         //m_rigidBody.velocity = newVelocity;
 
         shipMovement();
-
     }
 
     #endregion
@@ -66,7 +65,7 @@ public class ShipController : Controller<ShipModel>
 
     private void shipMovement()
     {
-  //      Debug.Log(m_rigidBody.velocity);
+        //      Debug.Log(m_rigidBody.velocity);
         m_rigidBody.AddForce(Model.Speed * Model.SailDirection, ForceMode.Force);
         var newVelocity = Model.Speed * Model.SailDirection;
         m_rigidBody.velocity = newVelocity;

@@ -1,14 +1,18 @@
 using JetBrains.Annotations;
+using PlasticGui.WebApi.Responses;
 using UnityEngine;
 
 namespace EE.Prototype.PC
 {
-    public class BodyController : MonoBehaviour
+    public class BodyController : MonoBehaviour, INotifiable
     {
         [Header("Config")] [SerializeField] private float m_jumpForce = 20.0f;
         [SerializeField] private float m_moveSpeed = 3.0f;
 
-        [SerializeField] private Rigidbody m_rigidBody;
+        [Header("Refs.")] [SerializeField] private Rigidbody m_rigidBody;
+        [SerializeField] private Transform m_hip;
+        [SerializeField] private Transform m_shoulder;
+        [SerializeField] private Transform m_rotateMe;
 
         // TODO: Refactor to frequency
         [SerializeField] private float m_springConstant;
@@ -22,23 +26,25 @@ namespace EE.Prototype.PC
         {
             Vector3 groundOffset = _M_CalculateGroundOffset();
 
+            Vector3 gaitOffset = _M_UpdateGaitOffset(Time.timeSinceLevelLoad);
+            __M_RotateHip(Time.timeSinceLevelLoad);
+            __M_RotateShoulder(Time.timeSinceLevelLoad);
+
+            // Store target position at this frame;
             Vector3 currentTargetPosition = m_targetPosition;
+
             m_targetPosition.y += groundOffset.y;
+            m_targetPosition += gaitOffset;
 
             Vector3 supportForce = _M_SolveSupportForce();
             m_rigidBody.AddForce(supportForce, ForceMode.Force);
+
+            // _M_FaceMovingDirection();
 
             // Reset Target Position
             m_targetPosition = currentTargetPosition;
         }
 
-        // BUG: Cause Height Increment Issue
-        // [UsedImplicitly]
-        // private void OnCollisionEnter(Collision collision)
-        // {
-        //     const float bounceBackPercentage = 0.25f;
-        //     m_targetPosition += collision.relativeVelocity * bounceBackPercentage;
-        // }
 
         [UsedImplicitly]
         private void OnDrawGizmosSelected()
@@ -96,10 +102,59 @@ namespace EE.Prototype.PC
             return force;
         }
 
-        private void _M_SolveConstraint()
+        private Vector3 _M_UpdateGaitOffset(float timeSinceLastStep)
         {
+            float amplitude = 0.1f;
+
+            float frequency = 1.0f;
+
+            float yPosition = amplitude * Mathf.Sin(Mathf.PI * frequency * timeSinceLastStep);
+
+            return new Vector3(0, yPosition, 0);
+        }
+
+        private void __M_RotateHip(float timeSinceLastStep)
+        {
+            float amplitude = 15f;
+
+            float frequency = 1.0f;
+
+            float yRotation = amplitude * Mathf.Sin(2 * Mathf.PI * frequency * timeSinceLastStep);
+
+            m_hip.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
+
+        private void __M_RotateShoulder(float timeSinceLastStep)
+        {
+            float amplitude = -15f;
+
+            float frequency = 1.0f;
+
+            float yRotation = amplitude * Mathf.Sin(2 * Mathf.PI * frequency * timeSinceLastStep);
+
+            m_shoulder.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
+
+        private void _M_FaceMovingDirection()
+        {
+            Vector3 direction = m_rigidBody.velocity.normalized;
+            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            Quaternion targetRotation = Quaternion.Euler(0, angle, 0);
+            m_rotateMe.rotation = Quaternion.Slerp(m_rotateMe.rotation, targetRotation, 0.1f);
         }
 
         #endregion
+
+        public void Notify(params object[] data)
+        {
+            var userInput = (Vector3)data[0];
+            var jumpInput = (float)data[1];
+
+            Move(userInput);
+
+            if (userInput != Vector3.zero) _M_FaceMovingDirection();
+
+            if (jumpInput > 0) Jump();
+        }
     }
 }
