@@ -52,7 +52,7 @@ public class DirectionalInteraction : Interactable
             var dotProduct = Vector3.Dot(rotatedForward, directionToAgent.normalized);
             var behindObject = dotProduct < 0;
 
-            if (!behindObject)
+            if (!behindObject || agent.gameObject != CurrentPerformer)
                 continue;
 
             anyAgentBehind = true;
@@ -71,6 +71,13 @@ public class DirectionalInteraction : Interactable
         var rotation = Quaternion.Euler(0, m_imageRotationY, 0);
         var rotatedVector = rotation * transform.forward;
         return rotatedVector;
+    }
+
+    // TEST ONLY
+    public void __M_Reset()
+    {
+        Debug.Log("Directional @Reset");
+        CurrentPlayer = null;
     }
 
     #endregion

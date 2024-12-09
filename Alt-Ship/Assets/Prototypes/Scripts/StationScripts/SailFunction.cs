@@ -11,6 +11,7 @@ public class SailFunction : MonoBehaviour
     public InputActionAsset inputActions;
 
     private InputAction sailing;
+    private PlayerInput playerInput;
 
     private bool m_sailing = false;
 
@@ -28,13 +29,10 @@ public class SailFunction : MonoBehaviour
     public CinemachineVirtualCamera sailCam2;
     private CinemachineFreeLook lastPlayerCam;
 
-    public LineRenderer sailIndicator;
+    private Transform playerTransform;
+    private Vector3 recentPosition;
 
-    private void Awake()
-    {
-        var actionMap = inputActions.FindActionMap("Sail");
-        sailing = actionMap.FindAction("Pulling");
-    }
+    public LineRenderer sailIndicator;
 
     private void Update()
     {
@@ -51,15 +49,22 @@ public class SailFunction : MonoBehaviour
         shipModel.Speed = Mathf.Clamp(shipModel.Speed, 0f, maxSpeed);
         sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -1, 0));
 
+        if (playerTransform != null && playerTransform.position != recentPosition)
+        {
+            playerTransform.localPosition = recentPosition;
+        }
+
     }
 
 
     public void Interact(IInteractable interactable, GameObject interactor)
     {
-
-        sailing.Enable();
-        sailing.performed += PullingSail;
-        sailing.canceled += NotPullingSail;
+        playerInput = interactor.GetComponent<PlayerInput>();
+        if (playerInput != null)
+        {
+            inputActions = playerInput.actions;
+            NewPlayerStarted();
+        }
 
         m_sailing = !m_sailing;
         interactable.InteractionName = m_sailing ? "Stop Interacting" : "Start Interacting";
@@ -80,6 +85,12 @@ public class SailFunction : MonoBehaviour
 
     private void __M_LockPlayer(PlayerModel player)
     {
+        if (playerTransform == null)
+        {
+            playerTransform = player.transform;
+            recentPosition = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y, player.transform.localPosition.z);
+        }
+
         float playerNum = 0;
 
         if (player.transform.GetComponent<PlayerController>() != null)
@@ -108,9 +119,7 @@ public class SailFunction : MonoBehaviour
 
     private void __M_UnLockPlayer(PlayerModel player)
     {
-        sailing.performed -= PullingSail;
-        sailing.canceled -= NotPullingSail;
-        sailing.Disable();
+
         m_sailing = false;
 
         float playerNum = 0;
@@ -133,7 +142,11 @@ public class SailFunction : MonoBehaviour
             lastPlayerCam.Priority = 10;
             sailCam2.Priority = 5;
         }
+
+        playerTransform = null;
         lastPlayerCam = null;
+
+        StationAbandonded();
 
         // TODO: Reference Regular Speed
         const float newSpeed = 5;
@@ -164,6 +177,26 @@ public class SailFunction : MonoBehaviour
     {
         isRaising = false;
         isLowering = false;
+    }
+
+    private void NewPlayerStarted()
+    {
+        var actionMap = inputActions.FindActionMap("Sail");
+        sailing = actionMap.FindAction("Pulling");
+
+        sailing.Enable();
+        sailing.performed += PullingSail;
+        sailing.canceled += NotPullingSail;
+    }
+
+    private void StationAbandonded()
+    {
+        sailing.performed -= PullingSail;
+        sailing.canceled -= NotPullingSail;
+        sailing.Disable();
+
+        playerInput = null;
+        inputActions = null;
     }
 
 }

@@ -62,12 +62,14 @@ public class PlayerController : Controller<PlayerModel>
 
         if (playerNum == 1)
         {
+            this.gameObject.name = "Player: " + playerNum;
             playerFreeLook.gameObject.layer = 11;
             m_camera.cullingMask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", "Water", "UI", "Detectable", "Goal", "Player1");
             m_camera.gameObject.layer = 11;
         }
         else if(playerNum == 2)
         {
+            this.gameObject.name = "Player: " + playerNum;
             m_camera.cullingMask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", "Water", "UI", "Detectable", "Goal", "Player2");
             playerFreeLook.gameObject.layer = 12;
             m_camera.gameObject.layer = 12;

@@ -17,22 +17,26 @@ namespace EE.Interactions
     {
         #region Editor API
 
-        [Header("Configs")] [SerializeField] private string m_interactionName;
+        [Header("Configs")][SerializeField] private string m_interactionName;
 
-        [SerializeField] [Space(4)] private InputAction m_inputAction;
-        [SerializeField] [Space(4)] private float m_interactionCoolingDown = 2.0f;
+        [SerializeField][Space(4)] private InputAction m_inputAction;
+        [SerializeField][Space(4)] private float m_interactionCoolingDown = 2.0f;
 
-        [Space(4)] [Tooltip("Assign your callbacks here")]
+        [Space(4)]
+        [Tooltip("Assign your callbacks here")]
         public UnityEvent<IInteractable> OnActivated;
 
-        [Space(4)] [Tooltip("Assign your callbacks here")]
+        [Space(4)]
+        [Tooltip("Assign your callbacks here")]
         public UnityEvent<IInteractable, GameObject> OnInteracted;
 
         // TODO: Another callback handles player exit;
-        [Space(4)] [Tooltip("Assign your callbacks here")]
+        [Space(4)]
+        [Tooltip("Assign your callbacks here")]
         public UnityEvent<IInteractable, GameObject> OnExit;
 
-        [Space(4)] [Tooltip("Assign your callbacks here")]
+        [Space(4)]
+        [Tooltip("Assign your callbacks here")]
         public UnityEvent<IInteractable> OnDeactivate;
 
         #endregion
@@ -53,6 +57,14 @@ namespace EE.Interactions
             set => m_currentPlayer = value;
         }
 
+
+        protected GameObject CurrentPerformer
+        {
+            get => m_currerntPerformer;
+            set => m_currerntPerformer = value;
+        }
+
+
         protected virtual bool CanInteract()
         {
             var notInCoolingDown = Time.time - m_lastInteractTime 
@@ -60,9 +72,10 @@ namespace EE.Interactions
 
             // Reset current player to null if interacting with the same player again
             // This replaces the check for current player not equal to performing player   
-            var otherPlayerNotInUse = m_currentPlayer == null;
 
-            return notInCoolingDown && otherPlayerNotInUse;
+            var otherPlayerNotInUse = m_currentPlayer == null;
+            return notInCoolingDown;
+            // return notInCoolingDown && otherPlayerNotInUse;
         }
 
         public void RegisterPlayer(GameObject player, InputDevice device)
@@ -119,19 +132,21 @@ namespace EE.Interactions
         private bool m_canInteract = true;
         private double m_lastInteractTime;
         private GameObject m_currentPlayer;
+        private GameObject m_currerntPerformer;
 
         // TODO: Refactor to Device Manager
         private static Dictionary<int, GameObject> m_devicePlayerMap = new();
 
+        // TODO: Refactor exit condition
         private void __M_TryInteract(CallbackContext context)
         {
             var deviceId = context.control.device.deviceId;
-
             // Reset interaction state if the same user triggered it.
-            GameObject performedPlayer = m_devicePlayerMap[deviceId];
+            CurrentPerformer = m_devicePlayerMap[deviceId];
 
+            // TODO: Seperate RangeInteraction and Directional Interactable
             // Reset the current player to null if it is the performed player, allowing re-interaction
-            if (CurrentPlayer == performedPlayer) CurrentPlayer = null;
+            if (CurrentPlayer == CurrentPerformer) CurrentPlayer = null;
 
             // 'Triggered' indicates that the action was either pressed or released.
             // We need to verify that the key is actually pressed in this context.
@@ -141,12 +156,13 @@ namespace EE.Interactions
             var canInteract = CanInteract();
             if (canInteract)
             {
-                bool isDifferentFromInteractor = CurrentPlayer != null && CurrentPlayer != performedPlayer;
+                bool isDifferentFromInteractor = CurrentPlayer != null && CurrentPlayer != CurrentPerformer;
                 if (isDifferentFromInteractor) OnExit?.Invoke(this, CurrentPlayer);
 
                 OnActivated?.Invoke(this);
-                if (desiredKeyPressed) __M_Interact(performedPlayer);
+                if (desiredKeyPressed) __M_Interact(CurrentPerformer);
             }
+            // TODO: Potential bug
             // If interaction is not possible this frame but was possible in the previous frame.
             else if (m_canInteract) OnDeactivate?.Invoke(this);
 
@@ -186,6 +202,7 @@ namespace EE.Interactions
 
         private void __M_Reset(IInteractable interactable, GameObject interactor)
         {
+            Debug.Log("@Reset");
             CurrentPlayer = null;
         }
 

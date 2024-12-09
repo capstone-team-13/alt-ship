@@ -1023,6 +1023,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActions: {fileID: -944628639613478452, guid: 341ea1a4165b9744cb8f930d6ba4e6d4,
     type: 3}
+  rudCam1: {fileID: 0}
+  rudCam2: {fileID: 0}
+  pOneSail: {fileID: 0}
+  pTwoSail: {fileID: 0}
+  standard: {fileID: 0}
+  transparent: {fileID: 0}
+  m_interactable: {fileID: 0}
 --- !u!114 &429224805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1092,6 +1099,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
   OnDeactivate:
     m_PersistentCalls:
       m_Calls:
@@ -1556,6 +1566,8 @@ MonoBehaviour:
   playerInputManager: {fileID: 649546764}
   spawnPointA: {fileID: 457677774}
   spawnPointB: {fileID: 360884734}
+  shipModel: {fileID: 0}
+  m_interaction: {fileID: 0}
 --- !u!1 &655514365
 GameObject:
   m_ObjectHideFlags: 0
@@ -4243,6 +4255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_model: {fileID: 1701215692}
   m_rigidBody: {fileID: 1701215694}
+  mainSail: {fileID: 0}
 --- !u!54 &1701215694
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4766,6 +4779,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
   OnDeactivate:
     m_PersistentCalls:
       m_Calls:
@@ -4798,6 +4814,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_model: {fileID: 2098200704}
+  cannonBall: {fileID: 0}
 --- !u!114 &2098200704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4988,6 +5005,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
   OnDeactivate:
     m_PersistentCalls:
       m_Calls:
@@ -5020,6 +5040,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_model: {fileID: 2143088029}
+  cannonBall: {fileID: 0}
 --- !u!114 &2143088029
 MonoBehaviour:
   m_ObjectHideFlags: 0

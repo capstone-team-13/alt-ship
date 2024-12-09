@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class CannonTimeout : MonoBehaviour
 {
+    [SerializeField] private GameObject particles;
+
+    [SerializeField] private MeshRenderer meshRenderer;
+
     private float timeLeft = 4f;
     private bool isEnabled = false;
 
@@ -19,15 +23,24 @@ public class CannonTimeout : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        prevPos = transform.position;
-
         if (isEnabled)
         {
+            prevPos = transform.position;
             timeLeft -= Time.deltaTime;
             if(timeLeft < 0)
             {
-                Destroy(this.transform.gameObject);
+                selfDestruct();
             }
+        }
+        else if (!isEnabled)
+        {
+            this.transform.position = prevPos;
+            meshRenderer.enabled = false;
+        }
+
+        if(!isEnabled && !particles.activeSelf)
+        {
+            selfDestruct();
         }
     }
 
@@ -35,9 +48,19 @@ public class CannonTimeout : MonoBehaviour
     {
         if (collision.gameObject.tag != "Cannon")
         {
+            TriggerParticles();
             isEnabled = false;
-            Destroy(this.transform.gameObject);
         }
+    }
+
+    private void TriggerParticles()
+    {
+        particles.SetActive(true);
+    }
+
+    private void selfDestruct()
+    {
+        Destroy(this.transform.gameObject);
     }
 
 }
