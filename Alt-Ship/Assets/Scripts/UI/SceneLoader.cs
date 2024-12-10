@@ -15,7 +15,7 @@ public class SceneLoader : MonoBehaviour
     {
         "Start",
         "Level Selection",
-        "Luka's Greybox"
+        "Level #2 Asset Implemented"
     };
 
     [SerializeField] private SceneName m_sceneName = SceneName.Undefined;
