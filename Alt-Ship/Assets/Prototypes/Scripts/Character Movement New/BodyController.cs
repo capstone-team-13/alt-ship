@@ -1,5 +1,4 @@
 using JetBrains.Annotations;
-using PlasticGui.WebApi.Responses;
 using UnityEngine;
 
 namespace EE.Prototype.PC
