@@ -10,6 +10,23 @@ namespace EE.Prototype.PC
 
         private INotifiable[] m_pieces;
 
+        private Vector3 m_userInput;
+
+        private float m_jumpInput;
+
+        public Vector3 UserInput
+        {
+            get => m_userInput;
+            set => m_userInput = value;
+        }
+
+        public float JumpInput
+        {
+            get => m_jumpInput;
+            set => m_jumpInput = value;
+        }
+
+        [UsedImplicitly]
         private void Start()
         {
             m_pieces = GetComponentsInChildren<INotifiable>();
@@ -18,30 +35,16 @@ namespace EE.Prototype.PC
         [UsedImplicitly]
         private void FixedUpdate()
         {
-            Vector3 userInput = _M_GetInput();
-            // m_body.Move(userInput);
-
-            var jumpInput = Input.GetAxis("Jump");
-            bool jumpPressed = jumpInput > 0;
-            // if (jumpPressed) m_body.Jump();
+            var userInput = UserInput;
+            var jumpInput = JumpInput;
 
             foreach (INotifiable piece in m_pieces)
                 piece.Notify(userInput, jumpInput);
         }
 
-        #region Internal
-
-        private Vector3 _M_GetInput()
+        public void SetTargetPositionXZ(Vector3 position)
         {
-            var x = Input.GetAxis("Horizontal");
-            var z = Input.GetAxis("Vertical");
-            return new Vector3(x, 0, z);
+            m_body.SetTargetPositionXZ(position);
         }
-
-        private void _M_SolveConstraint()
-        {
-        }
-
-        #endregion
     }
 }
