@@ -76,19 +76,19 @@ public class CameraController : MonoBehaviour
         player.transform.parent = shipModel.transform;
         if (spawnPointA != null && spawnPointB != null)
         {
-            if (m_playerCount == 1)
+            switch (m_playerCount)
             {
-                player.transform.position = spawnPointA.transform.position;
-                player.transform.rotation = shipModel.transform.rotation;
+                case 1:
+                    player.transform.position = spawnPointA.position;
+                    player.transform.rotation = shipModel.transform.rotation;
+                    player.GetComponent<PlayerController>().SetTargetPositionXZ(spawnPointA.position);
+                    break;
+                case 2:
+                    player.transform.position = spawnPointB.position;
+                    player.transform.rotation = shipModel.transform.rotation;
+                    player.GetComponent<PlayerController>().SetTargetPositionXZ(spawnPointB.position);
+                    break;
             }
-            else if (m_playerCount == 2)
-            {
-                player.transform.position = spawnPointB.transform.position;
-                player.transform.rotation = shipModel.transform.rotation;
-            }
-        }
-        else
-        {
         }
 
         if (shipModel != null)
