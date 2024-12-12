@@ -12,10 +12,11 @@ public class PlayerController : Controller<PlayerModel>
     [Header("Concrete Reference")] [SerializeField]
     private Rigidbody m_rigidBody;
 
-    [SerializeField]
-    private Transform parentRotation;
+    [SerializeField] private Transform parentRotation;
 
     [SerializeField] private Camera m_camera;
+
+    [SerializeField] private EE.Prototype.PC.PlayerController m_animator;
 
     // TODO: Remove
     public Material playerOneMat;
@@ -24,8 +25,7 @@ public class PlayerController : Controller<PlayerModel>
 
     public float playerNum = 0;
 
-    [SerializeField]
-    private CinemachineFreeLook playerFreeLook;
+    [SerializeField] private CinemachineFreeLook playerFreeLook;
 
     #endregion
 
@@ -46,6 +46,11 @@ public class PlayerController : Controller<PlayerModel>
         }
     }
 
+    public void SetTargetPositionXZ(Vector3 position)
+    {
+        m_animator.SetTargetPositionXZ(position);
+    }
+
     #endregion
 
     #region Unity Callbacks
@@ -64,13 +69,15 @@ public class PlayerController : Controller<PlayerModel>
         {
             this.gameObject.name = "Player: " + playerNum;
             playerFreeLook.gameObject.layer = 11;
-            m_camera.cullingMask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", "Water", "UI", "Detectable", "Goal", "Player1");
+            m_camera.cullingMask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", "Water", "UI",
+                "Detectable", "Goal", "Player1");
             m_camera.gameObject.layer = 11;
         }
-        else if(playerNum == 2)
+        else if (playerNum == 2)
         {
             this.gameObject.name = "Player: " + playerNum;
-            m_camera.cullingMask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", "Water", "UI", "Detectable", "Goal", "Player2");
+            m_camera.cullingMask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", "Water", "UI",
+                "Detectable", "Goal", "Player2");
             playerFreeLook.gameObject.layer = 12;
             m_camera.gameObject.layer = 12;
         }
@@ -130,15 +137,13 @@ public class PlayerController : Controller<PlayerModel>
     private void __M_Move()
     {
         Vector3 movementInput = __M_GetPlayerInput();
-
-        
+        m_animator.UserInput = movementInput;
 
         Vector3 direction = m_camera.transform.TransformDirection(movementInput);
         direction.y = 0;
 
         Quaternion inverseParentRotation = Quaternion.Inverse(parentRotation.rotation);
         direction = inverseParentRotation * direction;
-
 
         __M_UpdateDirection(direction);
 

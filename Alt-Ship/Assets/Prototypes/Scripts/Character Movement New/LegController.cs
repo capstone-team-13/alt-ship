@@ -8,6 +8,7 @@ namespace EE.Prototype.PC
         [SerializeField] private Transform m_top;
         [SerializeField] private Rigidbody m_body;
         [SerializeField] private Transform m_bodyRotation;
+        [SerializeField] private float m_dampingFactor = 0.1f;
 
         private Vector3 m_previousPosition;
         private Vector3 m_previousError;
@@ -55,7 +56,6 @@ namespace EE.Prototype.PC
         public void OnTick()
         {
             _M_FollowBody();
-            _M_AlignWithBodyRotation();
         }
 
         private void _M_FollowBody()
@@ -65,16 +65,9 @@ namespace EE.Prototype.PC
 
             Vector3 targetPosition = m_body.position + m_selfToBody + scaledVelocity;
 
-            float dampingFactor = 0.1f;
-
-            transform.position = Vector3.Lerp(transform.position, targetPosition, dampingFactor);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, m_dampingFactor);
 
             m_previousPosition = transform.position;
-        }
-
-        private void _M_AlignWithBodyRotation()
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, m_bodyRotation.rotation, 0.1f);
         }
     }
 }

@@ -3,11 +3,13 @@ using UnityEngine;
 
 namespace EE.Prototype.PC
 {
-    public class HeadController : MonoBehaviour
+    public class HeadController : MonoBehaviour, INotifiable
     {
         // [SerializeField] private float m_beta;
         [SerializeField] private Rigidbody m_body;
         [SerializeField] private Transform m_bodyRotation;
+
+        [SerializeField] private float m_dampingFactor = 0.1f;
 
         private Vector3 m_previousPosition;
 
@@ -16,20 +18,19 @@ namespace EE.Prototype.PC
         {
             _M_FollowBody();
             _M_AlignWithBodyRotation();
+
         }
 
         private void _M_FollowBody()
         {
             Vector3 targetDistanceToBody = Vector3.up * 2.75f;
 
-            Vector3 scale = new(0.4f, 0.25f, 0.4f);
+            Vector3 scale = new(0.4f, 0.4f, 0.4f);
             Vector3 scaledVelocity = Vector3.Scale(m_body.velocity, scale);
 
             Vector3 targetPosition = m_body.position + targetDistanceToBody + scaledVelocity;
 
-            float dampingFactor = 0.1f;
-
-            transform.position = Vector3.Lerp(transform.position, targetPosition, dampingFactor);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, m_dampingFactor);
 
             m_previousPosition = transform.position;
         }
@@ -37,6 +38,21 @@ namespace EE.Prototype.PC
         private void _M_AlignWithBodyRotation()
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, m_bodyRotation.rotation, 0.1f);
+        }
+
+
+        public void Notify(params object[] data)
+        {
+            var userInput = (Vector3)data[0];
+            if (userInput != Vector3.zero) _M_FaceMovingDirection();
+        }
+
+        private void _M_FaceMovingDirection()
+        {
+            Vector3 direction = m_body.velocity.normalized;
+            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            Quaternion targetRotation = Quaternion.Euler(0, angle, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
         }
     }
 }
