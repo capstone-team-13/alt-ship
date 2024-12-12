@@ -6,6 +6,14 @@ public class tentacleDamageDetection : MonoBehaviour
 {
     public Animator animator;
     public bool toggle = false;
+    public bool attackStart;
+
+    public GameObject targetPosition;
+
+    public GameObject getSheep = null;
+
+    public float MaxTime = 20f;
+    private float CountDown = 0f;
 
     void OnTriggerEnter(Collider collider)
     {
@@ -25,10 +33,25 @@ public class tentacleDamageDetection : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider collider)
+    {
+        if (!toggle && collider.CompareTag("Sheep"))
+        {
+
+        }
+
+    }
+
     void wasHit()
     {
         animator.SetTrigger("wasHit");
         Debug.Log("was hit");
+    }
+
+    void attackSheep()
+    {
+
+        animator.SetTrigger("attackSheep");
     }
 
 
