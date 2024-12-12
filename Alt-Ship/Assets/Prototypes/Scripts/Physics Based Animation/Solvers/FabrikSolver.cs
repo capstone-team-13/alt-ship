@@ -12,8 +12,8 @@ namespace EE.Prototype.PBA
         private float3 m_root;
         private float3 m_target;
 
-        private float m_torrence = 1e-2f;
-        private int m_maxIteration = 100;
+        private float m_torrence = 1e-1f;
+        private int m_maxIteration = 1000;
 
         // Output
         public float3[] Result => m_joints;
