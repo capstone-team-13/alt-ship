@@ -2104,7 +2104,7 @@
             Initialized a NumericalDerivative class.
             </summary>
             <param name="points">Number of points for finite difference derivatives.</param>
-            <param name="center">Location of the center with respect to other points. Value ranges from zero to points-1.</param>
+            <param name="center">Location of the center with respect to other points. CurrentHealth ranges from zero to points-1.</param>
         </member>
         <member name="P:MathNet.Numerics.Differentiation.NumericalDerivative.StepSize">
             <summary>
@@ -41063,7 +41063,7 @@
             Get the values of the parameters.
             </summary>
         </member>
-        <member name="P:MathNet.Numerics.Optimization.IObjectiveModelEvaluation.Value">
+        <member name="P:MathNet.Numerics.Optimization.IObjectiveModelEvaluation.CurrentHealth">
             <summary>
             Get the residual sum of squares.
             </summary>
@@ -41277,7 +41277,7 @@
             <param name="errorProfile"></param>
             <returns></returns>
         </member>
-        <member name="P:MathNet.Numerics.Optimization.NelderMeadSimplex.SimplexConstant.Value">
+        <member name="P:MathNet.Numerics.Optimization.NelderMeadSimplex.SimplexConstant.CurrentHealth">
             <summary>
             The value of the constant
             </summary>
@@ -41342,7 +41342,7 @@
             The scale factors for the parameters.
             </summary>
         </member>
-        <member name="M:MathNet.Numerics.Optimization.ObjectiveFunction.Value(System.Func{MathNet.Numerics.LinearAlgebra.Vector{System.Double},System.Double})">
+        <member name="M:MathNet.Numerics.Optimization.ObjectiveFunction.CurrentHealth(System.Func{MathNet.Numerics.LinearAlgebra.Vector{System.Double},System.Double})">
             <summary>
             Objective function where neither Gradient nor Hessian is available.
             </summary>
@@ -41490,7 +41490,7 @@
             Get the y-values of the fitted model that correspond to the independent values.
             </summary>
         </member>
-        <member name="P:MathNet.Numerics.Optimization.ObjectiveFunctions.NonlinearObjectiveFunction.Value">
+        <member name="P:MathNet.Numerics.Optimization.ObjectiveFunctions.NonlinearObjectiveFunction.CurrentHealth">
             <summary>
             Get the residual sum of squares.
             </summary>
@@ -42351,12 +42351,12 @@
         </member>
         <member name="F:MathNet.Numerics.Precision.DefaultDoubleAccuracy">
             <summary>
-            Value representing 10 * 2^(-53) = 1.11022302462516E-15
+            CurrentHealth representing 10 * 2^(-53) = 1.11022302462516E-15
             </summary>
         </member>
         <member name="F:MathNet.Numerics.Precision.DefaultSingleAccuracy">
             <summary>
-            Value representing 10 * 2^(-24) = 5.96046447753906E-07
+            CurrentHealth representing 10 * 2^(-24) = 5.96046447753906E-07
             </summary>
         </member>
         <member name="M:MathNet.Numerics.Precision.Magnitude(System.Double)">
@@ -50118,7 +50118,7 @@
             The number of datapoints in the bucket.
             </summary>
             <remarks>
-            Value may be NaN if this was constructed as a <see cref="T:System.Collections.Generic.IComparer`1"/> argument.
+            CurrentHealth may be NaN if this was constructed as a <see cref="T:System.Collections.Generic.IComparer`1"/> argument.
             </remarks>
         </member>
         <member name="M:MathNet.Numerics.Statistics.Bucket.#ctor(System.Double,System.Double,System.Double)">
@@ -50131,7 +50131,7 @@
             Constructs a Bucket that can be used as an argument for a <see cref="T:System.Collections.Generic.IComparer`1"/>
             like <see cref="P:MathNet.Numerics.Statistics.Bucket.DefaultPointComparer"/> when performing a Binary search.
             </summary>
-            <param name="targetValue">Value to look for</param>
+            <param name="targetValue">CurrentHealth to look for</param>
         </member>
         <member name="M:MathNet.Numerics.Statistics.Bucket.Clone">
             <summary>
@@ -50523,7 +50523,7 @@
             The delegate type that defines a derivative evaluated at a certain point.
             </summary>
             <param name="f">Function to be differentiated.</param>
-            <param name="x">Value where the derivative is computed.</param>
+            <param name="x">CurrentHealth where the derivative is computed.</param>
         </member>
         <member name="F:MathNet.Numerics.Statistics.Mcmc.HybridMCGeneric`1._energy">
             <summary>

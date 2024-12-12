@@ -132,7 +132,7 @@
             </summary>
             
             <param name="point">Point to increase coordinates of.</param>
-            <param name="valueToAdd">Value to add to coordinates of the specified point.</param>
+            <param name="valueToAdd">CurrentHealth to add to coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point increased by specified value.</returns>
@@ -144,7 +144,7 @@
             </summary>
             
             <param name="point">Point to increase coordinates of.</param>
-            <param name="valueToAdd">Value to add to coordinates of the specified point.</param>
+            <param name="valueToAdd">CurrentHealth to add to coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point increased by specified value.</returns>
@@ -156,7 +156,7 @@
             </summary>
             
             <param name="point">Point to decrease coordinates of.</param>
-            <param name="valueToSubtract">Value to subtract from coordinates of the specified point.</param>
+            <param name="valueToSubtract">CurrentHealth to subtract from coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point decreased by specified value.</returns>
@@ -168,7 +168,7 @@
             </summary>
             
             <param name="point">Point to decrease coordinates of.</param>
-            <param name="valueToSubtract">Value to subtract from coordinates of the specified point.</param>
+            <param name="valueToSubtract">CurrentHealth to subtract from coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point decreased by specified value.</returns>
@@ -676,7 +676,7 @@
             </summary>
             
             <param name="point">Point to increase coordinates of.</param>
-            <param name="valueToAdd">Value to add to coordinates of the specified point.</param>
+            <param name="valueToAdd">CurrentHealth to add to coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point increased by specified value.</returns>
@@ -688,7 +688,7 @@
             </summary>
             
             <param name="point">Point to increase coordinates of.</param>
-            <param name="valueToAdd">Value to add to coordinates of the specified point.</param>
+            <param name="valueToAdd">CurrentHealth to add to coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point increased by specified value.</returns>
@@ -700,7 +700,7 @@
             </summary>
             
             <param name="point">Point to decrease coordinates of.</param>
-            <param name="valueToSubtract">Value to subtract from coordinates of the specified point.</param>
+            <param name="valueToSubtract">CurrentHealth to subtract from coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point decreased by specified value.</returns>
@@ -712,7 +712,7 @@
             </summary>
             
             <param name="point">Point to decrease coordinates of.</param>
-            <param name="valueToSubtract">Value to subtract from coordinates of the specified point.</param>
+            <param name="valueToSubtract">CurrentHealth to subtract from coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point decreased by specified value.</returns>
@@ -852,7 +852,7 @@
             Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
             </summary>
             <param name="other">An object to compare with this instance.</param>
-            <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="other" /> in the sort order.  Zero This instance occurs in the same position in the sort order as <paramref name="other" />. Greater than zero This instance follows <paramref name="other" /> in the sort order.</returns>
+            <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: CurrentHealth Meaning Less than zero This instance precedes <paramref name="other" /> in the sort order.  Zero This instance occurs in the same position in the sort order as <paramref name="other" />. Greater than zero This instance follows <paramref name="other" /> in the sort order.</returns>
         </member>
         <member name="T:Accord.Point">
             <summary>
@@ -973,7 +973,7 @@
             </summary>
             
             <param name="point">Point to increase coordinates of.</param>
-            <param name="valueToAdd">Value to add to coordinates of the specified point.</param>
+            <param name="valueToAdd">CurrentHealth to add to coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point increased by specified value.</returns>
@@ -985,7 +985,7 @@
             </summary>
             
             <param name="point">Point to increase coordinates of.</param>
-            <param name="valueToAdd">Value to add to coordinates of the specified point.</param>
+            <param name="valueToAdd">CurrentHealth to add to coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point increased by specified value.</returns>
@@ -997,7 +997,7 @@
             </summary>
             
             <param name="point">Point to decrease coordinates of.</param>
-            <param name="valueToSubtract">Value to subtract from coordinates of the specified point.</param>
+            <param name="valueToSubtract">CurrentHealth to subtract from coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point decreased by specified value.</returns>
@@ -1009,7 +1009,7 @@
             </summary>
             
             <param name="point">Point to decrease coordinates of.</param>
-            <param name="valueToSubtract">Value to subtract from coordinates of the specified point.</param>
+            <param name="valueToSubtract">CurrentHealth to subtract from coordinates of the specified point.</param>
             
             <returns>Returns new point which coordinates equal to coordinates of
             the specified point decreased by specified value.</returns>
@@ -1640,7 +1640,7 @@
             <typeparam name="U">The source type.</typeparam>
             
         </member>
-        <member name="P:Accord.cast`2.Value">
+        <member name="P:Accord.cast`2.CurrentHealth">
             <summary>
               Gets the value being casted.
             </summary>
@@ -1678,7 +1678,7 @@
             <typeparam name="T">The target type.</typeparam>
             
         </member>
-        <member name="P:Accord.cast`1.Value">
+        <member name="P:Accord.cast`1.CurrentHealth">
             <summary>
               Gets the value being casted.
             </summary>
@@ -2414,7 +2414,7 @@
             </summary>
             
         </member>
-        <member name="P:Accord.Collections.PriorityQueueNode`1.Value">
+        <member name="P:Accord.Collections.PriorityQueueNode`1.CurrentHealth">
             <summary>
               Gets or sets the current value associated with this node.
             </summary>
@@ -2475,7 +2475,7 @@
             </summary>
             <param name="other">An object to compare with this object.</param>
             <returns>
-            A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other" /> parameter.Zero This object is equal to <paramref name="other" />. Greater than zero This object is greater than <paramref name="other" />.
+            A value that indicates the relative order of the objects being compared. The return value has the following meanings: CurrentHealth Meaning Less than zero This object is less than the <paramref name="other" /> parameter.Zero This object is equal to <paramref name="other" />. Greater than zero This object is greater than <paramref name="other" />.
             </returns>
         </member>
         <member name="M:Accord.Collections.PriorityQueueNode`1.op_Equality(Accord.Collections.PriorityQueueNode{`0},Accord.Collections.PriorityQueueNode{`0})">
@@ -3026,7 +3026,7 @@
             </summary>
             
         </member>
-        <member name="P:Accord.Collections.RedBlackTreeNode`1.Value">
+        <member name="P:Accord.Collections.RedBlackTreeNode`1.CurrentHealth">
             <summary>
               Gets or sets the value associated with this node.
             </summary>
@@ -4923,7 +4923,7 @@
             Gets the numerator of the current <see cref="T:Accord.Math.Rational"/> value.
             </summary>
         </member>
-        <member name="P:Accord.Math.Rational.Value">
+        <member name="P:Accord.Math.Rational.CurrentHealth">
             <summary>
             Gets the floating-point equivalent of the current <see cref="T:Accord.Math.Rational"/> value.
             </summary>
@@ -7532,7 +7532,7 @@
               Check if the specified value is inside of the range.
             </summary>
             
-            <param name="x">Value to check.</param>
+            <param name="x">CurrentHealth to check.</param>
             
             <returns>
               <b>True</b> if the specified value is inside of the range or <b>false</b> otherwise.
@@ -7783,7 +7783,7 @@
               Check if the specified value is inside of the range.
             </summary>
             
-            <param name="x">Value to check.</param>
+            <param name="x">CurrentHealth to check.</param>
             
             <returns>
               <b>True</b> if the specified value is inside of the range or <b>false</b> otherwise.
@@ -7996,7 +7996,7 @@
               Check if the specified value is inside of the range.
             </summary>
             
-            <param name="x">Value to check.</param>
+            <param name="x">CurrentHealth to check.</param>
             
             <returns>
               <b>True</b> if the specified value is inside of the range or <b>false</b> otherwise.
@@ -8271,7 +8271,7 @@
               Check if the specified value is inside of the range.
             </summary>
             
-            <param name="x">Value to check.</param>
+            <param name="x">CurrentHealth to check.</param>
             
             <returns>
               <b>True</b> if the specified value is inside of the range or <b>false</b> otherwise.

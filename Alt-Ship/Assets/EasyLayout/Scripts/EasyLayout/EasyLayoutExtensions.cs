@@ -111,7 +111,7 @@
 		/// </summary>
 		/// <param name="builder">Builder.</param>
 		/// <param name="label">Label.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="value">CurrentHealth.</param>
 		/// <returns>Builder instance.</returns>
 		public static StringBuilder AppendValue(this StringBuilder builder, string label, string value)
 		{
@@ -127,7 +127,7 @@
 		/// </summary>
 		/// <param name="builder">Builder.</param>
 		/// <param name="label">Label.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="value">CurrentHealth.</param>
 		/// <returns>Builder instance.</returns>
 		public static StringBuilder AppendValue(this StringBuilder builder, string label, bool value)
 		{
@@ -143,7 +143,7 @@
 		/// </summary>
 		/// <param name="builder">Builder.</param>
 		/// <param name="label">Label.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="value">CurrentHealth.</param>
 		/// <returns>Builder instance.</returns>
 		public static StringBuilder AppendValue(this StringBuilder builder, string label, int value)
 		{
@@ -159,7 +159,7 @@
 		/// </summary>
 		/// <param name="builder">Builder.</param>
 		/// <param name="label">Label.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="value">CurrentHealth.</param>
 		/// <returns>Builder instance.</returns>
 		public static StringBuilder AppendValue(this StringBuilder builder, string label, float value)
 		{
@@ -175,7 +175,7 @@
 		/// </summary>
 		/// <param name="builder">Builder.</param>
 		/// <param name="label">Label.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="value">CurrentHealth.</param>
 		/// <returns>Builder instance.</returns>
 		public static StringBuilder AppendValue(this StringBuilder builder, string label, Vector2 value)
 		{
@@ -187,7 +187,7 @@
 		/// </summary>
 		/// <param name="builder">Builder.</param>
 		/// <param name="label">Label.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="value">CurrentHealth.</param>
 		/// <returns>Builder instance.</returns>
 		public static StringBuilder AppendValue(this StringBuilder builder, string label, Vector3 value)
 		{
@@ -199,7 +199,7 @@
 		/// </summary>
 		/// <param name="builder">Builder.</param>
 		/// <param name="label">Label.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="value">CurrentHealth.</param>
 		/// <returns>Builder instance.</returns>
 		public static StringBuilder AppendValue(this StringBuilder builder, string label, Padding value)
 		{
@@ -211,7 +211,7 @@
 		/// </summary>
 		/// <param name="builder">Builder.</param>
 		/// <param name="label">Label.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="value">CurrentHealth.</param>
 		/// <param name="suffix">Suffix.</param>
 		/// <returns>Builder instance.</returns>
 		public static StringBuilder AppendValue(this StringBuilder builder, string label, int value, string suffix)
@@ -229,7 +229,7 @@
 		/// </summary>
 		/// <param name="builder">Builder.</param>
 		/// <param name="label">Label.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="value">CurrentHealth.</param>
 		/// <param name="suffix1">First suffix.</param>
 		/// <param name="suffix2">Second suffix.</param>
 		/// <returns>Builder instance.</returns>
@@ -250,7 +250,7 @@
 		/// <typeparam name="TEnum">Type of Enum.</typeparam>
 		/// <param name="builder">Builder.</param>
 		/// <param name="label">Label.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="value">CurrentHealth.</param>
 		/// <returns>Builder instance.</returns>
 		public static StringBuilder AppendValueEnum<TEnum>(this StringBuilder builder, string label, TEnum value)
 			#if CSHARP_7_3_OR_NEWER
