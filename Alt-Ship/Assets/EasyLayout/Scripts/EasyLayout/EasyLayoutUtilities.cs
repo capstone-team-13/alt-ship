@@ -28,7 +28,7 @@
 		/// <summary>
 		/// Convert list to string.
 		/// </summary>
-		/// <typeparam name="T">Value type.</typeparam>
+		/// <typeparam name="T">CurrentHealth type.</typeparam>
 		/// <param name="values">Values.</param>
 		/// <returns>String.</returns>
 		public static string List2String<T>(List<T> values)
@@ -55,7 +55,7 @@
 		/// <summary>
 		/// Convert list to string.
 		/// </summary>
-		/// <typeparam name="T">Value type.</typeparam>
+		/// <typeparam name="T">CurrentHealth type.</typeparam>
 		/// <param name="values">Values.</param>
 		/// <returns>String.</returns>
 		public static string List2String<T>(T[] values)
