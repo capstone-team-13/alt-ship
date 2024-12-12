@@ -20,36 +20,36 @@ namespace EE.Prototype.PBA
 
             for (int i = 0; i < m_joints.Length - 1; i++)
             {
-                Vector3 currentJoint = m_joints[i].position;
-                Vector3 nextJoint = m_joints[i + 1].position;
+                Vector3 currentJoint = m_joints[i].localPosition;
+                Vector3 nextJoint = m_joints[i + 1].localPosition;
 
                 m_positions[i] = currentJoint;
                 m_lengths[i] = Vector3.Magnitude(nextJoint - currentJoint);
             }
 
-            m_positions[^1] = m_joints[^1].position;
+            m_positions[^1] = m_joints[^1].localPosition;
         }
 
         [UsedImplicitly]
         private void Update()
         {
             FabrikSolver solver = new FabrikSolver.Builder().SetJoints(m_positions).SetLengths(m_lengths)
-                .SetTarget(m_target.position).Build();
+                .SetTarget(m_target.localPosition).Build();
 
             solver.Solve();
 
             for (int i = 0; i < m_joints.Length; i++)
-                m_joints[i].position = solver.Result[i];
+                m_joints[i].localPosition = solver.Result[i];
         }
 
         [UsedImplicitly]
         private void OnDrawGizmos()
         {
             foreach (Transform joint in m_joints)
-                Gizmos.DrawWireSphere(joint.position, 0.25f);
+                Gizmos.DrawWireSphere(joint.localPosition, 0.25f);
 
             for (int i = 0; i < m_joints.Length - 1; i++)
-                Gizmos.DrawLine(m_joints[i].position, m_joints[i + 1].position);
+                Gizmos.DrawLine(m_joints[i].localPosition, m_joints[i + 1].localPosition);
         }
     }
 }

@@ -65,15 +65,12 @@ public class NewCannonController : MonoBehaviour
     {
         if (!m_manning) return;
 
-        Debug.Log("1");
         if (isRaising)
         {
-            Debug.Log("2");
             pitch += verticalRotateRate * Time.deltaTime;
         }
         else if (isLowering)
         {
-            Debug.Log("3");
             pitch -= verticalRotateRate * Time.deltaTime;
         }
 
@@ -82,18 +79,15 @@ public class NewCannonController : MonoBehaviour
 
         if (leftTurning)
         {
-            Debug.Log("4");
             yaw += horizontalRotateRate * Time.deltaTime;
         }
         else if (rightTurning) 
         {
-            Debug.Log("5");
             yaw -= horizontalRotateRate * Time.deltaTime;
         }
         yaw = Mathf.Clamp(yaw, -7, 7);
         bodyTransform.localEulerAngles = new Vector3(bodyTransform.localEulerAngles.x, yaw + currentDirection, bodyTransform.localEulerAngles.z);
 
-        Debug.Log("6");
         if (playerTransform != null && playerTransform.position != recentPosition)
         {
             playerTransform.localPosition = recentPosition;
@@ -146,7 +140,6 @@ public class NewCannonController : MonoBehaviour
 
         if (lastPlayerCam != null && playerNum == 1)
         {
-            //    Debug.Log("Has loaded");
             lastPlayerCam.Priority = 5;
             cannonCam1.Priority = 10;
         }
@@ -177,7 +170,6 @@ public class NewCannonController : MonoBehaviour
 
         if (lastPlayerCam != null && playerNum == 1)
         {
-            //    Debug.Log("Has loaded");
             lastPlayerCam.Priority = 10;
             cannonCam1.Priority = 5;
         }
@@ -263,7 +255,6 @@ public class NewCannonController : MonoBehaviour
 
     private void NewPlayerStarted()
     {
-        Debug.Log("Cannon Setup");
         var actionMap = inputActions.FindActionMap("CannonFire");
         firing = actionMap.FindAction("Fire");
         tilting = actionMap.FindAction("Tilt");

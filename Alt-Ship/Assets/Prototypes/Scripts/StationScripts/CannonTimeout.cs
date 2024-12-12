@@ -9,7 +9,9 @@ public class CannonTimeout : MonoBehaviour
     [SerializeField] private MeshRenderer meshRenderer;
 
     private float timeLeft = 4f;
-    private bool isEnabled = false;
+    public bool isEnabled = false;
+
+    private bool toggle = false;
 
     Vector3 prevPos;
     // Start is called before the first frame update
@@ -32,13 +34,20 @@ public class CannonTimeout : MonoBehaviour
                 selfDestruct();
             }
         }
-        else if (!isEnabled)
+        else if (!isEnabled && toggle == false)
         {
-            this.transform.position = prevPos;
+            
+            TriggerParticles();
             meshRenderer.enabled = false;
+            toggle = true;
         }
 
-        if(!isEnabled && !particles.activeSelf)
+        if (!isEnabled && toggle)
+        {
+            this.transform.position = prevPos;
+        }
+
+        if (!isEnabled && !particles.activeSelf)
         {
             selfDestruct();
         }
@@ -48,7 +57,6 @@ public class CannonTimeout : MonoBehaviour
     {
         if (collision.gameObject.tag != "Cannon")
         {
-            TriggerParticles();
             isEnabled = false;
         }
     }
