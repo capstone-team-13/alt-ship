@@ -13,6 +13,8 @@ namespace EE.Prototype.PC
 
         [SerializeField] private float m_dampingFactor = 0.1f;
 
+        [SerializeField] private Vector3 m_velocityScale = Vector3.zero;
+
 
         private Vector3 m_previousPosition;
 
@@ -27,8 +29,7 @@ namespace EE.Prototype.PC
         {
             Vector3 targetDistanceToBody = Vector3.up * m_targetY;
 
-            Vector3 scale = new(0.4f, 0.4f, 0.4f);
-            Vector3 scaledVelocity = Vector3.Scale(m_body.velocity, scale);
+            Vector3 scaledVelocity = Vector3.Scale(m_body.velocity, m_velocityScale);
 
             Vector3 targetPosition = m_body.position + targetDistanceToBody + scaledVelocity;
 
