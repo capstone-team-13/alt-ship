@@ -79,6 +79,7 @@ namespace EE.Prototype.PC
             m_targetPosition.z = position.z;
         }
 
+
         public void Notify(params object[] data)
         {
             var userInput = (Vector3)data[0];

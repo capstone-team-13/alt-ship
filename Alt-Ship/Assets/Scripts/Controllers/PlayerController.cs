@@ -16,14 +16,14 @@ public class PlayerController : Controller<PlayerModel>
 
     [SerializeField] private Camera m_camera;
 
-    [SerializeField] private EE.Prototype.PC.PlayerController m_animator;
+    [SerializeField] private EE.Prototype.PC.PlayerController[] m_animator;
 
     // TODO: Remove
     public Material playerOneMat;
     public Material playerTwoMat;
     public MeshRenderer meshRenderer;
 
-    public float playerNum = 0;
+    public int playerNum;
 
     [SerializeField] private CinemachineFreeLook playerFreeLook;
 
@@ -48,7 +48,26 @@ public class PlayerController : Controller<PlayerModel>
 
     public void SetTargetPositionXZ(Vector3 position)
     {
-        m_animator.SetTargetPositionXZ(position);
+        m_animator[playerNum - 1].SetTargetPositionXZ(position);
+    }
+
+    public void UpdatePlayerId()
+    {
+        playerNum = (int)++m_playerCount;
+    }
+
+    private void __M_SetUpPlayerModel()
+    {
+        var character = m_animator[playerNum - 1].gameObject;
+
+        m_animator[playerNum - 1].gameObject.SetActive(true);
+        var anotherAnimator = playerNum % m_animator.Length;
+        m_animator[anotherAnimator].gameObject.SetActive(false);
+
+        var body = character.transform.Find("Body")?.gameObject;
+        if (body == null) return;
+        playerFreeLook.LookAt = body.transform;
+        playerFreeLook.Follow = body.transform;
     }
 
     #endregion
@@ -58,13 +77,6 @@ public class PlayerController : Controller<PlayerModel>
     [UsedImplicitly]
     private void Awake()
     {
-        ++m_playerCount;
-
-        if (playerNum == 0)
-        {
-            playerNum = m_playerCount;
-        }
-
         if (playerNum == 1)
         {
             this.gameObject.name = "Player: " + playerNum;
@@ -90,10 +102,13 @@ public class PlayerController : Controller<PlayerModel>
             2 => playerTwoMat,
             _ => meshRenderer.material
         };
+
         if (!parentRotation)
         {
             parentRotation = GameObject.FindWithTag("Ship").transform;
         }
+
+        __M_SetUpPlayerModel();
     }
 
     [UsedImplicitly]
@@ -137,7 +152,7 @@ public class PlayerController : Controller<PlayerModel>
     private void __M_Move()
     {
         Vector3 movementInput = __M_GetPlayerInput();
-        m_animator.UserInput = movementInput;
+        m_animator[playerNum - 1].UserInput = movementInput;
 
         Vector3 direction = m_camera.transform.TransformDirection(movementInput);
         direction.y = 0;
@@ -148,9 +163,10 @@ public class PlayerController : Controller<PlayerModel>
         __M_UpdateDirection(direction);
 
         // Remove if players rotation matters
-        transform.rotation = parentRotation.rotation;
+        // transform.rotation = parentRotation.rotation;
 
         transform.Translate(Model.Velocity * Time.deltaTime);
+        m_animator[playerNum - 1].SetTargetPositionXZ(transform.position);
     }
 
     private void __M_UpdateDirection(Vector3 input)

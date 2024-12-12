@@ -36,6 +36,7 @@ namespace EE.Prototype.PC
         private void FixedUpdate()
         {
             var userInput = UserInput;
+
             var jumpInput = JumpInput;
 
             foreach (INotifiable piece in m_pieces)
