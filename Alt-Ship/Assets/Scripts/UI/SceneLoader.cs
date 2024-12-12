@@ -8,6 +8,7 @@ public class SceneLoader : MonoBehaviour
         Start = 0,
         LevelSelection,
         Level1,
+        End,
         Undefined
     }
 
@@ -15,7 +16,8 @@ public class SceneLoader : MonoBehaviour
     {
         "Start",
         "Level Selection",
-        "Luka's Greybox"
+        "Luka's Greybox",
+        "End"
     };
 
     [SerializeField] private SceneName m_sceneName = SceneName.Undefined;
