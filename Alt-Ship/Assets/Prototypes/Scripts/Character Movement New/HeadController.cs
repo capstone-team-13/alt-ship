@@ -6,10 +6,13 @@ namespace EE.Prototype.PC
     public class HeadController : MonoBehaviour, INotifiable
     {
         // [SerializeField] private float m_beta;
+        [SerializeField] private float m_targetY = 2.75f;
+
         [SerializeField] private Rigidbody m_body;
         [SerializeField] private Transform m_bodyRotation;
 
         [SerializeField] private float m_dampingFactor = 0.1f;
+
 
         private Vector3 m_previousPosition;
 
@@ -18,12 +21,11 @@ namespace EE.Prototype.PC
         {
             _M_FollowBody();
             _M_AlignWithBodyRotation();
-
         }
 
         private void _M_FollowBody()
         {
-            Vector3 targetDistanceToBody = Vector3.up * 2.75f;
+            Vector3 targetDistanceToBody = Vector3.up * m_targetY;
 
             Vector3 scale = new(0.4f, 0.4f, 0.4f);
             Vector3 scaledVelocity = Vector3.Scale(m_body.velocity, scale);
