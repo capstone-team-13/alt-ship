@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 129072512}
   - component: {fileID: 129072516}
   m_Layer: 5
-  m_Name: Title Page <div>
+  m_Name: Back <div>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -713,16 +713,16 @@ RectTransform:
   m_GameObject: {fileID: 405665573}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 19.140686, y: 10.21, z: 10.21}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 20, y: 20, z: 20}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1532207810}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -128}
+  m_SizeDelta: {x: 70.05, y: 100}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &405665575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -743,9 +743,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf7cfe8aa3350c44695d4cef1fc3d030, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 83c7a9a98172c4944947df076261993b, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -950,7 +950,7 @@ MonoBehaviour:
   rowAlign: 0
   innerAlign: 0
   cellAlign: 0
-  spacing: {x: 0, y: 0}
+  spacing: {x: 0, y: 12}
   symmetric: 1
   margin: {x: 4, y: 4}
   marginInner:
@@ -1187,9 +1187,9 @@ MonoBehaviour:
   rowAlign: 0
   innerAlign: 0
   cellAlign: 0
-  spacing: {x: 0, y: 0}
+  spacing: {x: 5, y: 5}
   symmetric: 1
-  margin: {x: 36, y: 12}
+  margin: {x: 5, y: 5}
   marginInner:
     Left: 0
     Right: 0
@@ -1322,7 +1322,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.9921569, g: 0.8431373, b: 0.69803923, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9058824, g: 0.9843138, b: 1, a: 1}
     m_PressedColor: {r: 0.8078432, g: 0.6313726, b: 0.45098042, a: 1}
     m_SelectedColor: {r: 0.8078432, g: 0.6313726, b: 0.45098042, a: 1}
@@ -1364,7 +1364,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 832445077}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1501,7 +1501,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Level #1
+  m_text: Start Level
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
