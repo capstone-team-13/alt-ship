@@ -9,6 +9,9 @@ public class HealthUI : Controller<ShipModel>
 {
     [SerializeField] private GameObject m_indicatorPrefab;
 
+    // TODO: TEMP
+    [SerializeField] private SceneLoader m_sceneLoader;
+
     private List<GameObject> m_indicators = new();
     private Coroutine m_waveCoroutine;
 
@@ -44,6 +47,7 @@ public class HealthUI : Controller<ShipModel>
         {
             Application.Instance.Push(new GameCommand.GameEnd(Time.time));
             PlayerPrefs.SetInt("Game Result", (int)GameResult.Lose);
+            m_sceneLoader.Load();
             return;
         }
 
