@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Application = EE.AMVCC.Application;
 
 public class TentacleDamageDetection : MonoBehaviour
 {
@@ -60,6 +61,9 @@ public class TentacleDamageDetection : MonoBehaviour
             currentSheep.transform.SetParent(targetPosition.transform);
             currentSheep.transform.localPosition = Vector3.zero;
             isGrabbed = true;
+
+            Application.Instance.Push(new ShipCommand.Damage(1));
+
             Debug.Log("Sheep taken!");
         }
     }

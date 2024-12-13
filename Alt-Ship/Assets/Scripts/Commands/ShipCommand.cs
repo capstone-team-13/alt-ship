@@ -21,4 +21,14 @@ public class ShipCommand : Command
             CurrentHealth = currentHealth;
         }
     }
+
+    public class Damage : ShipCommand
+    {
+        public int Value;
+
+        public Damage(int value)
+        {
+            Value = value;
+        }
+    }
 }

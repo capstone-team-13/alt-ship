@@ -1,11 +1,9 @@
+using Cinemachine;
 using EE.Interactions;
-using JetBrains.Annotations;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Application = EE.AMVCC.Application;
-using Cinemachine;
-using System;
-using EE.AMVCC;
 
 public class NewCannonController : MonoBehaviour
 {

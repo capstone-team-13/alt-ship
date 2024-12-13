@@ -2,9 +2,8 @@ using EE.AMVCC;
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
-using EasyLayoutNS;
-using UnityEditor;
 using UnityEngine;
+using Application = EE.AMVCC.Application;
 
 public class HealthUI : Controller<ShipModel>
 {
@@ -31,6 +30,9 @@ public class HealthUI : Controller<ShipModel>
             case ShipCommand.HealthUpdate healthUpdateCommand:
                 __M_UpdateHealth(healthUpdateCommand.CurrentHealth);
                 break;
+            case ShipCommand.Damage damageCommand:
+                __M_UpdateHealth(Model.Health - damageCommand.Value);
+                break;
         }
     }
 
@@ -38,6 +40,13 @@ public class HealthUI : Controller<ShipModel>
 
     private void __M_UpdateHealth(int currentHealth)
     {
+        if (currentHealth <= 0)
+        {
+            Application.Instance.Push(new GameCommand.GameEnd(Time.time));
+            PlayerPrefs.SetInt("Game Result", (int)GameResult.Lose);
+            return;
+        }
+
         var indicatorToGenerate = currentHealth - m_indicators.Count;
 
         for (var i = 0; i < indicatorToGenerate; ++i)
