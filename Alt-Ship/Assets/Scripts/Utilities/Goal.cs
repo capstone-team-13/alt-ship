@@ -13,7 +13,7 @@ public class Goal : MonoBehaviour
         if (collision.gameObject.CompareTag("Ship"))
         {
             Application.Instance.Push(new GameCommand.GameEnd(Time.time));
-            PlayerPrefs.SetInt("Game Result", 1);
+            PlayerPrefs.SetInt("Game Result", (int)GameResult.Win);
             OnGameEnd?.Invoke();
         }
     }

@@ -2,6 +2,13 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum GameResult
+{
+    Undefined = -1,
+    Lose = 0,
+    Win
+}
+
 public class WinLoseUI : MonoBehaviour
 {
     [SerializeField] private Image m_image;
