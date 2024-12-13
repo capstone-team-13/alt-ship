@@ -27,7 +27,7 @@ public class TentacleDamageDetection : MonoBehaviour
 
     public IEnumerator AttackSheepTime()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
 
         if (currentSheep != null && !toggle)
         {
