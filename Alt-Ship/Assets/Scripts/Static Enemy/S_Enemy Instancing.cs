@@ -8,15 +8,8 @@ public class S_EnemyInstancing : MonoBehaviour
 
     public GameObject enemyModel;
     public float spawnRadius = 10f;
-    public Transform ship;
 
     private bool shipInRange = false;
-
-
-    private void Update()
-    {
-        RotateTo();
-    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -49,15 +42,6 @@ public class S_EnemyInstancing : MonoBehaviour
         enemyModel.SetActive(true);
 
     }
-
-    void RotateTo()
-    {
-        if (enemyModel.activeSelf)
-        {
-            enemyModel.transform.LookAt(ship.position);
-            enemyModel.transform.eulerAngles = new Vector3(0f, enemyModel.transform.eulerAngles.y - 90f,0f);
-        }
-   }
 
 
 }
