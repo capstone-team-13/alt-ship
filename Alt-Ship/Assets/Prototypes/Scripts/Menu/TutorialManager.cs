@@ -2,17 +2,17 @@
 
 public class TutorialManager : MonoBehaviour
 {
-    public GameObject tutorialPanel;
+    public GameObject Panel;
 
     // 显示教程面板
     public void ShowTutorial()
     {
-        tutorialPanel.SetActive(true);
+        Panel.SetActive(true);
     }
 
     // 隐藏教程面板
     public void HideTutorial()
     {
-        tutorialPanel.SetActive(false);
+        Panel.SetActive(false);
     }
 }
