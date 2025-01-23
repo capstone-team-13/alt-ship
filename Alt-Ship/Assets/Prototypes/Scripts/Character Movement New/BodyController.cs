@@ -20,14 +20,14 @@ namespace EE.Prototype.PC
 
         [SerializeField] private LayerMask m_ground;
 
+        private float timePasted;
+
         [UsedImplicitly]
         private void FixedUpdate()
         {
             Vector3 groundOffset = _M_CalculateGroundOffset();
 
             Vector3 gaitOffset = _M_UpdateGaitOffset(Time.timeSinceLevelLoad);
-            __M_RotateHip(Time.timeSinceLevelLoad);
-            __M_RotateShoulder(Time.timeSinceLevelLoad);
 
             // Store target position at this frame;
             Vector3 currentTargetPosition = m_targetPosition;
@@ -71,6 +71,28 @@ namespace EE.Prototype.PC
         public void Jump()
         {
             m_rigidBody.AddForce(Vector3.up * m_jumpForce, ForceMode.Impulse);
+        }
+
+        public void SetTargetPositionXZ(Vector3 position)
+        {
+            m_targetPosition.x = position.x;
+            m_targetPosition.z = position.z;
+        }
+
+
+        public void Notify(params object[] data)
+        {
+            var userInput = (Vector3)data[0];
+            var jumpInput = (float)data[1];
+
+            if (userInput != Vector3.zero) timePasted += Time.fixedDeltaTime;
+            else timePasted = 0.0f;
+            __M_RotateHip(timePasted);
+            __M_RotateShoulder(timePasted);
+
+            Move(userInput);
+
+            if (jumpInput > 0) Jump();
         }
 
         #endregion
@@ -134,26 +156,6 @@ namespace EE.Prototype.PC
             m_shoulder.rotation = Quaternion.Euler(0, yRotation, 0);
         }
 
-        private void _M_FaceMovingDirection()
-        {
-            Vector3 direction = m_rigidBody.velocity.normalized;
-            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            Quaternion targetRotation = Quaternion.Euler(0, angle, 0);
-            m_rotateMe.rotation = Quaternion.Slerp(m_rotateMe.rotation, targetRotation, 0.1f);
-        }
-
         #endregion
-
-        public void Notify(params object[] data)
-        {
-            var userInput = (Vector3)data[0];
-            var jumpInput = (float)data[1];
-
-            Move(userInput);
-
-            if (userInput != Vector3.zero) _M_FaceMovingDirection();
-
-            if (jumpInput > 0) Jump();
-        }
     }
 }

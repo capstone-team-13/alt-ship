@@ -11,4 +11,24 @@ public class ShipCommand : Command
             RotationSign = rotationSign;
         }
     }
+
+    public class HealthUpdate : ShipCommand
+    {
+        public int CurrentHealth;
+
+        public HealthUpdate(int currentHealth)
+        {
+            CurrentHealth = currentHealth;
+        }
+    }
+
+    public class Damage : ShipCommand
+    {
+        public int Value;
+
+        public Damage(int value)
+        {
+            Value = value;
+        }
+    }
 }
