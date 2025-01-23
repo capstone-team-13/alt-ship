@@ -86,6 +86,7 @@ public class DeviceRegister : MonoBehaviour
 
             __M_AssignPlayerName(player, id);
             __M_AssignPlayerDevice(player, id);
+            __M_AssignPlayerModel(player, id);
             __M_AssignToPlayerArray(player, id);
 
             spawnPointId = __M_GetNextSpawnPointId(spawnPointId);
@@ -114,6 +115,13 @@ public class DeviceRegister : MonoBehaviour
         player.SwitchCurrentControlScheme(device);
 
         Debug.Log($"Device assigned to player {player.playerIndex}: {device.displayName}");
+    }
+
+    private static void __M_AssignPlayerModel(PlayerInput player, int id)
+    {
+        var playerController = player.GetComponent<PlayerController>();
+        if (playerController != null) playerController.SetUpPlayerModel(id);
+        else throw new Exception($"PlayerController component not found on GameObject: {player.name}");
     }
 
     private void __M_AssignToPlayerArray(PlayerInput player, int id)
