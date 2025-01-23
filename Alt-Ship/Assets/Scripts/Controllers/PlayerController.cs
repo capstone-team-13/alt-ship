@@ -56,18 +56,40 @@ public class PlayerController : Controller<PlayerModel>
         playerNum = (int)++m_playerCount;
     }
 
-    private void __M_SetUpPlayerModel()
+    public void SetUpPlayerModel(int id)
     {
-        var character = m_animator[playerNum - 1].gameObject;
+        if (id < 0 || id >= m_animator.Length)
+        {
+            Debug.LogError(
+                $"Index out of range: playerNum - 1 = {id}, m_animator.Length = {m_animator.Length}");
+            return;
+        }
 
-        m_animator[playerNum - 1].gameObject.SetActive(true);
+        var character = m_animator[id].gameObject;
+
+        m_animator[id].gameObject.SetActive(true);
+
         var anotherAnimator = playerNum % m_animator.Length;
+        if (anotherAnimator < 0 || anotherAnimator >= m_animator.Length)
+        {
+            Debug.LogError(
+                $"Index out of range: anotherAnimator = {anotherAnimator}, m_animator.Length = {m_animator.Length}");
+            return;
+        }
+
         m_animator[anotherAnimator].gameObject.SetActive(false);
 
         var body = character.transform.Find("Body")?.gameObject;
-        if (body == null) return;
+        if (body == null)
+        {
+            Debug.LogWarning($"Body not found for character: {character.name}");
+            return;
+        }
+
         playerFreeLook.LookAt = body.transform;
         playerFreeLook.Follow = body.transform;
+
+        playerNum = id + 1;
     }
 
     #endregion
@@ -107,8 +129,6 @@ public class PlayerController : Controller<PlayerModel>
         {
             parentRotation = GameObject.FindWithTag("Ship").transform;
         }
-
-        __M_SetUpPlayerModel();
     }
 
     [UsedImplicitly]
