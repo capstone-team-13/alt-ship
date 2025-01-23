@@ -8,8 +8,6 @@ bool Server::__M_InitializeENet() const
     int result = enet_initialize();
     atexit(enet_deinitialize);
 
-    // m_onReceivePacket.append([](uint8_t eventType, const uint8_t *data, uint32_t dataLength)
-    //                          { std::cout << std::boolalpha << "Got callback 1, s is " << eventType << " b is " << dataLength << std::endl; });
     return result == 0;
 }
 
@@ -46,7 +44,8 @@ void Server::__M_Send(ENetPeer *peer, const Message &message)
         ENET_PACKET_FLAG_UNSEQUENCED);
 
     enet_peer_send(peer, 0, packet);
-    enet_host_flush(peer->host);
+
+    // enet_host_flush(peer->host);
 }
 
 void Server::__M_ParsePacket(const ENetEvent &event) const
@@ -117,11 +116,14 @@ void Server::tick()
             break;
         }
 
+        printf("In Loop");
+
         switch (event.type)
         {
         case ENET_EVENT_TYPE_RECEIVE:
             __M_Log("Message received from client #", event.peer->incomingPeerID);
             __M_ParsePacket(event);
+            enet_packet_destroy(event.packet);
             break;
         case ENET_EVENT_TYPE_CONNECT:
             __M_Log("Client #", event.peer->incomingPeerID, " connected to the server.");

@@ -1,6 +1,7 @@
 using ENet;
 using JetBrains.Annotations;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -27,10 +28,8 @@ namespace EE.QC
         #region Editor API
 
         [SerializeField] private Transform m_body;
-        [SerializeField] private Transform m_hipJoint;
-        [SerializeField] private Transform m_upperJoint;
-        [SerializeField] private Transform m_lowerJoint;
-        [SerializeField] private Transform m_endEffector;
+        [SerializeField] private LegReference[] m_legs;
+        [SerializeField] private Transform[] m_endEffectors;
 
         #endregion
 
@@ -41,6 +40,11 @@ namespace EE.QC
         {
             __M_InitializeENet();
             __M_CreateBufferReader();
+
+            for (var i = 0; i < 4; i++)
+            {
+                m_frames.Add(new LegFrame());
+            }
         }
 
         [UsedImplicitly]
@@ -50,29 +54,16 @@ namespace EE.QC
             if (Input.GetKeyDown(keyCode))
             {
                 Logger.Log($"{keyCode} pressed.");
-                var packet = new Packet();
-                var data = new[] { (byte)EventType.ADD_FORCE };
-                packet.Create(data, data.Length, PacketFlags.Unsequenced);
-                m_server.Send(0, ref packet);
+                // var packet = new Packet();
+                // var data = new[] { (byte)EventType.ADD_FORCE };
+                // packet.Create(data, data.Length, PacketFlags.Unsequenced);
+                // m_server.Send(0, ref packet);
             }
 
-            float lerpSpeed = 5.0f * Time.deltaTime;
-
-            m_hipJoint.transform.position =
-                Vector3.Lerp(m_hipJoint.transform.position, m_state.positions[0], lerpSpeed);
-            m_upperJoint.transform.position =
-                Vector3.Lerp(m_upperJoint.transform.position, m_state.positions[1], lerpSpeed);
-            m_lowerJoint.transform.position =
-                Vector3.Lerp(m_lowerJoint.transform.position, m_state.positions[2], lerpSpeed);
-            // m_endEffector.transform.position =
-            //     Vector3.Lerp(m_endEffector.transform.position, desiredPositions[3], lerpSpeed);
-
-            m_hipJoint.transform.rotation =
-                Quaternion.Slerp(m_hipJoint.transform.rotation, m_state.rotations[0], lerpSpeed);
-            m_upperJoint.transform.rotation =
-                Quaternion.Slerp(m_upperJoint.transform.rotation, m_state.rotations[1], lerpSpeed);
-            m_lowerJoint.transform.rotation =
-                Quaternion.Slerp(m_lowerJoint.transform.rotation, m_state.rotations[2], lerpSpeed);
+            for (var i = 0; i < m_legs.Length; i++)
+            {
+                m_legs[i].Tick(m_frames[i]);
+            }
         }
 
         [UsedImplicitly]
@@ -104,7 +95,7 @@ namespace EE.QC
         private MemoryStream m_readStream;
         private BinaryReader m_reader;
 
-        private LegFrame m_state = new();
+        private List<LegFrame> m_frames = new(4);
 
         private void __M_InitializeENet()
         {
@@ -142,7 +133,7 @@ namespace EE.QC
             address.Port = PORT;
 
             m_server = m_client.Connect(address);
-            m_server.Timeout(5000, 2000, 5000);
+            m_server.Timeout(5000, 10000, 30000);
         }
 
         private void __M_CreateBufferReader()
@@ -156,7 +147,8 @@ namespace EE.QC
         {
             try
             {
-                var noImmediateEvent = m_client.CheckEvents(out var netEvent) <= 0;
+                int eventSize = m_client.CheckEvents(out var netEvent);
+                var noImmediateEvent = eventSize <= 0;
                 if (noImmediateEvent)
                 {
                     var noEventAfterWait = m_client.Service(1, out netEvent) <= 0;
@@ -210,7 +202,7 @@ namespace EE.QC
 
             netEvent.Packet.CopyTo(m_buffer);
             var packetType = (EventType)m_reader.ReadByte();
-            
+
             switch (packetType)
             {
                 case EventType.CONNECTION_SUCCEED:
@@ -219,17 +211,29 @@ namespace EE.QC
                     Logger.Log($"Connection Succeed: {response}");
                     break;
 
-                case EventType.POSITION_UPDATE:
+                // if (m_reader.BaseStream.Length - m_reader.BaseStream.Position >= 14)
+                case EventType.FL_UPDATE:
+                    m_frames[0].Update(m_reader);
+                    break;
 
-                    Debug.Log(m_reader.BaseStream.Length - m_reader.BaseStream.Position);
+                case EventType.BL_UPDATE:
+                    m_frames[1].Update(m_reader);
+                    break;
 
-                    //m_body.position = new Vector3(m_reader.ReadSingle(), m_reader.ReadSingle(), m_reader.ReadSingle());
-                    //m_body.rotation = new Rotation(m_reader.ReadSingle(), m_reader.ReadSingle(), m_reader.ReadSingle(),
-                    //    m_reader.ReadSingle());
+                case EventType.BR_UPDATE:
+                    m_frames[2].Update(m_reader);
+                    break;
 
-                    m_state.Update(m_reader);
+                case EventType.FR_UPDATE:
+                    m_frames[3].Update(m_reader);
+                    break;
 
-                    // if (m_reader.BaseStream.Length - m_reader.BaseStream.Position >= 14)
+                case EventType.END_EFFECTOR_UPDATE:
+                    foreach (var endEffector in m_endEffectors)
+                    {
+                        endEffector.position = new Vector3(m_reader.ReadSingle(),
+                            m_reader.ReadSingle(), m_reader.ReadSingle());
+                    }
 
                     break;
 

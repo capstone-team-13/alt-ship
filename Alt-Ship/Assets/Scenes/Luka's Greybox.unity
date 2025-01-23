@@ -41500,6 +41500,56 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1731135847}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1734404446
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1734404447}
+  - component: {fileID: 1734404448}
+  m_Layer: 0
+  m_Name: Device Register
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &1734404447
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734404446}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1734404448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734404446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18d0f127c64f3f4c81eae749110f617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_playerPrefab: {fileID: 8527858545994635388, guid: dffb35516ad9a6a4689dffc94d8aff8d,
+    type: 3}
+  m_spawnPoints:
+  - {fileID: 457677774}
+  - {fileID: 360884734}
+  m_cameraController: {fileID: 705831974}
 --- !u!1 &1735026714
 GameObject:
   m_ObjectHideFlags: 0
@@ -52326,7 +52376,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_interactionRadius: 4
+  m_interactionRadius: 2
   m_playerLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -52343,8 +52393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_model: {fileID: 2098200704}
-  cannonBall: {fileID: 5724602821431987991, guid: c015624d256ad854f8e4d56727231e01,
-    type: 3}
+  cannonBall: {fileID: 0}
 --- !u!114 &2098200704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52357,8 +52406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace643d03db070048823581bc97d4d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Projectile: {fileID: 5724602821431987991, guid: c015624d256ad854f8e4d56727231e01,
-    type: 3}
+  Projectile: {fileID: 1036309884}
   ShootAt: {fileID: 2137558303}
   InitialForce: 75
 --- !u!65 &2098200705
@@ -53892,7 +53940,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_interactionRadius: 4
+  m_interactionRadius: 2
   m_playerLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -53909,8 +53957,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_model: {fileID: 2143088029}
-  cannonBall: {fileID: 5724602821431987991, guid: c015624d256ad854f8e4d56727231e01,
-    type: 3}
+  cannonBall: {fileID: 0}
 --- !u!114 &2143088029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53923,8 +53970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace643d03db070048823581bc97d4d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Projectile: {fileID: 5724602821431987991, guid: c015624d256ad854f8e4d56727231e01,
-    type: 3}
+  Projectile: {fileID: 1036309884}
   ShootAt: {fileID: 1636995088}
   InitialForce: 75
 --- !u!65 &2143088030
@@ -53967,3 +54013,4 @@ SceneRoots:
   - {fileID: 1387159792}
   - {fileID: 1430612256}
   - {fileID: 1907646821}
+  - {fileID: 1734404447}

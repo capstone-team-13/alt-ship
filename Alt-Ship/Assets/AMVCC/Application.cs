@@ -34,15 +34,8 @@ namespace EE.AMVCC
             get
             {
                 if (m_instance != null) return m_instance;
-
                 m_instance = FindObjectOfType<Application>();
-
-                if (m_instance != null) return m_instance;
-
-                var singletonObject = new GameObject("Application");
-                m_instance = singletonObject.AddComponent<Application>();
-                DontDestroyOnLoad(singletonObject);
-                return m_instance;
+                return m_instance != null ? m_instance : null;
             }
         }
 

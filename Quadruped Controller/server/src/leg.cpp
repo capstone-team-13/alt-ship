@@ -22,14 +22,16 @@ void Leg::init(const dWorldID &_world, const dSpaceID &_space, const Vector3f &_
     space = _space;
     offset = _offset;
 
+    constexpr float density = 1.0;
+
     // Hip Body
     Vector3f dimension{0.1f, 0.1f, 0.1f};
     Vector3f position = {dimension[0] / 2.0f, 0.0f, 0.0f};
     position += offset;
 
     __M_CreateBox(hipJointBody, hipJointGeom, dimension);
-    __M_ConfigBox(hipJointBody, position, 1.0f, dimension);
-    // hipHingeJoint = __M_CreateHingeJoint(hipJointBody, nullptr, anchor, {1, 0, 0});
+    __M_ConfigBox(hipJointBody, position, density, dimension);
+    hipHingeJoint = __M_CreateHingeJoint(hipJointBody, nullptr, {length[1], 0, length[0]}, {1, 0, 0});
 
     // Upper Body
     dimension = {2.0f, 0.5f, 0.5f};
@@ -39,7 +41,7 @@ void Leg::init(const dWorldID &_world, const dSpaceID &_space, const Vector3f &_
     anchor += offset;
 
     __M_CreateBox(upperJointBody, upperJointGeom, dimension);
-    __M_ConfigBox(upperJointBody, position, 1, dimension);
+    __M_ConfigBox(upperJointBody, position, density, dimension);
     upperHingeJoint = __M_CreateHingeJoint(upperJointBody, &hipJointBody, anchor, {0, 0, 1});
 
     // Lower Body
@@ -50,7 +52,7 @@ void Leg::init(const dWorldID &_world, const dSpaceID &_space, const Vector3f &_
     anchor += offset;
 
     __M_CreateBox(lowerJointBody, lowerJointGeom, dimension);
-    __M_ConfigBox(lowerJointBody, position, 1, dimension);
+    __M_ConfigBox(lowerJointBody, position, density, dimension);
     lowerHingeJoint = __M_CreateHingeJoint(lowerJointBody, &upperJointBody, anchor, {0, 0, 1});
 }
 
@@ -66,15 +68,17 @@ void Leg::simulate(float timeStep)
     __M_UpdateTheta();
 
     auto endEffectorPosition = __M_CalculateForwardKinematic();
-    endEffectorPosition += offset;
     auto endEffectorVelocity = (endEffectorPosition - previousEndEffectorPosition) / timeStep;
 
     auto jacobianTransport = __M_MakeJacobianTransport();
 
     // TODO: Gait Offset
+    // desiredPosition = __M__CalculateDesiredPosition();
+    // desiredPosition[1] += -4;
+    // desiredPosition += offset;
+
     desiredPosition = __M__CalculateDesiredPosition();
     desiredPosition[1] += -4;
-    desiredPosition += offset;
 
     auto virtualForce = __M__CalculateVirtualForce(endEffectorPosition, endEffectorVelocity);
     Vector3f torque = jacobianTransport * Vector3f(virtualForce[0], virtualForce[1], virtualForce[2]);
@@ -115,7 +119,6 @@ void Leg::__M_CreateBox(dBodyID &body, dGeomID &geom, const Vector3f &dimension)
 
 void Leg::__M_ConfigBox(dBodyID &body, const Vector3f &position, const dReal density, const Vector3f &dimension) const
 {
-
     assert(body && "Error: Invalid body.");
 
     assert(dimension[0] > 0 && dimension[1] > 0 && dimension[2] > 0 && "Error: Invalid box dimensions.");
@@ -139,6 +142,11 @@ dJointID Leg::__M_CreateHingeJoint(dBodyID &from, dBodyID *to, const Vector3f &a
     dJointAttach(joint, from, to ? *to : nullptr);
     dJointSetHingeAnchor(joint, anchor[0], anchor[1], anchor[2]);
     dJointSetHingeAxis(joint, axis[0], axis[1], axis[2]);
+
+    dJointSetHingeParam(joint, dParamVel, 50.0f);
+    dJointSetHingeParam(joint, dParamFMax, 100.0f);
+    dJointSetHingeParam(joint, dParamLoStop, -3.14);
+    dJointSetHingeParam(joint, dParamHiStop, 3.14);
 
     return joint;
 }
@@ -236,6 +244,9 @@ void Leg::__M_UpdateState()
     const dReal *hipJointPosition = dBodyGetPosition(hipJointBody);
     const dReal *hipJointQuaternion = dBodyGetQuaternion(hipJointBody);
 
+    // dVector3 endEffectorPosition{previousEndEffectorPosition[0], previousEndEffectorPosition[1], previousEndEffectorPosition[2]};
     state.update({hipJointPosition, upperJointPosition, lowerJointPosition,
                   hipJointQuaternion, upperJointQuaternion, lowerJointQuaternion});
+
+    state.endEffector = previousEndEffectorPosition;
 }
