@@ -3,7 +3,6 @@ using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor.Profiling;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 

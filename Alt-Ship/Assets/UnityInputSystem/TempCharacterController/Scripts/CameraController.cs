@@ -1,6 +1,7 @@
 using Cinemachine;
 using EE.AMVCC;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Application = EE.AMVCC.Application;
@@ -28,18 +29,24 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private DirectionalInteraction m_interaction;
 
+    public int PlayerCount
+    {
+        get => m_playerCount;
+        set => m_playerCount = value;
+    }
+
     private void OnEnable()
     {
-        playerInputManager.onPlayerJoined += AddPlayer;
-        playerInputManager.onPlayerJoined += SpawnLocation;
+        // playerInputManager.onPlayerJoined += AddPlayer;
+        // playerInputManager.onPlayerJoined += SpawnLocation;
         playerInputManager.onPlayerLeft += __M_CleanUp;
         m_playerCount += 1;
     }
 
     private void OnDisable()
     {
-        playerInputManager.onPlayerJoined -= AddPlayer;
-        playerInputManager.onPlayerJoined -= SpawnLocation;
+        // playerInputManager.onPlayerJoined -= AddPlayer;
+        // playerInputManager.onPlayerJoined -= SpawnLocation;
         playerInputManager.onPlayerLeft -= __M_CleanUp;
     }
 
@@ -59,9 +66,23 @@ public class CameraController : MonoBehaviour
 
         playerParent.GetComponentInChildren<CameraInput>().horizontal = inputMap.FindAction("Camera");
 
-        Debug.Log($"{player.gameObject.name} joined with device {player.GetDevice<InputDevice>().deviceId}");
 
-        m_interaction.RegisterPlayer(player.gameObject, player.GetDevice<InputDevice>());
+        var devices = player.devices;
+
+        if (devices.Count == 0)
+        {
+            Debug.LogWarning($"{player.gameObject.name} joined, but no input devices were found.");
+        }
+        else
+        {
+            var deviceInfo = string.Join(", ",
+                devices.Select(device => $"[Name: {device.displayName}, ID: {device.deviceId}]"));
+            Debug.Log($"{player.gameObject.name} joined with the following devices: {deviceInfo}");
+        }
+
+        InputDevice inputDevice = devices.Count > 0 ? devices[0] : null;
+
+        m_interaction.RegisterPlayer(player.gameObject, inputDevice);
         Application.Instance.RegisterController(player.GetComponent<IController>());
     }
 

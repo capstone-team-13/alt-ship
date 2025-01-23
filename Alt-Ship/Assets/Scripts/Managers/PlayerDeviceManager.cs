@@ -1,6 +1,8 @@
+using System.Collections;
 using JetBrains.Annotations;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
@@ -10,6 +12,12 @@ public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
     [SerializeField] private InputActionAsset m_inputActionAsset;
     [SerializeField] private string m_joinActionName = "Join";
     [SerializeField] private string m_exitActionName = "Exit";
+
+    [Space(8)] public UnityEvent<float> OnAllPlayerJoined;
+    [Space(8)] public UnityEvent OnDelayedPlayerEvent;
+    [Space(8)] public UnityEvent OnInterruptedPlayerEvent;
+
+    [Space(8)] [SerializeField] private float m_delayBeforeAllPlayerJoinedEvent = 5.0f;
 
     #endregion
 
@@ -102,10 +110,19 @@ public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
         if (index == -1) return;
 
         m_connectedDevices[index] = null;
+        --m_joinedPlayerCount;
+
+        if (m_allPlayerJoinedCoroutine != null)
+        {
+            StopCoroutine(m_allPlayerJoinedCoroutine);
+            OnInterruptedPlayerEvent?.Invoke();
+        }
+
+        m_allPlayerJoinedCoroutine = null;
 
         LevelManager.PlayerEventBus.Raise(new PlayerExitedEvent(index, device), null, gameObject);
 
-        Debug.Log($"{device.name} Left! (ID: {index})");
+        Debug.Log($"{device.displayName} Left! (ID: {index})");
     }
 
     private void OnJoin(InputAction.CallbackContext context)
@@ -122,10 +139,14 @@ public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
         }
 
         m_connectedDevices[index] = device;
+        ++m_joinedPlayerCount;
 
         LevelManager.PlayerEventBus.Raise(new PlayerJoinedEvent(index, device), null, gameObject);
 
-        Debug.Log($"{device.name} Joined! (ID: {index})");
+        Debug.Log($"{device.displayName} Joined! (ID: {index})");
+
+        if (m_joinedPlayerCount == MAX_PLAYER_COUNT)
+            m_allPlayerJoinedCoroutine = StartCoroutine(__M_StartInvokeAllPlayerJoinedEvent());
     }
 
     #endregion
@@ -134,6 +155,8 @@ public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
 
     private const int MAX_PLAYER_COUNT = 2;
     private List<InputDevice> m_connectedDevices = new(MAX_PLAYER_COUNT);
+    private int m_joinedPlayerCount = 0;
+    private Coroutine m_allPlayerJoinedCoroutine;
 
     private (InputAction joinAction, InputAction exitAction) __M_FindActions()
     {
@@ -151,6 +174,13 @@ public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
         }
 
         return (joinAction, exitAction);
+    }
+
+    private IEnumerator __M_StartInvokeAllPlayerJoinedEvent()
+    {
+        OnAllPlayerJoined?.Invoke(m_delayBeforeAllPlayerJoinedEvent);
+        yield return new WaitForSecondsRealtime(m_delayBeforeAllPlayerJoinedEvent);
+        OnDelayedPlayerEvent?.Invoke();
     }
 
     #endregion

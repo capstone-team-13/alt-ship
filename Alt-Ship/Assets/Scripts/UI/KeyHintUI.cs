@@ -21,6 +21,8 @@ public class KeyHintUI : MonoBehaviour
     [SerializeField] private Sprite[] m_sprites;
     [SerializeField] private float m_spriteSwitchingDuration = 1.0f;
 
+    private Tween m_buttonPressedTween;
+
     #endregion
 
     #region API
@@ -35,6 +37,26 @@ public class KeyHintUI : MonoBehaviour
             __M_ShowSpritesSequentially();
         }
         else m_spriteShowingTween?.Kill();
+    }
+
+    public void PlayPressButtonEffect()
+    {
+        if (m_iconImage == null) return;
+
+        m_buttonPressedTween?.Kill();
+
+        m_buttonPressedTween = m_iconImage.transform.DOScale(0.8f, 0.08f)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                m_iconImage.transform.DOScale(1.1f, 0.12f)
+                    .SetEase(Ease.OutBounce)
+                    .OnComplete(() =>
+                    {
+                        m_iconImage.transform.DOScale(1f, 0.1f)
+                            .SetEase(Ease.OutQuad);
+                    });
+            });
     }
 
     #endregion

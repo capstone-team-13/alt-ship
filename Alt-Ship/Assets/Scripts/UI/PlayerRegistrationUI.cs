@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerRegistrationUI : MonoBehaviour
 {
@@ -29,10 +30,10 @@ public class PlayerRegistrationUI : MonoBehaviour
 
     private void OnPlayerJoined(ref PlayerJoinedEvent eventData, GameObject target, GameObject source)
     {
-        var device = eventData.Device;
+        InputDevice device = eventData.Device;
         if (eventData.Index != m_index) return;
 
-        if (device.name.Contains("Xbox"))
+        if (device.displayName.Contains("Xbox"))
         {
             m_joinKeyHint.SetSpriteType(KeyHintUI.SpriteType.XBOX);
             m_exitKeyHint.SetSpriteType(KeyHintUI.SpriteType.XBOX);
@@ -43,8 +44,10 @@ public class PlayerRegistrationUI : MonoBehaviour
             m_exitKeyHint.SetSpriteType(KeyHintUI.SpriteType.PLAYSTATION);
         }
 
-        m_readyIndicator.SetColor(m_joinedColor);
-        m_readyIndicator.SetText("Ready!");
+        m_joinKeyHint.PlayPressButtonEffect();
+
+        m_readyIndicator.SetColor(m_joinedColor, 1.0f);
+        m_readyIndicator.SetReadyImageActive(true);
     }
 
     private void OnPlayerExited(ref PlayerExitedEvent eventData, GameObject target, GameObject source)
@@ -54,7 +57,9 @@ public class PlayerRegistrationUI : MonoBehaviour
         m_joinKeyHint.SetSpriteType(KeyHintUI.SpriteType.UNKNOWN);
         m_exitKeyHint.SetSpriteType(KeyHintUI.SpriteType.UNKNOWN);
 
-        m_readyIndicator.SetColor(m_exitedColor);
-        m_readyIndicator.SetText("");
+        m_exitKeyHint.PlayPressButtonEffect();
+
+        m_readyIndicator.SetColor(m_exitedColor, 1.0f);
+        m_readyIndicator.SetReadyImageActive(false);
     }
 }
