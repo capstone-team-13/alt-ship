@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 
 public class DeviceRegister : MonoBehaviour
 {
@@ -112,9 +113,23 @@ public class DeviceRegister : MonoBehaviour
     private void __M_AssignPlayerDevice(PlayerInput player, int id)
     {
         InputDevice device = PlayerDeviceManager.Instance.GetDeviceByPlayerId(id);
-        player.SwitchCurrentControlScheme(device);
-
+    
+        if (device == null)
+        {
+            Debug.LogWarning($"No device found for player {id}.");
+            return;
+        }
+        
+        player.user.UnpairDevices();
+        var devicesToAssign = new List<InputDevice> { device };
+        if (device is Keyboard && Mouse.current != null) devicesToAssign.Add(Mouse.current);
+        foreach (InputDevice dev in devicesToAssign) InputUser.PerformPairingWithDevice(dev, player.user);
+        
         Debug.Log($"Device assigned to player {player.playerIndex}: {device.displayName}");
+
+        player.SwitchCurrentControlScheme(devicesToAssign.ToArray());
+        
+        Debug.Log($"Player {player.playerIndex} devices after assignment: {string.Join(", ", player.devices)}");
     }
 
     private static void __M_AssignPlayerModel(PlayerInput player, int id)
@@ -147,6 +162,7 @@ public class DeviceRegister : MonoBehaviour
         {
             Debug.Log($"Player Name {player.name}");
             m_cameraController.AddPlayer(player);
+            m_cameraController.SpawnLocation(player);
         }
 
         m_cameraController.PlayerCount = m_players.Length;

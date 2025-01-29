@@ -66,7 +66,6 @@ public class CameraController : MonoBehaviour
 
         playerParent.GetComponentInChildren<CameraInput>().horizontal = inputMap.FindAction("Camera");
 
-
         var devices = player.devices;
 
         if (devices.Count == 0)
@@ -89,7 +88,8 @@ public class CameraController : MonoBehaviour
     private void __M_CleanUp(PlayerInput player)
     {
         --m_playerCount;
-        Application.Instance.RegisterController(player.GetComponent<IController>());
+
+        if (Application.Instance != null) Application.Instance.UnregisterController(player.GetComponent<IController>());
     }
 
     public void SpawnLocation(PlayerInput player)
