@@ -5,10 +5,22 @@ namespace EE.Prototype.PC
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private BodyController m_body;
-        [SerializeField] private LegManager m_leg;
+        /// <summary>
+        /// Animator controller for player
+        /// </summary>
+        [Header("References")] [SerializeField]
+        private Animator m_animator = null;
 
-        private INotifiable[] m_pieces;
+        [SerializeField] private Transform m_position;
+        [SerializeField] private Transform m_rotation;
+
+        [UsedImplicitly]
+        private void LateUpdate()
+        {
+            Vector3 currentInput = UserInput;
+            m_animator.SetFloat("inputX", currentInput.x);
+            m_animator.SetFloat("inputZ", currentInput.z);
+        }
 
         private Vector3 m_userInput;
 
@@ -26,26 +38,12 @@ namespace EE.Prototype.PC
             set => m_jumpInput = value;
         }
 
-        [UsedImplicitly]
-        private void Start()
+        public Transform Position => m_position;
+
+        public Transform Rotation
         {
-            m_pieces = GetComponentsInChildren<INotifiable>();
-        }
-
-        [UsedImplicitly]
-        private void FixedUpdate()
-        {
-            var userInput = UserInput;
-
-            var jumpInput = JumpInput;
-
-            foreach (INotifiable piece in m_pieces)
-                piece.Notify(userInput, jumpInput);
-        }
-
-        public void SetTargetPositionXZ(Vector3 position)
-        {
-            m_body.SetTargetPositionXZ(position);
+            get => m_rotation;
+            set => m_rotation = value;
         }
     }
 }

@@ -43,6 +43,9 @@ public class DeviceRegister : MonoBehaviour
     [UsedImplicitly]
     private void Start()
     {
+        int playerCount = PlayerDeviceManager.Instance.MaxPlayerCount;
+        m_players = new PlayerInput[playerCount];
+
         __M_SpawnPlayers();
 
         if (PlayerDeviceManager.Instance != null)
@@ -74,15 +77,16 @@ public class DeviceRegister : MonoBehaviour
 
     #region Internal
 
-    private const uint PLAYER_COUNT = 2;
-    private PlayerInput[] m_players = new PlayerInput[PLAYER_COUNT];
+    private PlayerInput[] m_players;
 
     private void __M_SpawnPlayers()
     {
-        int spawnPointId = 0;
-        for (int id = 0; id < PLAYER_COUNT; id++)
+        var playerCount = PlayerDeviceManager.Instance.MaxPlayerCount;
+        var spawnPointId = 0;
+
+        for (var id = 0; id < playerCount; id++)
         {
-            PlayerInput player = __M_CreatePlayer(id, spawnPointId);
+            var player = __M_CreatePlayer(id, spawnPointId);
             if (player == null) continue;
 
             __M_AssignPlayerName(player, id);
@@ -96,7 +100,7 @@ public class DeviceRegister : MonoBehaviour
 
     private PlayerInput __M_CreatePlayer(int id, int spawnPointId)
     {
-        PlayerInput player = Instantiate(m_playerPrefab, m_spawnPoints[spawnPointId].position, Quaternion.identity);
+        var player = Instantiate(m_playerPrefab, m_spawnPoints[spawnPointId].position, Quaternion.identity);
         if (player == null)
         {
             Debug.LogError($"Failed to instantiate player prefab for player #{id + 1}.");
@@ -113,22 +117,22 @@ public class DeviceRegister : MonoBehaviour
     private void __M_AssignPlayerDevice(PlayerInput player, int id)
     {
         InputDevice device = PlayerDeviceManager.Instance.GetDeviceByPlayerId(id);
-    
+
         if (device == null)
         {
             Debug.LogWarning($"No device found for player {id}.");
             return;
         }
-        
+
         player.user.UnpairDevices();
         var devicesToAssign = new List<InputDevice> { device };
         if (device is Keyboard && Mouse.current != null) devicesToAssign.Add(Mouse.current);
         foreach (InputDevice dev in devicesToAssign) InputUser.PerformPairingWithDevice(dev, player.user);
-        
+
         Debug.Log($"Device assigned to player {player.playerIndex}: {device.displayName}");
 
         player.SwitchCurrentControlScheme(devicesToAssign.ToArray());
-        
+
         Debug.Log($"Player {player.playerIndex} devices after assignment: {string.Join(", ", player.devices)}");
     }
 
@@ -137,6 +141,8 @@ public class DeviceRegister : MonoBehaviour
         var playerController = player.GetComponent<PlayerController>();
         if (playerController != null) playerController.SetUpPlayerModel(id);
         else throw new Exception($"PlayerController component not found on GameObject: {player.name}");
+        Debug.Log($"Player {id} model set up.");
+
     }
 
     private void __M_AssignToPlayerArray(PlayerInput player, int id)
@@ -160,7 +166,6 @@ public class DeviceRegister : MonoBehaviour
     {
         foreach (PlayerInput player in m_players)
         {
-            Debug.Log($"Player Name {player.name}");
             m_cameraController.AddPlayer(player);
             m_cameraController.SpawnLocation(player);
         }

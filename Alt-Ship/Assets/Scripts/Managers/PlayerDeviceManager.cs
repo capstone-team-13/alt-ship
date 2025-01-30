@@ -13,6 +13,7 @@ public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
     [SerializeField] private string m_joinActionName = "Join";
     [SerializeField] private string m_exitActionName = "Exit";
 
+    [SerializeField] private int m_maxPlayerCount = 2;
     [Space(8)] public UnityEvent<float> OnAllPlayerJoined;
     [Space(8)] public UnityEvent OnDelayedPlayerEvent;
     [Space(8)] public UnityEvent OnInterruptedPlayerEvent;
@@ -27,7 +28,8 @@ public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
     protected override void Awake()
     {
         base.Awake();
-        for (int i = 0; i < MAX_PLAYER_COUNT; i++) m_connectedDevices.Add(null);
+        m_connectedDevices = new List<InputDevice>(m_maxPlayerCount);
+        for (int i = 0; i < m_maxPlayerCount; i++) m_connectedDevices.Add(null);
     }
 
     [UsedImplicitly]
@@ -46,9 +48,11 @@ public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
 
     #region API
 
+    public int MaxPlayerCount => m_maxPlayerCount;
+
     public InputDevice GetDeviceByPlayerId(int playerId)
     {
-        return playerId is < 0 or >= MAX_PLAYER_COUNT ? null : m_connectedDevices[playerId];
+        return playerId < 0 || playerId > m_maxPlayerCount ? null : m_connectedDevices[playerId];
     }
 
     /// <summary>
@@ -145,7 +149,7 @@ public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
 
         Debug.Log($"{device.displayName} Joined! (ID: {index})");
 
-        if (m_joinedPlayerCount == MAX_PLAYER_COUNT)
+        if (m_joinedPlayerCount == m_maxPlayerCount)
             m_allPlayerJoinedCoroutine = StartCoroutine(__M_StartInvokeAllPlayerJoinedEvent());
     }
 
@@ -153,9 +157,8 @@ public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
 
     #region Internal
 
-    private const int MAX_PLAYER_COUNT = 2;
-    private List<InputDevice> m_connectedDevices = new(MAX_PLAYER_COUNT);
-    private int m_joinedPlayerCount = 0;
+    private List<InputDevice> m_connectedDevices;
+    private int m_joinedPlayerCount;
     private Coroutine m_allPlayerJoinedCoroutine;
 
     private (InputAction joinAction, InputAction exitAction) __M_FindActions()
