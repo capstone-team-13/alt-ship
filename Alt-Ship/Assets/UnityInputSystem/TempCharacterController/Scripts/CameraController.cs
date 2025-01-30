@@ -108,9 +108,6 @@ public class CameraController : MonoBehaviour
                 player.transform.rotation = shipModel.transform.rotation;
             }
         }
-        else
-        {
-        }
 
         if (shipModel != null)
         {

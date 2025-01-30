@@ -16,7 +16,7 @@ public class PlayerController : Controller<PlayerModel>
 
     [SerializeField] private Camera m_camera;
 
-    [SerializeField] private EE.Prototype.PC.PlayerController[] m_animator;
+    [SerializeField] private EE.Prototype.PC.PlayerController[] m_controllers;
 
     // TODO: Remove
     public Material playerOneMat;
@@ -46,48 +46,33 @@ public class PlayerController : Controller<PlayerModel>
         }
     }
 
-    public void SetTargetPositionXZ(Vector3 position)
-    {
-        m_animator[playerNum - 1].SetTargetPositionXZ(position);
-    }
-
-    public void UpdatePlayerId()
-    {
-        playerNum = (int)++m_playerCount;
-    }
-
     public void SetUpPlayerModel(int id)
     {
-        if (id < 0 || id >= m_animator.Length)
+        if (id < 0 || id >= m_controllers.Length)
         {
             Debug.LogError(
-                $"Index out of range: playerNum - 1 = {id}, m_animator.Length = {m_animator.Length}");
+                $"Index out of range: playerNum - 1 = {id}, m_controllers.Length = {m_controllers.Length}");
             return;
         }
 
-        var character = m_animator[id].gameObject;
+        var character = m_controllers[id];
+        character.gameObject.SetActive(true);
 
-        m_animator[id].gameObject.SetActive(true);
-
-        var anotherAnimator = playerNum % m_animator.Length;
-        if (anotherAnimator < 0 || anotherAnimator >= m_animator.Length)
+        var anotherAnimator = playerNum % m_controllers.Length;
+        if (anotherAnimator != id)
         {
-            Debug.LogError(
-                $"Index out of range: anotherAnimator = {anotherAnimator}, m_animator.Length = {m_animator.Length}");
-            return;
+            if (anotherAnimator < 0 || anotherAnimator >= m_controllers.Length)
+            {
+                Debug.LogError(
+                    $"Index out of range: anotherAnimator = {anotherAnimator}, m_controllers.Length = {m_controllers.Length}");
+                return;
+            }
+
+            m_controllers[anotherAnimator].gameObject.SetActive(false);
         }
 
-        m_animator[anotherAnimator].gameObject.SetActive(false);
-
-        var body = character.transform.Find("Body")?.gameObject;
-        if (body == null)
-        {
-            Debug.LogWarning($"Body not found for character: {character.name}");
-            return;
-        }
-
-        playerFreeLook.LookAt = body.transform;
-        playerFreeLook.Follow = body.transform;
+        playerFreeLook.LookAt = character.Position;
+        playerFreeLook.Follow = character.Position;
 
         playerNum = id + 1;
     }
@@ -101,7 +86,7 @@ public class PlayerController : Controller<PlayerModel>
     {
         if (playerNum == 1)
         {
-            this.gameObject.name = "Player: " + playerNum;
+            gameObject.name = "Player: " + playerNum;
             playerFreeLook.gameObject.layer = 11;
             m_camera.cullingMask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", "Water", "UI",
                 "Detectable", "Goal", "Player1");
@@ -109,7 +94,7 @@ public class PlayerController : Controller<PlayerModel>
         }
         else if (playerNum == 2)
         {
-            this.gameObject.name = "Player: " + playerNum;
+            gameObject.name = "Player: " + playerNum;
             m_camera.cullingMask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", "Water", "UI",
                 "Detectable", "Goal", "Player2");
             playerFreeLook.gameObject.layer = 12;
@@ -135,7 +120,13 @@ public class PlayerController : Controller<PlayerModel>
     private void Update()
     {
         if (Model.Dead) return;
-        if (m_player.enabled) __M_Move();
+        // if (m_player.enabled) __M_Move();
+        if (m_player.enabled)
+        {
+            var movementInput = __M_GetPlayerInput();
+            m_controllers[playerNum - 1].UserInput = movementInput;
+            __M_Move();
+        }
     }
 
     [UsedImplicitly]
@@ -172,7 +163,7 @@ public class PlayerController : Controller<PlayerModel>
     private void __M_Move()
     {
         Vector3 movementInput = __M_GetPlayerInput();
-        m_animator[playerNum - 1].UserInput = movementInput;
+        m_controllers[playerNum - 1].UserInput = movementInput;
 
         Vector3 direction = m_camera.transform.TransformDirection(movementInput);
         direction.y = 0;
@@ -182,11 +173,18 @@ public class PlayerController : Controller<PlayerModel>
 
         __M_UpdateDirection(direction);
 
-        // Remove if players rotation matters
-        // transform.rotation = parentRotation.rotation;
+        direction.y = 0;
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            m_controllers[playerNum - 1].Rotation.rotation = Quaternion.Slerp(
+                m_controllers[playerNum - 1].Rotation.rotation,
+                targetRotation,
+                Time.deltaTime * 5f
+            );
+        }
 
         transform.Translate(Model.Velocity * Time.deltaTime);
-        m_animator[playerNum - 1].SetTargetPositionXZ(transform.position);
     }
 
     private void __M_UpdateDirection(Vector3 input)
