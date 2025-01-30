@@ -81,6 +81,13 @@ public class KeyHintUI : MonoBehaviour
         if (m_spriteType != SpriteType.UNKNOWN) __M_ShowSprites();
     }
 
+    [UsedImplicitly]
+    private void OnDestroy()
+    {
+        m_buttonPressedTween?.Kill();
+        m_spriteShowingTween?.Kill();
+    }
+
     #endregion
 
     #region Internal

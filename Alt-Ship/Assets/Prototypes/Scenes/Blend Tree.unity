@@ -132,6 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 713356671}
   - component: {fileID: 713356673}
+  - component: {fileID: 713356674}
   m_Layer: 0
   m_Name: Minothore
   m_TagString: Untagged
@@ -167,8 +168,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43d08b32ee695574fa4f4b2efc8536d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animator: {fileID: 1806338215}
+  m_speed: 14
+  m_movementThreshold: 0.01
+  m_speedUpTime: 0.2
+  m_speedDownTime: 0.1
+  m_allowPlayerRotation: 1
   m_rotationSpeed: 5
+  m_animator: {fileID: 1806338215}
+  m_rigidbody: {fileID: 713356674}
+  m_rotation: {fileID: 0}
+--- !u!54 &713356674
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713356670}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1398531328
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +241,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -373,7 +408,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 14f2fd452a461244e9818b1419aca9bf, type: 2}
+      objectReference: {fileID: 9100000, guid: 63c940e3503e8c64f95b5b45162db481, type: 2}
     - target: {fileID: 1625279565036330952, guid: 6cd167a5ea98e6f45b4f48b29778c32a,
         type: 3}
       propertyPath: m_ApplyRootMotion
@@ -406,6 +441,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1480236777}
   - component: {fileID: 1480236776}
+  - component: {fileID: 1480236778}
   m_Layer: 0
   m_Name: Girl
   m_TagString: Untagged
@@ -425,8 +461,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43d08b32ee695574fa4f4b2efc8536d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animator: {fileID: 1706356090}
+  m_speed: 14
+  m_movementThreshold: 0.01
+  m_speedUpTime: 0.2
+  m_speedDownTime: 0.1
+  m_allowPlayerRotation: 1
   m_rotationSpeed: 5
+  m_animator: {fileID: 1706356090}
+  m_rigidbody: {fileID: 1480236778}
+  m_rotation: {fileID: 0}
 --- !u!4 &1480236777
 Transform:
   m_ObjectHideFlags: 0
@@ -443,6 +486,33 @@ Transform:
   - {fileID: 1706356089}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1480236778
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1480236775}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &1706356088
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -455,7 +525,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 14f2fd452a461244e9818b1419aca9bf, type: 2}
+      objectReference: {fileID: 9100000, guid: 63c940e3503e8c64f95b5b45162db481, type: 2}
     - target: {fileID: 8117421425064995276, guid: c118cdd903f50104f89ced5b119ba585,
         type: 3}
       propertyPath: m_Name
@@ -555,7 +625,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 14f2fd452a461244e9818b1419aca9bf, type: 2}
+      objectReference: {fileID: 9100000, guid: 63c940e3503e8c64f95b5b45162db481, type: 2}
     - target: {fileID: 4714067703654684706, guid: f1e27babf37eb3d46974caa67cfbae7a,
         type: 3}
       propertyPath: m_Name
@@ -653,6 +723,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1982885254}
   - component: {fileID: 1982885252}
+  - component: {fileID: 1982885255}
   m_Layer: 0
   m_Name: Robot
   m_TagString: Untagged
@@ -672,8 +743,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43d08b32ee695574fa4f4b2efc8536d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animator: {fileID: 1411892908}
+  m_speed: 14
+  m_movementThreshold: 0.01
+  m_speedUpTime: 0.2
+  m_speedDownTime: 0.1
+  m_allowPlayerRotation: 1
   m_rotationSpeed: 5
+  m_animator: {fileID: 1411892908}
+  m_rigidbody: {fileID: 1982885255}
+  m_rotation: {fileID: 0}
 --- !u!4 &1982885254
 Transform:
   m_ObjectHideFlags: 0
@@ -690,6 +768,33 @@ Transform:
   - {fileID: 1411892907}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1982885255
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982885251}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2083458139
 GameObject:
   m_ObjectHideFlags: 0
