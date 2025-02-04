@@ -1,10 +1,11 @@
+using Boopoo.Telemetry;
+using Cinemachine;
 using EE.Interactions;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Application = EE.AMVCC.Application;
-using Cinemachine;
-using UnityEngine.Rendering;
+
 public class Rudder : MonoBehaviour
 {
     public InputActionAsset inputActions;
@@ -50,7 +51,6 @@ public class Rudder : MonoBehaviour
         {
             playerTransform.localPosition = recentPosition;
         }
-
     }
 
     private void steeringBoat(InputAction.CallbackContext context)
@@ -81,13 +81,16 @@ public class Rudder : MonoBehaviour
 
         var playerModel = interactor.GetComponent<PlayerModel>();
 
-        if (m_steering) __M_LockPlayer(playerModel);
+        if (m_steering)
+        {
+            __M_LockPlayer(playerModel);
+        }
         else
         {
             __M_UnLockPlayer(playerModel);
             m_interactable.__M_Reset();
+            TelemetryLogger.Log(this, "Rudder Used");
         }
-
     }
 
     // Exit is never running
@@ -109,7 +112,8 @@ public class Rudder : MonoBehaviour
         if (playerTransform == null)
         {
             playerTransform = player.transform;
-            recentPosition = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y, player.transform.localPosition.z);
+            recentPosition = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y,
+                player.transform.localPosition.z);
         }
 
         // Camera Start
@@ -187,6 +191,7 @@ public class Rudder : MonoBehaviour
                 materialTest.material = standard;
             }
         }
+
         lastPlayerCam = null;
         playerTransform = null;
         // Camera End
@@ -224,6 +229,4 @@ public class Rudder : MonoBehaviour
         playerInput = null;
         inputActions = null;
     }
-
-
 }

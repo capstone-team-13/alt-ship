@@ -35981,6 +35981,58 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1200434531}
   m_Mesh: {fileID: -7816651620332925852, guid: 61c0aced19d0c1c449336469fe9d3840, type: 3}
+--- !u!1 &1200662261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1200662262}
+  - component: {fileID: 1200662263}
+  m_Layer: 0
+  m_Name: Telemetry Region - Level #1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &1200662262
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200662261}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1200662263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200662261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a5fa563ff5679345830cf5ea81cf56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_regionName: Level #1
+  m_telemetrySetting: {fileID: 11400000, guid: c5a24b9df3b54b0429f9e17818e40793, type: 2}
+  OnConnectionEstablished:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisconnected:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1201244252
 GameObject:
   m_ObjectHideFlags: 0
@@ -54813,7 +54865,7 @@ MonoBehaviour:
   pTwoSail: {fileID: 1705410001}
   standard: {fileID: 2100000, guid: 26dea264725e81c458982a697f9bf469, type: 2}
   transparent: {fileID: 2100000, guid: fa416b33ecc71134da332cf389ba04aa, type: 2}
-  m_interactable: {fileID: 0}
+  m_interactable: {fileID: 1799744430}
 --- !u!54 &1799744432
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -69249,6 +69301,7 @@ SceneRoots:
   - {fileID: 1227351386}
   - {fileID: 1290189434}
   - {fileID: 705831976}
+  - {fileID: 1200662262}
   - {fileID: 1036309883}
   - {fileID: 194497427}
   - {fileID: 456988915}

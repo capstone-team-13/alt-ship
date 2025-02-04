@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using Application = EE.AMVCC.Application;
 using Cinemachine;
 using System;
+using Boopoo.Telemetry;
 
 public class SailFunction : MonoBehaviour
 {
@@ -17,8 +18,7 @@ public class SailFunction : MonoBehaviour
 
     public float sailPositionSpeed = 0.1f;
 
-    [Range(0f, 20f)]
-    public float maxSpeed;
+    [Range(0f, 20f)] public float maxSpeed;
 
     public ShipModel shipModel;
 
@@ -46,6 +46,7 @@ public class SailFunction : MonoBehaviour
         {
             shipModel.Speed -= 1f * Time.deltaTime;
         }
+
         shipModel.Speed = Mathf.Clamp(shipModel.Speed, 0f, maxSpeed);
         sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -1, 0));
 
@@ -53,7 +54,6 @@ public class SailFunction : MonoBehaviour
         {
             playerTransform.localPosition = recentPosition;
         }
-
     }
 
 
@@ -72,7 +72,11 @@ public class SailFunction : MonoBehaviour
         var playerModel = interactor.GetComponent<PlayerModel>();
 
         if (m_sailing) __M_LockPlayer(playerModel);
-        else __M_UnLockPlayer(playerModel);
+        else
+        {
+            __M_UnLockPlayer(playerModel);
+            TelemetryLogger.Log(this, "Sail Used");
+        }
     }
 
     // Exit is never running
@@ -88,7 +92,8 @@ public class SailFunction : MonoBehaviour
         if (playerTransform == null)
         {
             playerTransform = player.transform;
-            recentPosition = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y, player.transform.localPosition.z);
+            recentPosition = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y,
+                player.transform.localPosition.z);
         }
 
         float playerNum = 0;
@@ -102,11 +107,11 @@ public class SailFunction : MonoBehaviour
 
         if (lastPlayerCam != null && playerNum == 1)
         {
-        //    Debug.Log("Has loaded");
+            //    Debug.Log("Has loaded");
             lastPlayerCam.Priority = 5;
             sailCam1.Priority = 10;
         }
-        else if(lastPlayerCam != null && playerNum == 2)
+        else if (lastPlayerCam != null && playerNum == 2)
         {
             lastPlayerCam.Priority = 5;
             sailCam2.Priority = 10;
@@ -119,7 +124,6 @@ public class SailFunction : MonoBehaviour
 
     private void __M_UnLockPlayer(PlayerModel player)
     {
-
         m_sailing = false;
 
         float playerNum = 0;
@@ -133,7 +137,7 @@ public class SailFunction : MonoBehaviour
 
         if (lastPlayerCam != null && playerNum == 1)
         {
-        //    Debug.Log("Has loaded");
+            //    Debug.Log("Has loaded");
             lastPlayerCam.Priority = 10;
             sailCam1.Priority = 5;
         }
@@ -156,13 +160,12 @@ public class SailFunction : MonoBehaviour
 
     private void PullingSail(InputAction.CallbackContext context)
     {
-        if(context.ReadValue<float>() > 0)
+        if (context.ReadValue<float>() > 0)
         {
             isRaising = true;
             isLowering = false;
-
         }
-        else if(context.ReadValue<float>() < 0)
+        else if (context.ReadValue<float>() < 0)
         {
             isLowering = true;
             isRaising = false;
@@ -173,6 +176,7 @@ public class SailFunction : MonoBehaviour
             isLowering = false;
         }
     }
+
     private void NotPullingSail(InputAction.CallbackContext context)
     {
         isRaising = false;
@@ -198,7 +202,4 @@ public class SailFunction : MonoBehaviour
         playerInput = null;
         inputActions = null;
     }
-
 }
-
-
