@@ -1,3 +1,4 @@
+using Boopoo.Telemetry;
 using Cinemachine;
 using EE.Interactions;
 using System;
@@ -24,20 +25,15 @@ public class NewCannonController : MonoBehaviour
     public Rigidbody cannonBall;
     public GameObject shootAt;
 
-    [Range(0f, 50f)]
-    public float fireForce;
+    [Range(0f, 50f)] public float fireForce;
 
-    [Range(-7f, 7f)]
-    public float pitch;
+    [Range(-7f, 7f)] public float pitch;
 
-    [Range(-7f, 7f)]
-    public float yaw;
+    [Range(-7f, 7f)] public float yaw;
 
-    [Range(0f, 5f)]
-    public float verticalRotateRate;
+    [Range(0f, 5f)] public float verticalRotateRate;
 
-    [Range(0f, 5f)]
-    public float horizontalRotateRate;
+    [Range(0f, 5f)] public float horizontalRotateRate;
 
     private bool isRaising;
     private bool isLowering;
@@ -73,18 +69,21 @@ public class NewCannonController : MonoBehaviour
         }
 
         pitch = Mathf.Clamp(pitch, -7, 7);
-        barrelTransform.localEulerAngles = new Vector3(barrelTransform.localEulerAngles.x, barrelTransform.localEulerAngles.y, pitch);
+        barrelTransform.localEulerAngles =
+            new Vector3(barrelTransform.localEulerAngles.x, barrelTransform.localEulerAngles.y, pitch);
 
         if (leftTurning)
         {
             yaw += horizontalRotateRate * Time.deltaTime;
         }
-        else if (rightTurning) 
+        else if (rightTurning)
         {
             yaw -= horizontalRotateRate * Time.deltaTime;
         }
+
         yaw = Mathf.Clamp(yaw, -7, 7);
-        bodyTransform.localEulerAngles = new Vector3(bodyTransform.localEulerAngles.x, yaw + currentDirection, bodyTransform.localEulerAngles.z);
+        bodyTransform.localEulerAngles = new Vector3(bodyTransform.localEulerAngles.x, yaw + currentDirection,
+            bodyTransform.localEulerAngles.z);
 
         if (playerTransform != null && playerTransform.position != recentPosition)
         {
@@ -108,7 +107,12 @@ public class NewCannonController : MonoBehaviour
         var playerModel = interactor.GetComponent<PlayerModel>();
 
         if (m_manning) __M_LockPlayer(playerModel);
-        else __M_UnLockPlayer(playerModel);
+        else
+        {
+            __M_UnLockPlayer(playerModel);
+
+            TelemetryLogger.Log(this, "Cannon Used");
+        }
     }
 
     // Exit is never running
@@ -124,7 +128,8 @@ public class NewCannonController : MonoBehaviour
         if (playerTransform == null)
         {
             playerTransform = player.transform;
-            recentPosition = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y, player.transform.localPosition.z);
+            recentPosition = new Vector3(player.transform.localPosition.x, player.transform.localPosition.y,
+                player.transform.localPosition.z);
         }
 
         float playerNum = 0;
@@ -154,7 +159,6 @@ public class NewCannonController : MonoBehaviour
 
     private void __M_UnLockPlayer(PlayerModel player)
     {
-
         m_manning = false;
 
         float playerNum = 0;
@@ -196,7 +200,8 @@ public class NewCannonController : MonoBehaviour
             Rigidbody launchedBall = Instantiate(cannonBall, shootAt.transform.position, Quaternion.identity);
             launchedBall.AddForce(shootAt.transform.forward * fireForce, ForceMode.Impulse);
         }
-            particles.SetActive(true);
+
+        particles.SetActive(true);
     }
 
     private void TiltingCannon(InputAction.CallbackContext context)
@@ -205,7 +210,6 @@ public class NewCannonController : MonoBehaviour
         {
             isRaising = true;
             isLowering = false;
-
         }
         else if (context.ReadValue<float>() < 0)
         {
@@ -225,7 +229,6 @@ public class NewCannonController : MonoBehaviour
         {
             leftTurning = true;
             rightTurning = false;
-
         }
         else if (context.ReadValue<float>() < 0)
         {
@@ -284,5 +287,4 @@ public class NewCannonController : MonoBehaviour
         playerInput = null;
         inputActions = null;
     }
-
 }
