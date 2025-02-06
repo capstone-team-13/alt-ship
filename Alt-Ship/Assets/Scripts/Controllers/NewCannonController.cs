@@ -105,12 +105,13 @@ public class NewCannonController : MonoBehaviour
         interactable.InteractionName = m_manning ? "Stop Interacting" : "Start Interacting";
 
         var playerModel = interactor.GetComponent<PlayerModel>();
+        var playerController = interactor.GetComponent<PlayerController>();
 
         if (m_manning) __M_LockPlayer(playerModel);
         else
         {
             __M_UnLockPlayer(playerModel);
-
+            playerController.ResetTransform();
             TelemetryLogger.Log(this, "Cannon Used");
         }
     }
