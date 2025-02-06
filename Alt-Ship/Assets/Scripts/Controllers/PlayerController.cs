@@ -77,6 +77,11 @@ public class PlayerController : Controller<PlayerModel>
         playerNum = id + 1;
     }
 
+    public void ResetTransform()
+    {
+        transform.rotation = transform.parent != null ? transform.parent.rotation : Quaternion.identity;
+    }
+
     #endregion
 
     #region Unity Callbacks
@@ -141,6 +146,13 @@ public class PlayerController : Controller<PlayerModel>
     private void OnDisable()
     {
         m_player.Disable();
+    }
+
+    [UsedImplicitly]
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Debug.DrawRay(transform.position + Vector3.up * 0.01f, transform.forward * 5.0f);
     }
 
     #endregion

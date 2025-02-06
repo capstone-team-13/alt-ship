@@ -80,6 +80,7 @@ public class Rudder : MonoBehaviour
         interactable.InteractionName = m_steering ? "Stop Steering" : "Start Steer";
 
         var playerModel = interactor.GetComponent<PlayerModel>();
+        var playerController = interactor.GetComponent<PlayerController>();
 
         if (m_steering)
         {
@@ -89,6 +90,7 @@ public class Rudder : MonoBehaviour
         {
             __M_UnLockPlayer(playerModel);
             m_interactable.__M_Reset();
+            playerController.ResetTransform();
             TelemetryLogger.Log(this, "Rudder Used");
         }
     }
@@ -161,7 +163,7 @@ public class Rudder : MonoBehaviour
         m_steering = false;
 
         // Camera Start
-        float playerNum = 0;
+        int playerNum = 0;
         if (player.transform.GetComponent<PlayerController>() != null)
         {
             playerNum = player.transform.GetComponent<PlayerController>().playerNum;
