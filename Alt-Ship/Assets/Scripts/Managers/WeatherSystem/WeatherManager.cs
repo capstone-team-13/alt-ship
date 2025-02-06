@@ -1,0 +1,78 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class WeatherManager : MonoBehaviour
+{
+    public static WeatherManager Instance {  get; private set; }
+
+    [Header("Global Wind Settings")]
+    public Vector3 windDirection = Vector3.forward;
+    public float windIntensity = 3f;
+
+    [Header("Wind Movement")]
+    public float windDirectionRate = .05f;
+    public float windIntensityRate = 1f;
+    public float maxIntensity = 10f;
+    public float minIntensity = 3f;
+    public float windChangeTime = 10f;
+
+    private Vector3 targetDirection;
+    private float targetIntensity;
+    private Coroutine windChange;
+
+    private void Awake()
+    {
+        if(Instance != null & Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
+        WindVariations();
+        InvokeRepeating(nameof(WindVariations), windChangeTime, windChangeTime);
+    }
+
+    private void Update()
+    {
+        windDirection = Vector3.Slerp(windDirection, targetDirection, Time.deltaTime * windDirectionRate);
+        windIntensity = Mathf.Lerp(windIntensity, targetIntensity, Time.deltaTime * windIntensityRate);
+    }
+
+    private void WindVariations()
+    {
+        targetDirection = Random.insideUnitSphere;
+        Debug.Log("Vector 3 Direction" +  targetDirection);
+        targetDirection.y = 0f;
+        targetDirection.Normalize();
+        targetIntensity = Random.Range(minIntensity, maxIntensity);
+    }
+
+    public void WindOverride(Vector3 newDirection, float newIntensity, float transitionSpeed)
+    {
+        if (windChange != null)
+            StopCoroutine(windChange);
+
+        windChange = StartCoroutine(WindTransition(newDirection, newIntensity, transitionSpeed));
+    }
+
+    private IEnumerator WindTransition(Vector3 newDirection, float newIntensity, float transitionSpeed)
+    {
+        float t = 0f;
+        Vector3 initialDirection = windDirection;
+        float initialIntensity = windIntensity;
+
+        while(t < 1f)
+        {
+            t += Time.deltaTime * transitionSpeed;
+            windDirection = Vector3.Slerp(initialDirection, newDirection, t);
+            windIntensity = Mathf.Lerp(initialIntensity, newIntensity, t);
+            yield return null;
+        }
+        windDirection = newDirection;
+        windIntensity = newIntensity;
+    }
+
+
+}
