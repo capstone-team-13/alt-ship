@@ -129,8 +129,8 @@ public class PlayerController : Controller<PlayerModel>
         if (m_player.enabled)
         {
             var movementInput = __M_GetPlayerInput();
-            m_controllers[playerNum - 1].UserInput = movementInput;
             __M_Move();
+            m_controllers[playerNum - 1].UserInput = Model.Speed > Mathf.Epsilon ? movementInput : Vector3.zero;
         }
     }
 
@@ -185,15 +185,18 @@ public class PlayerController : Controller<PlayerModel>
 
         __M_UpdateDirection(direction);
 
-        direction.y = 0;
-        if (direction.sqrMagnitude > 0.001f)
+        if (Model.Speed > Mathf.Epsilon)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            m_controllers[playerNum - 1].Rotation.rotation = Quaternion.Slerp(
-                m_controllers[playerNum - 1].Rotation.rotation,
-                targetRotation,
-                Time.deltaTime * 5f
-            );
+            direction.y = 0;
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                m_controllers[playerNum - 1].Rotation.rotation = Quaternion.Slerp(
+                    m_controllers[playerNum - 1].Rotation.rotation,
+                    targetRotation,
+                    Time.deltaTime * 5f
+                );
+            }
         }
 
         transform.Translate(Model.Velocity * Time.deltaTime);
