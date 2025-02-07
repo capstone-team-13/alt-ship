@@ -70,11 +70,13 @@ public class SailFunction : MonoBehaviour
         interactable.InteractionName = m_sailing ? "Stop Interacting" : "Start Interacting";
 
         var playerModel = interactor.GetComponent<PlayerModel>();
+        var playerController = interactor.GetComponent<PlayerController>();
 
         if (m_sailing) __M_LockPlayer(playerModel);
         else
         {
             __M_UnLockPlayer(playerModel);
+            playerController.ResetTransform();
             TelemetryLogger.Log(this, "Sail Used");
         }
     }

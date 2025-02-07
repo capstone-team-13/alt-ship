@@ -23,7 +23,14 @@ public class ShipController : Controller<ShipModel>
 
         Quaternion currentRotation = transform.localRotation;
         Quaternion targetRotation = Quaternion.Euler(Model.TargetEulerAngles);
-        transform.localRotation = Quaternion.Lerp(currentRotation, targetRotation, Model.LerpSpeed * Time.deltaTime);
+
+        float angleDifference = Quaternion.Angle(currentRotation, targetRotation);
+
+        if (angleDifference > 0.1f)
+        {
+            transform.localRotation =
+                Quaternion.Lerp(currentRotation, targetRotation, Model.LerpSpeed * Time.deltaTime);
+        }
     }
 
     [UsedImplicitly]
