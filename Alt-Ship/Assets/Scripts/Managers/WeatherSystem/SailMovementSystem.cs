@@ -8,6 +8,8 @@ public class SailMovementSystem : MonoBehaviour
     [Header("Ship Variables")]
     public float maxSpeed = 10f;
     public float turnSpeed = 1f;
+    public float turnSpeedMax = 6f;
+    public float turnSpeedMin = 3f;
     public float sailEfficiency = 1f;
 
     private Rigidbody rb;
@@ -46,12 +48,12 @@ public class SailMovementSystem : MonoBehaviour
         // Temporary for testing
         if (sailHeight == .2f && !toggle)
         {
-            turnSpeed = 3f;
+            turnSpeed = turnSpeedMax;
             toggle = true;
         }
         else if (sailHeight != .2f && toggle)
         {
-            turnSpeed = 1f;
+            turnSpeed = turnSpeedMin;
             toggle = false;
         }
 
