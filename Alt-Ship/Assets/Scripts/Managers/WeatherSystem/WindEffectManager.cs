@@ -47,14 +47,14 @@ public class WindEffectManager : MonoBehaviour
         {
             Debug.Log("Wind is fast");
             targetLength = .15f;
-            spawnRate.rateOverTime = .5f;
+            spawnRate.rateOverTime = 1f;
             toggle = true;
         }
         else if(WeatherManager.Instance.windIntensity < midIntensity && toggle)
         {
             Debug.Log("Wind is slow");
             targetLength = .075f;
-            spawnRate.rateOverTime = 1f;
+            spawnRate.rateOverTime = 3f;
             toggle = false;
         }
 
