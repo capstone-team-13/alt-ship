@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -10,7 +11,10 @@ public class TutorialManager : MonoBehaviour
     // 五页教程
     public List<GameObject> tutorialPages;
 
-    private int currentPageIndex = 0;
+    public int currentPageIndex = 0;
+
+    public Button prevButton;
+    public Button nextButton;
 
     void Start()
     {
@@ -45,7 +49,9 @@ public class TutorialManager : MonoBehaviour
     {
         tutorialPanel.SetActive(true);
         currentPageIndex = 0;
+        prevButton.gameObject.SetActive(false);
         ShowPage(currentPageIndex);
+        checkButtons();
     }
 
     // “下一页”按钮
@@ -57,6 +63,7 @@ public class TutorialManager : MonoBehaviour
             currentPageIndex = tutorialPages.Count - 1;
         }
         ShowPage(currentPageIndex);
+        checkButtons();
     }
 
     // “上一页”按钮
@@ -68,6 +75,7 @@ public class TutorialManager : MonoBehaviour
             currentPageIndex = 0;
         }
         ShowPage(currentPageIndex);
+        checkButtons();
     }
 
     // ESC或者“关闭”按钮退出
@@ -82,6 +90,27 @@ public class TutorialManager : MonoBehaviour
         for (int i = 0; i < tutorialPages.Count; i++)
         {
             tutorialPages[i].SetActive(i == index);
+        }
+    }
+
+    private void checkButtons()
+    {
+        if (!prevButton.gameObject.activeSelf && currentPageIndex != 0)
+        {
+            prevButton.gameObject.SetActive(true);
+        }
+        else if (prevButton.gameObject.activeSelf && currentPageIndex == 0)
+        {
+            prevButton.gameObject.SetActive(false);
+        }
+
+        if (!nextButton.gameObject.activeSelf && currentPageIndex != tutorialPages.Count -1)
+        {
+            nextButton.gameObject.SetActive(true);
+        }
+        else if (nextButton.gameObject.activeSelf && currentPageIndex == tutorialPages.Count - 1)
+        {
+            nextButton.gameObject.SetActive(false);
         }
     }
 }
