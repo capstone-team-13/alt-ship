@@ -271,24 +271,18 @@ public class MenuControlManager : MonoBehaviour
             {
                 if (verticleMovement != 0 && selectbuttonIndex == 10)
                 {
-                    Debug.Log("Triggered 1");
                     selectbuttonIndex = 0;
                     toggleTwo = !toggleTwo;
                 }
                 else if (verticleMovement > 0)
                 {
-                    Debug.Log("Triggered 2");
 
                     if (selectbuttonIndex > 0)
                     {
-                        Debug.Log("Triggered 3");
-
                         selectbuttonIndex--;
                     }
                     else
                     {
-                        Debug.Log("Triggered 4");
-
                         selectbuttonIndex = buttonCount;
                     }
                     toggleTwo = !toggleTwo;
@@ -296,18 +290,12 @@ public class MenuControlManager : MonoBehaviour
                 }
                 else if (verticleMovement < 0)
                 {
-                    Debug.Log("Triggered 5");
-
                     if (selectbuttonIndex < buttonCount)
                     {
-                        Debug.Log("Triggered 6");
-
                         selectbuttonIndex++;
                     }
                     else if (selectbuttonIndex == buttonCount)
                     {
-                        Debug.Log("Triggered 7");
-
                         selectbuttonIndex = 0;
                     }
                     toggleTwo = !toggleTwo;

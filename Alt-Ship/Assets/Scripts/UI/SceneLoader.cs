@@ -7,7 +7,9 @@ public class SceneLoader : MonoBehaviour
     {
         Start = 0,
         LevelSelection,
-        Level1,
+        DeviceRegistration,
+        LevelOne,
+        LevelTwo,
         End,
         Undefined
     }
@@ -16,7 +18,9 @@ public class SceneLoader : MonoBehaviour
     {
         "Start",
         "Level Selection",
+        "Device Registration",
         "Level #2 Asset Implemented",
+        "David's Greybox Level",
         //"Luka's Greybox",
         "End"
     };
@@ -33,6 +37,47 @@ public class SceneLoader : MonoBehaviour
 #endif
         var sceneIndex = (int)m_sceneName;
         SceneManager.LoadScene(m_sceneNames[sceneIndex]);
+    }
+
+    public void MainMenu()
+    {
+        if (m_sceneName == SceneName.Undefined)
+        {
+            Debug.LogWarning($"You need to define which scene you want to load. ({gameObject.name})");
+        }
+        var sceneIndex = (int)m_sceneName;
+
+        SceneManager.LoadScene(m_sceneNames[0]);
+    }
+
+    public void LevelLoad(int levelNum)
+    {
+        if (m_sceneName == SceneName.Undefined)
+        {
+            Debug.LogWarning($"You need to define which scene you want to load. ({gameObject.name})");
+        }
+        var sceneIndex = (int)m_sceneName;
+
+        if (SelectedLevelData.Instance == null) return;
+
+        levelNum = SelectedLevelData.Instance.levelChange;
+
+        if (levelNum == 0)
+        {
+            SelectedLevelData.Instance.finishedPurpose();
+            SceneManager.LoadScene(m_sceneNames[3]);
+        }
+        else if (levelNum == 1)
+        {
+            SelectedLevelData.Instance.finishedPurpose();
+            SceneManager.LoadScene(m_sceneNames[4]);
+        }
+        else if(levelNum == 2)
+        {
+            SelectedLevelData.Instance.finishedPurpose();
+            Debug.LogWarning($"You need to define which scene you want to load. ({gameObject.name})");
+        }
+
     }
 
     public void CloseGame()
