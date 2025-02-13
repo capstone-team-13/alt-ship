@@ -136,7 +136,7 @@ public class MenuControlManager : MonoBehaviour
         {
             tutorialManager.CloseTutorial();
             menuIndex = 0;
-            selectbuttonIndex = 2;
+            selectbuttonIndex = 1;
             toggleOne = false;
             toggleTwo = false;
         }
