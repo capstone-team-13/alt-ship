@@ -16,6 +16,10 @@ public class SelectedLevelData : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             Debug.Log("SelectedLevelData Instance Created");
         }
+        else if (Instance == this)
+        {
+            Debug.Log("Was the instance");
+        }
         else
         {
             Debug.Log("Duplicate Instance Destroyed");

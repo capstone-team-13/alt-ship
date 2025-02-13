@@ -151,19 +151,31 @@ public class LevelSelectMenu : MonoBehaviour
                 if (selectbuttonIndex == 0)
                 {
                     
-                    if (SelectedLevelData.Instance == null) return;
+                    if (SelectedLevelData.Instance == null)
+                    {
+                        Debug.Log("Null");
+                        return;
+                    }
                     SelectedLevelData.Instance.levelChosen(0);
                 }
                 // Level Two
                 else if (selectbuttonIndex == 1)
                 {
-                    if (SelectedLevelData.Instance == null) return;
+                    if (SelectedLevelData.Instance == null)
+                    {
+                        Debug.Log("Null");
+                        return;
+
+                    }
                     SelectedLevelData.Instance.levelChosen(1);
                 }
                 // Level Three
                 else if (selectbuttonIndex == 2)
                 {
-                    if (SelectedLevelData.Instance == null) return;
+                    if (SelectedLevelData.Instance == null){
+                        Debug.Log("Null");
+                        return;
+                    }
                 }
             }
             else if (menuIndex == 1)
