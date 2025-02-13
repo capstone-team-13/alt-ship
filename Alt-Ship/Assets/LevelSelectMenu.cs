@@ -164,7 +164,6 @@ public class LevelSelectMenu : MonoBehaviour
                 else if (selectbuttonIndex == 2)
                 {
                     if (SelectedLevelData.Instance == null) return;
-                    SelectedLevelData.Instance.levelChosen(2);
                 }
             }
             else if (menuIndex == 1)

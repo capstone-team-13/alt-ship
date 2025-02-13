@@ -50,32 +50,31 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(m_sceneNames[0]);
     }
 
-    public void LevelLoad(int levelNum)
+    public void LevelLoad()
     {
-        if (m_sceneName == SceneName.Undefined)
-        {
-            Debug.LogWarning($"You need to define which scene you want to load. ({gameObject.name})");
-        }
         var sceneIndex = (int)m_sceneName;
 
-        if (SelectedLevelData.Instance == null) return;
+        if (SelectedLevelData.Instance == null) Load();
 
-        levelNum = SelectedLevelData.Instance.levelChange;
+        int levelNum = SelectedLevelData.Instance.levelChange;
 
         if (levelNum == 0)
         {
+            // For Level One
             SelectedLevelData.Instance.finishedPurpose();
             SceneManager.LoadScene(m_sceneNames[3]);
         }
         else if (levelNum == 1)
         {
+            // For Level Two
             SelectedLevelData.Instance.finishedPurpose();
             SceneManager.LoadScene(m_sceneNames[4]);
         }
         else if(levelNum == 2)
         {
+            // For Level Three
             SelectedLevelData.Instance.finishedPurpose();
-            Debug.LogWarning($"You need to define which scene you want to load. ({gameObject.name})");
+            Load();
         }
 
     }

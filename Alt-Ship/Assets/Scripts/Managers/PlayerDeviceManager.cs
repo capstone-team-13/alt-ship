@@ -25,6 +25,7 @@ public class PlayerDeviceManager : SingletonBehaviour<PlayerDeviceManager>
     #region Unity Events
 
     [UsedImplicitly]
+
     protected override void Awake()
     {
         base.Awake();
