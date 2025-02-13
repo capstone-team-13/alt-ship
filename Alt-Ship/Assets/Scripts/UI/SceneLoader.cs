@@ -8,6 +8,7 @@ public class SceneLoader : MonoBehaviour
         Start = 0,
         LevelSelection,
         Level1,
+        Level2,
         End,
         Undefined
     }
@@ -17,6 +18,7 @@ public class SceneLoader : MonoBehaviour
         "Start",
         "Level Selection",
         "Level #2 Asset Implemented",
+        "Level #3",
         //"Luka's Greybox",
         "End"
     };
