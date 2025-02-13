@@ -5,10 +5,7 @@ using UnityEngine.UI;
 public class TutorialManager : MonoBehaviour
 {
     [Header("Tutorial UI")]
-    // 整个教程面板
     public GameObject tutorialPanel;
-
-    // 五页教程
     public List<GameObject> tutorialPages;
 
     public int currentPageIndex = 0;
@@ -20,21 +17,26 @@ public class TutorialManager : MonoBehaviour
     {
         // 一开始先把教程面板关掉
         tutorialPanel.SetActive(false);
+
+        // 绑定按钮事件
+        prevButton.onClick.AddListener(PrevPage);
+        nextButton.onClick.AddListener(NextPage);
+
+        // 初始化按钮状态
+        prevButton.gameObject.SetActive(false);
+        nextButton.gameObject.SetActive(tutorialPages.Count > 1); // 只有超过一页时才显示
     }
 
     void Update()
     {
-        // 按T键打开教程
         if (Input.GetKeyDown(KeyCode.T))
         {
-            // 如果教程当前是关闭的，那么就打开
             if (!tutorialPanel.activeSelf)
             {
                 OpenTutorial();
             }
         }
 
-        // 按ESC键退出教程
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (tutorialPanel.activeSelf)
@@ -44,47 +46,39 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    // 按下“打开教程”按钮或者按下T键时，也调用这个方法
     public void OpenTutorial()
     {
         tutorialPanel.SetActive(true);
         currentPageIndex = 0;
-        prevButton.gameObject.SetActive(false);
         ShowPage(currentPageIndex);
-        checkButtons();
+        CheckButtons();
     }
 
-    // “下一页”按钮
     public void NextPage()
     {
-        currentPageIndex++;
-        if (currentPageIndex >= tutorialPages.Count)
+        if (currentPageIndex < tutorialPages.Count - 1)
         {
-            currentPageIndex = tutorialPages.Count - 1;
+            currentPageIndex++;
+            ShowPage(currentPageIndex);
+            CheckButtons();
         }
-        ShowPage(currentPageIndex);
-        checkButtons();
     }
 
-    // “上一页”按钮
     public void PrevPage()
     {
-        currentPageIndex--;
-        if (currentPageIndex < 0)
+        if (currentPageIndex > 0)
         {
-            currentPageIndex = 0;
+            currentPageIndex--;
+            ShowPage(currentPageIndex);
+            CheckButtons();
         }
-        ShowPage(currentPageIndex);
-        checkButtons();
     }
 
-    // ESC或者“关闭”按钮退出
     public void CloseTutorial()
     {
         tutorialPanel.SetActive(false);
     }
 
-    // 显示指定页，隐藏其他页
     private void ShowPage(int index)
     {
         for (int i = 0; i < tutorialPages.Count; i++)
@@ -93,24 +87,9 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    private void checkButtons()
+    private void CheckButtons()
     {
-        if (!prevButton.gameObject.activeSelf && currentPageIndex != 0)
-        {
-            prevButton.gameObject.SetActive(true);
-        }
-        else if (prevButton.gameObject.activeSelf && currentPageIndex == 0)
-        {
-            prevButton.gameObject.SetActive(false);
-        }
-
-        if (!nextButton.gameObject.activeSelf && currentPageIndex != tutorialPages.Count -1)
-        {
-            nextButton.gameObject.SetActive(true);
-        }
-        else if (nextButton.gameObject.activeSelf && currentPageIndex == tutorialPages.Count - 1)
-        {
-            nextButton.gameObject.SetActive(false);
-        }
+        prevButton.gameObject.SetActive(currentPageIndex > 0);
+        nextButton.gameObject.SetActive(currentPageIndex < tutorialPages.Count - 1);
     }
 }
