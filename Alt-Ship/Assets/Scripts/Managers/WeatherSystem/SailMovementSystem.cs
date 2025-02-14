@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using EE.AMVCC;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SailMovementSystem : MonoBehaviour
+public class SailMovementSystem : Controller<ShipModel>
 {
     [Header("Ship Variables")]
     public float acceleration = 10f;
@@ -35,7 +37,7 @@ public class SailMovementSystem : MonoBehaviour
     private void FixedUpdate()
     {
         if (WeatherManager.Instance == null) return;
-
+        sailHeight = Model.Speed;
         Movement();
         Drag();
         Tilting();
@@ -68,7 +70,7 @@ public class SailMovementSystem : MonoBehaviour
         currentSpeed = acceleration * windIntensity * speedIntensity * sailEfficiency * sailHeight;
         float smoothSpeed = Mathf.Lerp(rb.velocity.magnitude, currentSpeed, Time.deltaTime * accelerationSmoothing);
         Vector3 targetVelocity = transform.forward * smoothSpeed;
-        Debug.Log("Current Speed: " + smoothSpeed);
+        //Debug.Log("Current Speed: " + smoothSpeed);
 
         rb.velocity = Vector3.Lerp(rb.velocity, targetVelocity, Time.deltaTime * velocitySmoothing);
 
@@ -85,20 +87,41 @@ public class SailMovementSystem : MonoBehaviour
             toggle = false;
         }
 
-        float turnInput = Input.GetAxis("Horizontal");
-
-        if (turnInput != 0f)
-        {
-            angularVelocity += turnInput * turnSpeed * Time.deltaTime;
-        }
-
         transform.Rotate(Vector3.up, angularVelocity * Time.deltaTime);
+
+    }
+
+    public override void Notify<TCommand>(TCommand command)
+    {
+        if (command is not ShipCommand) return;
+
+        switch (command)
+        {
+            case ShipCommand.Steer steerCommand:
+                var sign = steerCommand.RotationSign;
+                __M_Steer(sign);
+                break;
+        }
+    }
+
+    private void __M_Steer(float sign)
+    {
+        if (sign != 0f)
+        {
+            angularVelocity += sign * turnSpeed * Time.deltaTime;
+            angularVelocity = Mathf.Clamp(angularVelocity, -turnSpeedMax, turnSpeedMax);
+        }
+        else
+        {
+            angularVelocity = Mathf.Lerp(angularVelocity, 0f, Time.deltaTime * 2f);
+        }
     }
 
     private void Drag()
     {
         velocity *= dragFrontal;
-        angularVelocity *= dragAngular;
+        rb.angularVelocity *= dragAngular;
+        angularVelocity = Mathf.Lerp(angularVelocity, 0f, Time.deltaTime * 1.5f);
     }
 
     private void Tilting()

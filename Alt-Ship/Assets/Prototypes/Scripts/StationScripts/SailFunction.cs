@@ -16,9 +16,9 @@ public class SailFunction : MonoBehaviour
 
     private bool m_sailing = false;
 
-    public float sailPositionSpeed = 0.1f;
+    //public float sailPositionSpeed = 0.1f;
 
-    [Range(0f, 20f)] public float maxSpeed;
+   // [Range(0f, 20f)] public float maxSpeed;
 
     public ShipModel shipModel;
 
@@ -34,28 +34,33 @@ public class SailFunction : MonoBehaviour
 
     public LineRenderer sailIndicator;
 
+    private void Awake()
+    {
+        shipModel.Speed = .2f;
+        sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -5, 0));
+    }
+
     private void Update()
     {
         if (!m_sailing) return;
 
         if (isLowering)
         {
-            shipModel.Speed += 1f * Time.deltaTime;
+            shipModel.Speed += .5f * Time.deltaTime;
         }
         else if (isRaising)
         {
-            shipModel.Speed -= 1f * Time.deltaTime;
+            shipModel.Speed -= .5f * Time.deltaTime;
         }
 
-        shipModel.Speed = Mathf.Clamp(shipModel.Speed, 0f, maxSpeed);
-        sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -1, 0));
+        shipModel.Speed = Mathf.Clamp(shipModel.Speed, .2f, 1f);
+        sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -5, 0));
 
         if (playerTransform != null && playerTransform.position != recentPosition)
         {
-            playerTransform.localPosition = recentPosition;
+           playerTransform.localPosition = recentPosition;
         }
     }
-
 
     public void Interact(IInteractable interactable, GameObject interactor)
     {
