@@ -202,11 +202,10 @@ public class PlayerController : Controller<PlayerModel>
             if (direction.sqrMagnitude > 0.001f)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
-                Debug.Log("Direction: " + direction);
-                Debug.Log("targetRotation: " + targetRotation);
-                m_controllers[playerNum - 1].Rotation.rotation = Quaternion.Slerp(
-                    m_controllers[playerNum - 1].Rotation.rotation,
-                    targetRotation,
+                Debug.Log($"Direction: {direction}, Rotation: {m_controllers[playerNum - 1].Rotation.rotation.eulerAngles}");
+                m_controllers[playerNum - 1].Rotation.localRotation = Quaternion.Slerp(
+                    m_controllers[playerNum - 1].Rotation.localRotation,
+                    Quaternion.LookRotation(direction, Vector3.up),
                     Time.deltaTime * 5f
                 );
             }
