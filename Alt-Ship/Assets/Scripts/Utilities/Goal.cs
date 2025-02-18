@@ -10,7 +10,8 @@ public class Goal : MonoBehaviour
     [UsedImplicitly]
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ship"))
+        Debug.Log("Goal Reached");
+        if (collision.gameObject.CompareTag("ShipParent"))
         {
             Application.Instance.Push(new GameCommand.GameEnd(Time.time));
             PlayerPrefs.SetInt("Game Result", (int)GameResult.Win);

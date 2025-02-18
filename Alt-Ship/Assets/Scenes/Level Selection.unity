@@ -1444,7 +1444,7 @@ GameObject:
   - component: {fileID: 832445080}
   - component: {fileID: 832445079}
   m_Layer: 5
-  m_Name: Level #1 <btn>
+  m_Name: Start Level <btn>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1482,7 +1482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1907bd508898d61418c78efe2e444817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_sceneName: 2
+  m_sceneName: 0
 --- !u!114 &832445080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1672,9 +1672,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 832445079}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: Load
+      - m_Target: {fileID: 540397784}
+        m_TargetAssemblyTypeName: LevelSelectMenu, Assembly-CSharp
+        m_MethodName: LoadSceneBySelection
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

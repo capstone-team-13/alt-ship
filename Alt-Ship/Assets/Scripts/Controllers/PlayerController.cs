@@ -119,7 +119,14 @@ public class PlayerController : Controller<PlayerModel>
 
         if (!parentRotation)
         {
-            parentRotation = GameObject.FindWithTag("ShipParent").transform;
+            GameObject go = GameObject.FindWithTag("ShipParent");
+            if (go == null)
+            {
+                Debug.LogError("Error: ShipParent object not found in the scene!");
+                return;
+            }
+
+            parentRotation = go.transform;
         }
     }
 
@@ -187,7 +194,7 @@ public class PlayerController : Controller<PlayerModel>
         m_controllers[playerNum - 1].UserInput = movementInput;
 
         Vector3 direction = m_camera.transform.TransformDirection(movementInput);
-        
+
 
         Quaternion inverseParentRotation = Quaternion.Inverse(parentRotation.rotation);
         direction = inverseParentRotation * direction;
@@ -202,7 +209,8 @@ public class PlayerController : Controller<PlayerModel>
             if (direction.sqrMagnitude > 0.001f)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
-                Debug.Log($"Direction: {direction}, Rotation: {m_controllers[playerNum - 1].Rotation.rotation.eulerAngles}");
+                Debug.Log(
+                    $"Direction: {direction}, Rotation: {m_controllers[playerNum - 1].Rotation.rotation.eulerAngles}");
                 m_controllers[playerNum - 1].Rotation.localRotation = Quaternion.Slerp(
                     m_controllers[playerNum - 1].Rotation.localRotation,
                     Quaternion.LookRotation(direction, Vector3.up),

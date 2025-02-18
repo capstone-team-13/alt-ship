@@ -1,3 +1,4 @@
+using System;
 using Accord.Math;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,23 +10,20 @@ using UnityEngine.UI;
 
 public class LevelSelectMenu : MonoBehaviour
 {
-    [Header("Key Name")]
-    [SerializeField] private InputActionAsset m_inputActionAsset;
+    [Header("Key Name")] [SerializeField] private InputActionAsset m_inputActionAsset;
     [SerializeField] private string m_northActionName = "North";
     [SerializeField] private string m_eastActionName = "East";
     [SerializeField] private string m_southActionName = "South";
     [SerializeField] private string m_westActionName = "West";
 
-    [Header("Button Reference")]
-    public Button levelOne;
+    [Header("Button Reference")] public Button levelOne;
     public Button levelTwo;
     public Button levelThree;
 
     public Button startGame;
     public Button back;
 
-    [Header("Other")]
-    public SceneLoader sceneLoader;
+    [Header("Other")] public SceneLoader sceneLoader;
 
     [SerializeField] private int selectbuttonIndex = 10;
     [SerializeField] private int menuIndex = 0;
@@ -52,7 +50,6 @@ public class LevelSelectMenu : MonoBehaviour
 
     private void Update()
     {
-
         InputDetection();
 
         if (menuIndex == 0)
@@ -64,12 +61,12 @@ public class LevelSelectMenu : MonoBehaviour
         {
             MenuButtonHighlight();
         }
-
     }
 
     private void EnableHandlers()
     {
-        (InputAction actionNorth, InputAction actionEast, InputAction actionSouth, InputAction actionWest) = __M_FindActions();
+        (InputAction actionNorth, InputAction actionEast, InputAction actionSouth, InputAction actionWest) =
+            __M_FindActions();
         if (actionNorth != null)
         {
             actionNorth.performed += OnNorth;
@@ -101,7 +98,8 @@ public class LevelSelectMenu : MonoBehaviour
 
     private void DisableHandlers()
     {
-        (InputAction actionNorth, InputAction actionEast, InputAction actionSouth, InputAction actionWest) = __M_FindActions();
+        (InputAction actionNorth, InputAction actionEast, InputAction actionSouth, InputAction actionWest) =
+            __M_FindActions();
         if (actionNorth != null)
         {
             actionNorth.performed -= OnNorth;
@@ -133,12 +131,10 @@ public class LevelSelectMenu : MonoBehaviour
 
     private void OnNorth(InputAction.CallbackContext context)
     {
-
     }
 
     private void OnEast(InputAction.CallbackContext context)
     {
-
     }
 
     private void OnSouth(InputAction.CallbackContext context)
@@ -150,12 +146,12 @@ public class LevelSelectMenu : MonoBehaviour
                 // Level One
                 if (selectbuttonIndex == 0)
                 {
-                    
                     if (SelectedLevelData.Instance == null)
                     {
                         Debug.Log("Null");
                         return;
                     }
+
                     SelectedLevelData.Instance.levelChosen(0);
                 }
                 // Level Two
@@ -165,14 +161,15 @@ public class LevelSelectMenu : MonoBehaviour
                     {
                         Debug.Log("Null");
                         return;
-
                     }
+
                     SelectedLevelData.Instance.levelChosen(1);
                 }
                 // Level Three
                 else if (selectbuttonIndex == 2)
                 {
-                    if (SelectedLevelData.Instance == null){
+                    if (SelectedLevelData.Instance == null)
+                    {
                         Debug.Log("Null");
                         return;
                     }
@@ -183,14 +180,15 @@ public class LevelSelectMenu : MonoBehaviour
                 // Start Level
                 if (selectbuttonIndex == 0)
                 {
-                    sceneLoader.Load();
+                    LoadSceneBySelection();
                 }
-                // Back
+                //Back
                 else if (selectbuttonIndex == 1)
                 {
                     sceneLoader.MainMenu();
                 }
             }
+
             southToggle = !southToggle;
         }
 
@@ -200,12 +198,31 @@ public class LevelSelectMenu : MonoBehaviour
         }
     }
 
-    private void OnWest(InputAction.CallbackContext context)
+    public void LoadSceneBySelection()
     {
+        int targetIndex = 3 + SelectedLevelData.Instance.levelChange;
+        SelectedLevelData.Instance.finishedPurpose();
 
+        if (Enum.IsDefined(typeof(SceneName), targetIndex))
+        {
+            var sceneName = (SceneName)targetIndex;
+            sceneLoader.SceneName = sceneName;
+            Debug.Log($"Load to {sceneName}");
+            sceneLoader.Load();
+        }
+        else
+        {
+            Debug.LogError($"Invalid SceneName index: {targetIndex}");
+            sceneLoader.SceneName = SceneName.Undefined;
+        }
     }
 
-    private (InputAction actionNorth, InputAction actionEast, InputAction actionSouth, InputAction actionWest) __M_FindActions()
+    private void OnWest(InputAction.CallbackContext context)
+    {
+    }
+
+    private (InputAction actionNorth, InputAction actionEast, InputAction actionSouth, InputAction actionWest)
+        __M_FindActions()
     {
         InputAction actionNorth = m_inputActionAsset.FindAction(m_northActionName);
         InputAction actionEast = m_inputActionAsset.FindAction(m_eastActionName);
@@ -299,6 +316,7 @@ public class LevelSelectMenu : MonoBehaviour
                     {
                         selectbuttonIndex = buttonCount;
                     }
+
                     toggleTwo = !toggleTwo;
                     toggleOne = !toggleOne;
                 }
@@ -312,6 +330,7 @@ public class LevelSelectMenu : MonoBehaviour
                     {
                         selectbuttonIndex = 0;
                     }
+
                     toggleTwo = !toggleTwo;
                     toggleOne = !toggleOne;
                 }
@@ -330,7 +349,7 @@ public class LevelSelectMenu : MonoBehaviour
                     selectbuttonIndex = 0;
                     buttonChange();
                 }
-                else if(verticleMovement > tolerance)
+                else if (verticleMovement > tolerance)
                 {
                     // 1-1
                     menuIndex = 1;
@@ -339,11 +358,11 @@ public class LevelSelectMenu : MonoBehaviour
                     buttonChange();
                 }
             }
-            else if(menuIndex == 1)
+            else if (menuIndex == 1)
             {
                 if (selectbuttonIndex == 0)
                 {
-                    if(verticleMovement > tolerance)
+                    if (verticleMovement > tolerance)
                     {
                         menuIndex = 0;
                         selectbuttonIndex = lastButNum;
@@ -376,7 +395,6 @@ public class LevelSelectMenu : MonoBehaviour
         {
             toggleTwo = !toggleTwo;
         }
-
     }
 
     private void buttonChange()
@@ -384,7 +402,4 @@ public class LevelSelectMenu : MonoBehaviour
         toggleTwo = !toggleTwo;
         toggleOne = false;
     }
-
-
-
 }
