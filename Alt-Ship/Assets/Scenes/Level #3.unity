@@ -1215,6 +1215,57 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6880262858201208964, guid: 5dcb222588d74c5448f692f71664112a, type: 3}
+--- !u!1 &41248164
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 41248166}
+  - component: {fileID: 41248165}
+  m_Layer: 0
+  m_Name: WindManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &41248165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41248164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3984207d945c536448687ccf2136795c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windDirection: {x: 0, y: 0, z: 1}
+  windIntensity: 1
+  windDirectionRate: 0.03
+  windIntensityRate: 0.055
+  maxIntensity: 6
+  minIntensity: 2.5
+  windChangeTime: 60
+--- !u!4 &41248166
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41248164}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.0402164, y: 0.01274848, z: -1.729991}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &41931740 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2042379448428065318, guid: bcf1c34a5fd4cdd4a991cdf3b1edf775,
@@ -17192,10 +17243,10 @@ MonoBehaviour:
   - serializedVersion: 2
     m_Bits: 4096
   playerInputManager: {fileID: 705831975}
-  spawnPointA: {fileID: 0}
-  spawnPointB: {fileID: 0}
-  shipModel: {fileID: 0}
-  m_interaction: {fileID: 0}
+  spawnPointA: {fileID: 1299676853}
+  spawnPointB: {fileID: 264547329}
+  shipModel: {fileID: 1739243653}
+  m_interaction: {fileID: 1797887019}
 --- !u!114 &705831975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32307,7 +32358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37382aeec7e13aa43b0ef10c15d4d1c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_model: {fileID: 0}
+  m_model: {fileID: 1739243657}
   m_indicatorPrefab: {fileID: 810962482213323738, guid: 56959a7e7d1c0b24e83d0103895189b0,
     type: 3}
   m_sceneLoader: {fileID: 1098008016}
@@ -44837,8 +44888,8 @@ MonoBehaviour:
   m_playerPrefab: {fileID: 8527858545994635388, guid: dffb35516ad9a6a4689dffc94d8aff8d,
     type: 3}
   m_spawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1299676853}
+  - {fileID: 264547329}
   m_cameraController: {fileID: 705831974}
 --- !u!4 &1583497816
 Transform:
@@ -62116,3 +62167,4 @@ SceneRoots:
   - {fileID: 780449847}
   - {fileID: 1340099197}
   - {fileID: 139205214}
+  - {fileID: 41248166}

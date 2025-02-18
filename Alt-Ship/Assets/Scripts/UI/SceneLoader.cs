@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 public enum SceneName
 {
     Start = 0,
-    LevelSelection,
     DeviceRegistration,
+    LevelSelection,
     Level1,
     Level2,
     End,
@@ -17,8 +17,8 @@ public class SceneLoader : MonoBehaviour
     private static readonly string[] m_sceneNames =
     {
         "Start",
-        "Level Selection",
         "Device Registration",
+        "Level Selection",
         "Level #2 Asset Implemented",
         "Level #3",
         //"Luka's Greybox",
