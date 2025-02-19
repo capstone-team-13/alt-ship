@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EE.AMVCC;
 using JetBrains.Annotations;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,9 +30,33 @@ public class SailMovementSystem : Controller<ShipModel>
 
     private bool toggle = false;
 
+    [Header("Tilting")]
+    public bool tiltingToggle = true;
+    public float tiltAmount = 2f;
+    public float tiltSpeed = .5f;
+    public float forwardTilt = 1f;
+    public float forwardTiltSpeed = .3f;
+    public float torque = .1f;
+
+
+
+    private float timeOffset;
+
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
+        timeOffset = .1f;
+    }
+
+    private void Update()
+    {
+        if (tiltingToggle)
+        {
+            float sideTilt = Mathf.Sin(Time.time * tiltSpeed + timeOffset) * tiltAmount;
+            float frontTilt = Mathf.Sin(Time.time * forwardTiltSpeed + timeOffset) * forwardTilt;
+
+            transform.localRotation = Quaternion.Euler(frontTilt, transform.eulerAngles.y, sideTilt);
+        }
     }
 
     private void FixedUpdate()
@@ -41,6 +66,12 @@ public class SailMovementSystem : Controller<ShipModel>
         Movement();
         Drag();
         Tilting();
+
+        if (tiltingToggle)
+        {
+            float force = Mathf.Sin(Time.time * tiltSpeed + timeOffset) * torque;
+            rb.AddTorque(Vector3.up * force, ForceMode.Acceleration);
+        }
     }
 
     private float WindInput(float shipAngle)
