@@ -34,28 +34,41 @@ public class SailFunction : MonoBehaviour
 
     public LineRenderer sailIndicator;
 
+    public GameObject riggingLower;
+    public GameObject riggingUpper;
+
+    public GameObject pOneriggingLower;
+    public GameObject pOneriggingUpper;
+
+    public GameObject pTworiggingLower;
+    public GameObject pTworiggingUpper;
+
+
     private void Awake()
     {
         shipModel.Speed = .2f;
-        sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -5, 0));
+        SailChange();
     }
 
     private void Update()
     {
+        if(riggingLower.transform.transform.localScale.y != shipModel.Speed)
+        {
+            SailChange();
+        }
         if (!m_sailing) return;
 
         if (isLowering)
         {
             shipModel.Speed += .5f * Time.deltaTime;
+            SailChange();
         }
         else if (isRaising)
         {
             shipModel.Speed -= .5f * Time.deltaTime;
+            SailChange();
         }
-
-        shipModel.Speed = Mathf.Clamp(shipModel.Speed, .2f, 1f);
-        sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -5, 0));
-
+        
         if (playerTransform != null && playerTransform.position != recentPosition)
         {
            playerTransform.localPosition = recentPosition;
@@ -208,5 +221,23 @@ public class SailFunction : MonoBehaviour
 
         playerInput = null;
         inputActions = null;
+    }
+
+    private void SailChange()
+    {
+        shipModel.Speed = Mathf.Clamp(shipModel.Speed, .2f, 1f);
+        sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -5, 0));
+        float sailHeight = Mathf.Lerp(pOneriggingLower.transform.transform.localScale.y, shipModel.Speed, 1f * Time.deltaTime);
+        float upperSailHeight = Mathf.Lerp(pOneriggingUpper.transform.transform.localScale.y, shipModel.Speed, 1f * Time.deltaTime);
+
+        riggingLower.transform.transform.localScale = new Vector3(1f, sailHeight, 1f);
+        riggingUpper.transform.transform.localScale = new Vector3(1f, sailHeight, 1f);
+
+        pOneriggingLower.transform.transform.localScale = new Vector3(1f, sailHeight, 1f);
+        pOneriggingUpper.transform.transform.localScale = new Vector3(1f, sailHeight, 1f);
+
+        pTworiggingLower.transform.transform.localScale = new Vector3(1f, sailHeight, 1f);
+        pTworiggingUpper.transform.transform.localScale = new Vector3(1f, sailHeight, 1f);
+
     }
 }
