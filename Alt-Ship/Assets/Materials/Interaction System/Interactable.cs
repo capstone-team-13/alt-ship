@@ -16,9 +16,6 @@ namespace EE.Interactions
     public abstract class Interactable : MonoBehaviour, IInteractable
     {
         #region Editor API
-        [Header("Button Prompts")]
-        public SpriteRenderer pOneButton;
-        public SpriteRenderer pTwoButton;
 
         [Header("Configs")][SerializeField] private string m_interactionName;
 
