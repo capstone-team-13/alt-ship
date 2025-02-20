@@ -121,6 +121,7 @@ public class SailFunction : MonoBehaviour
         if (player.transform.GetComponent<PlayerController>() != null)
         {
             playerNum = player.transform.GetComponent<PlayerController>().playerNum;
+            player.transform.GetComponent<PlayerController>().isPerforming = true;
         }
 
         lastPlayerCam = player.GetComponentInChildren<CinemachineFreeLook>();
@@ -151,6 +152,7 @@ public class SailFunction : MonoBehaviour
         if (player.transform.GetComponent<PlayerController>() != null)
         {
             playerNum = player.transform.GetComponent<PlayerController>().playerNum;
+            player.transform.GetComponent<PlayerController>().isPerforming = false;
         }
 
         lastPlayerCam = player.GetComponentInChildren<CinemachineFreeLook>();

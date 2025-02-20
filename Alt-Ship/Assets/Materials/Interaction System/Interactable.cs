@@ -17,8 +17,8 @@ namespace EE.Interactions
     {
         #region Editor API
         [Header("Button Prompts")]
-        public SpriteRenderer pOneButton;
-        public SpriteRenderer pTwoButton;
+        public GameObject pOneButton;
+        public GameObject pTwoButton;
 
         [Header("Configs")][SerializeField] private string m_interactionName;
 
@@ -206,6 +206,7 @@ namespace EE.Interactions
         private void __M_Reset(IInteractable interactable, GameObject interactor)
         {
             Debug.Log("@Reset");
+            CurrentPerformer = null;
             CurrentPlayer = null;
         }
 

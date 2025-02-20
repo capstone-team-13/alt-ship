@@ -53,7 +53,6 @@ public class SailMovementSystem : Controller<ShipModel>
 
     private void Update()
     {
-        Debug.Log("Speed: " + rb.velocity.magnitude);
         if (tiltingToggle)
         {
             float sideTilt = Mathf.Sin(Time.time * tiltSpeed) * tiltAmount;

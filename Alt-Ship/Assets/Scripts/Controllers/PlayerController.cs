@@ -27,6 +27,8 @@ public class PlayerController : Controller<PlayerModel>
 
     private Vector3 direction;
 
+    public bool isPerforming = false;
+
     [SerializeField] private CinemachineFreeLook playerFreeLook;
 
     #endregion
@@ -209,8 +211,6 @@ public class PlayerController : Controller<PlayerModel>
             if (direction.sqrMagnitude > 0.001f)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
-                Debug.Log(
-                    $"Direction: {direction}, Rotation: {m_controllers[playerNum - 1].Rotation.rotation.eulerAngles}");
                 m_controllers[playerNum - 1].Rotation.localRotation = Quaternion.Slerp(
                     m_controllers[playerNum - 1].Rotation.localRotation,
                     Quaternion.LookRotation(direction, Vector3.up),
