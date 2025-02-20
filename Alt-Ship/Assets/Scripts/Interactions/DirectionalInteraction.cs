@@ -1,5 +1,6 @@
 using EE.Interactions;
 using JetBrains.Annotations;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DirectionalInteraction : Interactable
@@ -14,6 +15,8 @@ public class DirectionalInteraction : Interactable
 
     [SerializeField] private LayerMask m_playerLayer;
 
+    private HashSet<PlayerController> previousPlayers = new HashSet<PlayerController>();
+
     #endregion
 
     #region Unity Callbacks
@@ -27,6 +30,11 @@ public class DirectionalInteraction : Interactable
         Gizmos.color = Color.yellow;
         var rotatedVector = __M_RotateImageForward();
         Gizmos.DrawRay(transform.position, rotatedVector * 2.0f);
+    }
+
+    private void FixedUpdate()
+    {
+        ButtonPrompts();
     }
 
     #endregion
@@ -78,6 +86,71 @@ public class DirectionalInteraction : Interactable
     {
         Debug.Log("Directional @Reset");
         CurrentPlayer = null;
+    }
+
+    private void ButtonPrompts()
+    {
+        var colliders = Physics.OverlapSphere(transform.position, m_interactionRadius, m_playerLayer);
+        HashSet<PlayerController> currentPlayers = new HashSet<PlayerController>();
+
+        Debug.Log("Button Prompts Called");
+
+        foreach ( var agent in colliders)
+        {
+            Debug.Log("Collider Found: " + agent.gameObject.name);
+
+            PlayerController playerController = agent.gameObject.GetComponent<PlayerController>();
+            if(playerController == null) continue;
+
+            Debug.Log("Passed Null Check");
+            Debug.Log("Current Performer: " + CurrentPerformer);
+            Debug.Log("Player Num: " + playerController.playerNum);
+            currentPlayers.Add(playerController);
+
+                if(playerController.playerNum == 1 && !playerController.isPerforming && !pOneButton.activeSelf)
+                {
+
+                Debug.Log("Player confirmed not performer");
+
+                pOneButton.SetActive(true);
+                }
+                else if (playerController.playerNum == 2 && !playerController.isPerforming && !pTwoButton.activeSelf)
+                {
+                    pTwoButton.SetActive(true);
+                }
+
+                if(playerController.playerNum == 1 && playerController.isPerforming && pOneButton.activeSelf)
+                {
+
+                Debug.Log("Player confirmed is performer");
+
+                pOneButton.SetActive(false);
+                }
+                else if(playerController.playerNum == 2 && playerController.isPerforming && pTwoButton.activeSelf)
+                {
+                    pTwoButton.SetActive(false);
+                }
+        }
+
+        foreach (var previousPlayer in previousPlayers)
+        {
+            if (!currentPlayers.Contains(previousPlayer))
+            {
+                if(previousPlayer.playerNum == 1 && pOneButton.activeSelf)
+                {
+
+                    Debug.Log("Player left collider");
+
+                    pOneButton.SetActive(false);
+                }
+                else if(previousPlayer.playerNum == 2 && pTwoButton.activeSelf)
+                {
+                    pTwoButton.SetActive(false);
+                }
+            }
+        }
+
+        previousPlayers = currentPlayers;
     }
 
     #endregion
