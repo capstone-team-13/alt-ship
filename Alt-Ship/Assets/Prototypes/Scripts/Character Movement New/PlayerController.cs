@@ -22,6 +22,13 @@ namespace EE.Prototype.PC
             m_animator.SetFloat("inputZ", currentInput.z);
         }
 
+        private void OnDrawGizmos()
+        {
+
+            Gizmos.color = Color.yellow;
+            Debug.DrawRay(transform.position + Vector3.up * 0.01f, Rotation.forward * 5.0f);
+        }
+
         private Vector3 m_userInput;
 
         private float m_jumpInput;

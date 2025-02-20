@@ -25,6 +25,8 @@ public class PlayerController : Controller<PlayerModel>
 
     public int playerNum;
 
+    private Vector3 direction;
+
     [SerializeField] private CinemachineFreeLook playerFreeLook;
 
     #endregion
@@ -117,7 +119,14 @@ public class PlayerController : Controller<PlayerModel>
 
         if (!parentRotation)
         {
-            parentRotation = GameObject.FindWithTag("Ship").transform;
+            GameObject go = GameObject.FindWithTag("ShipParent");
+            if (go == null)
+            {
+                Debug.LogError("Error: ShipParent object not found in the scene!");
+                return;
+            }
+
+            parentRotation = go.transform;
         }
     }
 
@@ -152,7 +161,12 @@ public class PlayerController : Controller<PlayerModel>
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
+
         Debug.DrawRay(transform.position + Vector3.up * 0.01f, transform.forward * 5.0f);
+
+        Gizmos.color = Color.blue;
+
+        Debug.DrawRay(transform.position + Vector3.up * 0.01f, parentRotation.transform.forward * 2.0f);
     }
 
     #endregion
@@ -174,14 +188,18 @@ public class PlayerController : Controller<PlayerModel>
 
     private void __M_Move()
     {
+        transform.rotation = parentRotation.transform.rotation;
+
         Vector3 movementInput = __M_GetPlayerInput();
         m_controllers[playerNum - 1].UserInput = movementInput;
 
         Vector3 direction = m_camera.transform.TransformDirection(movementInput);
-        direction.y = 0;
+
 
         Quaternion inverseParentRotation = Quaternion.Inverse(parentRotation.rotation);
         direction = inverseParentRotation * direction;
+        direction.y = 0;
+        direction = direction.normalized;
 
         __M_UpdateDirection(direction);
 
@@ -191,9 +209,11 @@ public class PlayerController : Controller<PlayerModel>
             if (direction.sqrMagnitude > 0.001f)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
-                m_controllers[playerNum - 1].Rotation.rotation = Quaternion.Slerp(
-                    m_controllers[playerNum - 1].Rotation.rotation,
-                    targetRotation,
+                Debug.Log(
+                    $"Direction: {direction}, Rotation: {m_controllers[playerNum - 1].Rotation.rotation.eulerAngles}");
+                m_controllers[playerNum - 1].Rotation.localRotation = Quaternion.Slerp(
+                    m_controllers[playerNum - 1].Rotation.localRotation,
+                    Quaternion.LookRotation(direction, Vector3.up),
                     Time.deltaTime * 5f
                 );
             }

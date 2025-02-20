@@ -4,8 +4,7 @@ using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
-    [Header("Tutorial UI")]
-    public GameObject tutorialPanel;
+    [Header("Tutorial UI")] public GameObject tutorialPanel;
     public List<GameObject> tutorialPages;
 
     public int currentPageIndex = 0;
@@ -50,28 +49,24 @@ public class TutorialManager : MonoBehaviour
     {
         tutorialPanel.SetActive(true);
         currentPageIndex = 0;
-        ShowPage(currentPageIndex);
+        ShowPage();
         CheckButtons();
     }
 
     public void NextPage()
     {
-        if (currentPageIndex < tutorialPages.Count - 1)
-        {
-            currentPageIndex++;
-            ShowPage(currentPageIndex);
-            CheckButtons();
-        }
+        currentPageIndex++;
+        currentPageIndex %= tutorialPages.Count;
+        ShowPage();
+        CheckButtons();
     }
 
     public void PrevPage()
     {
-        if (currentPageIndex > 0)
-        {
-            currentPageIndex--;
-            ShowPage(currentPageIndex);
-            CheckButtons();
-        }
+        currentPageIndex--;
+        currentPageIndex %= tutorialPages.Count;
+        ShowPage();
+        CheckButtons();
     }
 
     public void CloseTutorial()
@@ -79,11 +74,11 @@ public class TutorialManager : MonoBehaviour
         tutorialPanel.SetActive(false);
     }
 
-    private void ShowPage(int index)
+    private void ShowPage()
     {
         for (int i = 0; i < tutorialPages.Count; i++)
         {
-            tutorialPages[i].SetActive(i == index);
+            tutorialPages[i].SetActive(i == currentPageIndex);
         }
     }
 

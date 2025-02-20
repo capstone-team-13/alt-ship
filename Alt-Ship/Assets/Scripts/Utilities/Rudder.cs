@@ -134,8 +134,7 @@ public class Rudder : MonoBehaviour
             //
             if (pOneSail.GetComponentInChildren<MeshRenderer>().material)
             {
-                MeshRenderer materialTest = pOneSail.GetComponentInChildren<MeshRenderer>();
-                materialTest.material = transparent;
+                MatSwap(true, transparent);
             }
         }
         else if (lastPlayerCam != null && playerNum == 2)
@@ -145,8 +144,7 @@ public class Rudder : MonoBehaviour
             //
             if (pTwoSail.GetComponentInChildren<MeshRenderer>().material)
             {
-                MeshRenderer materialTest = pTwoSail.GetComponentInChildren<MeshRenderer>();
-                materialTest.material = transparent;
+                MatSwap(false, transparent);
             }
         }
         // Camera End
@@ -178,8 +176,7 @@ public class Rudder : MonoBehaviour
             //
             if (pOneSail.GetComponentInChildren<MeshRenderer>().material)
             {
-                MeshRenderer materialTest = pOneSail.GetComponentInChildren<MeshRenderer>();
-                materialTest.material = standard;
+                MatSwap(true, standard);
             }
         }
         else if (lastPlayerCam != null && playerNum == 2)
@@ -189,8 +186,8 @@ public class Rudder : MonoBehaviour
             //
             if (pTwoSail.GetComponentInChildren<MeshRenderer>().material)
             {
-                MeshRenderer materialTest = pTwoSail.GetComponentInChildren<MeshRenderer>();
-                materialTest.material = standard;
+                MatSwap(false, standard);
+
             }
         }
 
@@ -231,4 +228,41 @@ public class Rudder : MonoBehaviour
         playerInput = null;
         inputActions = null;
     }
+
+    private void MatSwap(bool toggle, Material material)
+    {
+        // Player One
+        if(toggle)
+        {
+            MeshRenderer[] meshRenderers = pOneSail.GetComponentsInChildren<MeshRenderer>();
+            SkinnedMeshRenderer[] skinnedMeshRenderers = pOneSail.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+
+            foreach(MeshRenderer renderer in meshRenderers)
+            {
+                renderer.material = material;
+            }
+            foreach(SkinnedMeshRenderer skinrenderer in skinnedMeshRenderers)
+            {
+                skinrenderer.material = material;
+            }
+        }
+        // Player Two
+        else if(!toggle)
+        {
+            MeshRenderer[] meshRenderers = pTwoSail.GetComponentsInChildren<MeshRenderer>();
+            SkinnedMeshRenderer[] skinnedMeshRenderers = pTwoSail.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+
+            foreach (MeshRenderer renderer in meshRenderers)
+            {
+                renderer.material = material;
+            }
+            foreach (SkinnedMeshRenderer skinrenderer in skinnedMeshRenderers)
+            {
+                skinrenderer.material = material;
+            }
+        }
+    }
+
 }

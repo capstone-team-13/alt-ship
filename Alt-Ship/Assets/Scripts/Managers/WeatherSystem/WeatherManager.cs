@@ -13,24 +13,30 @@ public class WeatherManager : MonoBehaviour
     [Header("Wind Movement")]
     public float windDirectionRate = .05f;
     public float windIntensityRate = 1f;
-    public float maxIntensity = 10f;
-    public float minIntensity = 3f;
+    public float maxIntensity = 6f;
+    public float minIntensity = 2.5f;
     public float windChangeTime = 10f;
 
+    private float initialIntensity;
     private Vector3 targetDirection;
     private float targetIntensity;
     private Coroutine windChange;
 
     private void Awake()
     {
-        if(Instance != null & Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
 
-        WindVariations();
+        initialIntensity = 0f;
+        targetIntensity = minIntensity;
+
+        windDirection = Vector3.forward; 
+
+        Invoke(nameof(WindVariations), windChangeTime);
         InvokeRepeating(nameof(WindVariations), windChangeTime, windChangeTime);
     }
 
@@ -61,7 +67,7 @@ public class WeatherManager : MonoBehaviour
     {
         float t = 0f;
         Vector3 initialDirection = windDirection;
-        float initialIntensity = windIntensity;
+        initialIntensity = windIntensity;
 
         while(t < 1f)
         {

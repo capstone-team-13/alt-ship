@@ -1,23 +1,24 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum SceneName
+{
+    Start = 0,
+    DeviceRegistration,
+    LevelSelection,
+    Level1,
+    Level2,
+    End,
+    Undefined
+}
+
 public class SceneLoader : MonoBehaviour
 {
-    private enum SceneName
-    {
-        Start = 0,
-        LevelSelection,
-        Level1,
-        Level2,
-        End,
-        Undefined
-    }
-
     private static readonly string[] m_sceneNames =
     {
         "Start",
-        "Level Selection",
         "Device Registration",
+        "Level Selection",
         "Level #2 Asset Implemented",
         "Level #3",
         //"Luka's Greybox",
@@ -25,6 +26,12 @@ public class SceneLoader : MonoBehaviour
     };
 
     [SerializeField] private SceneName m_sceneName = SceneName.Undefined;
+
+    public SceneName SceneName
+    {
+        get => m_sceneName;
+        set => m_sceneName = value;
+    }
 
     public void Load()
     {
@@ -44,6 +51,7 @@ public class SceneLoader : MonoBehaviour
         {
             Debug.LogWarning($"You need to define which scene you want to load. ({gameObject.name})");
         }
+
         var sceneIndex = (int)m_sceneName;
 
         SceneManager.LoadScene(m_sceneNames[0]);
@@ -69,13 +77,12 @@ public class SceneLoader : MonoBehaviour
             SelectedLevelData.Instance.finishedPurpose();
             SceneManager.LoadScene(m_sceneNames[4]);
         }
-        else if(levelNum == 2)
+        else if (levelNum == 2)
         {
             // For Level Three
             SelectedLevelData.Instance.finishedPurpose();
             Load();
         }
-
     }
 
     public void CloseGame()
