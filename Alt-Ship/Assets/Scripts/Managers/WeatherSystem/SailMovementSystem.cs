@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using EE.AMVCC;
+using Application = EE.AMVCC.Application;
 using JetBrains.Annotations;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
@@ -26,8 +27,8 @@ public class SailMovementSystem : Controller<ShipModel>
     private float currentSpeed = 0f;
 
     public float sailHeight = 1;
-    
 
+    private float previousSpeed;
     private bool toggle = false;
 
     [Header("Tilting")]
@@ -36,24 +37,27 @@ public class SailMovementSystem : Controller<ShipModel>
     public float tiltSpeed = .5f;
     public float forwardTilt = 1f;
     public float forwardTiltSpeed = .3f;
-    public float torque = .1f;
 
-
-
-    private float timeOffset;
+    [Header("Sheep")]
+    public GameObject sheepOne;
+    public GameObject sheepTwo;
+    public GameObject sheepThree;
+    public float mincollisionSpeed = 8f;
+    public float collisionCD = 10f;
+    private bool collisionToggle = false;
 
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
-        timeOffset = .1f;
     }
 
     private void Update()
     {
+        Debug.Log("Speed: " + rb.velocity.magnitude);
         if (tiltingToggle)
         {
-            float sideTilt = Mathf.Sin(Time.time * tiltSpeed + timeOffset) * tiltAmount;
-            float frontTilt = Mathf.Sin(Time.time * forwardTiltSpeed + timeOffset) * forwardTilt;
+            float sideTilt = Mathf.Sin(Time.time * tiltSpeed) * tiltAmount;
+            float frontTilt = Mathf.Sin(Time.time * forwardTiltSpeed) * forwardTilt;
 
             transform.localRotation = Quaternion.Euler(frontTilt, transform.eulerAngles.y, sideTilt);
         }
@@ -67,11 +71,7 @@ public class SailMovementSystem : Controller<ShipModel>
         Drag();
         Tilting();
 
-        if (tiltingToggle)
-        {
-            float force = Mathf.Sin(Time.time * tiltSpeed + timeOffset) * torque;
-            rb.AddTorque(Vector3.up * force, ForceMode.Acceleration);
-        }
+        previousSpeed = rb.velocity.magnitude;
     }
 
     private float WindInput(float shipAngle)
@@ -161,4 +161,66 @@ public class SailMovementSystem : Controller<ShipModel>
         transform.localRotation = Quaternion.Euler(0, transform.eulerAngles.y, tiltAmount);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if ((collisionToggle)) return;
+
+        float currentSpeed = rb.velocity.magnitude;
+        float speedDrop = previousSpeed - currentSpeed;
+        if (speedDrop > mincollisionSpeed && collision.gameObject.tag == "Obstacle") 
+        {
+            rb.velocity *= .5f;
+            if (sheepOne.activeSelf) { SheepFling(sheepOne); return; }
+            if (sheepTwo.activeSelf) { SheepFling(sheepTwo); return; }
+            if (sheepThree.activeSelf) { SheepFling(sheepThree); return; }
+        }
+
+        StartCoroutine(SheepCooldown(collisionCD));
+    }
+
+    private void SheepFling(GameObject sheep)
+    {
+        if (sheep == null) return;
+
+        sheep.transform.parent = null;
+
+        Vector3 flingDirection = (transform.up + transform.forward).normalized * 5f;
+
+        StartCoroutine(FlingMovement(sheep, flingDirection, 5f));
+    }
+
+    private IEnumerator FlingMovement(GameObject sheep, Vector3 flingDirection, float duration)
+    {
+        sheep.transform.parent = null;
+        float timeElapsed = 0f;
+
+        Vector3 startPosition = sheep.transform.position;
+        Vector3 targetPosition = startPosition + flingDirection * 5f;
+        
+        Quaternion startRotation = sheep.transform.rotation;
+
+        Quaternion targetRotation = startRotation * Quaternion.Euler(Random.insideUnitSphere * 360f);
+
+        while (timeElapsed < duration)
+        {
+            float t = timeElapsed / duration;
+            sheep.transform.position = Vector3.Lerp(startPosition, targetPosition, t * 10f);
+            sheep.transform.rotation = Quaternion.RotateTowards(startRotation, targetRotation, t * 360f);
+            targetPosition.y = Mathf.Lerp(targetPosition.y, 0f, t); // 0f is water surface height
+
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        sheep.transform.position = new Vector3(sheep.transform.position.x, 0f, sheep.transform.position.z);
+
+        sheep.SetActive(false);
+    }
+
+    private IEnumerator SheepCooldown(float cooldown)
+    {
+        collisionToggle = true;
+        yield return new WaitForSeconds(cooldown);
+        collisionToggle = false;
+    }
 }

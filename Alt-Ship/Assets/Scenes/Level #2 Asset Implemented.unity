@@ -34132,6 +34132,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 3834.4587
       objectReference: {fileID: 0}
+    - target: {fileID: 4819381056400477161, guid: 1dd924f299ac76349980c0e2e7adbd9f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4819381056400477161, guid: 1dd924f299ac76349980c0e2e7adbd9f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5625283060714473328, guid: 1dd924f299ac76349980c0e2e7adbd9f,
         type: 3}
       propertyPath: m_Material
@@ -50128,11 +50138,15 @@ MonoBehaviour:
   accelerationSmoothing: 10
   velocitySmoothing: 0.5
   sailHeight: 0.2
+  tiltingToggle: 1
   tiltAmount: 0.55
   tiltSpeed: 0.5
   forwardTilt: 0.3
   forwardTiltSpeed: 0.15
-  torque: 0.005
+  sheepOne: {fileID: 233364967}
+  sheepTwo: {fileID: 1300887443}
+  sheepThree: {fileID: 1038354102}
+  collisionCD: 10
 --- !u!1001 &1707263635
 PrefabInstance:
   m_ObjectHideFlags: 0
