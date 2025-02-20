@@ -173,6 +173,7 @@ public class LevelSelectMenu : MonoBehaviour
                         Debug.Log("Null");
                         return;
                     }
+                    SelectedLevelData.Instance.levelChosen(2);
                 }
             }
             else if (menuIndex == 1)
