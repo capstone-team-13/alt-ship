@@ -113,10 +113,12 @@ public class DirectionalInteraction : Interactable
                 Debug.Log("Player confirmed not performer");
 
                 pOneButton.SetActive(true);
+                uiControlsOne.SetActive(false);
                 }
                 else if (playerController.playerNum == 2 && !playerController.isPerforming && !pTwoButton.activeSelf)
                 {
-                    pTwoButton.SetActive(true);
+                pTwoButton.SetActive(true);
+                uiControlsTwo.SetActive(false);
                 }
 
                 if(playerController.playerNum == 1 && playerController.isPerforming && pOneButton.activeSelf)
@@ -125,10 +127,12 @@ public class DirectionalInteraction : Interactable
                 Debug.Log("Player confirmed is performer");
 
                 pOneButton.SetActive(false);
+                uiControlsOne.SetActive(true);
                 }
                 else if(playerController.playerNum == 2 && playerController.isPerforming && pTwoButton.activeSelf)
                 {
                     pTwoButton.SetActive(false);
+                uiControlsTwo.SetActive(true);
                 }
         }
 
@@ -142,10 +146,12 @@ public class DirectionalInteraction : Interactable
                     Debug.Log("Player left collider");
 
                     pOneButton.SetActive(false);
+                    uiControlsOne.SetActive(false);
                 }
                 else if(previousPlayer.playerNum == 2 && pTwoButton.activeSelf)
                 {
                     pTwoButton.SetActive(false);
+                    uiControlsTwo.SetActive(false);
                 }
             }
         }

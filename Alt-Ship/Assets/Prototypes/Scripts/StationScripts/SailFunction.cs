@@ -29,6 +29,8 @@ public class SailFunction : MonoBehaviour
     public CinemachineVirtualCamera sailCam2;
     private CinemachineFreeLook lastPlayerCam;
 
+    private int selfIdentifier = 2;
+
     private Transform playerTransform;
     private Vector3 recentPosition;
 

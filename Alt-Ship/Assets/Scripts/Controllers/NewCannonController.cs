@@ -19,6 +19,8 @@ public class NewCannonController : MonoBehaviour
     public CinemachineVirtualCamera cannonCam2;
     private CinemachineFreeLook lastPlayerCam;
 
+    private int selfIdentifier = 1;
+
     private Transform playerTransform;
     private Vector3 recentPosition;
 

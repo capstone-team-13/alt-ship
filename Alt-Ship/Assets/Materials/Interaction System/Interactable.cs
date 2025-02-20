@@ -19,6 +19,8 @@ namespace EE.Interactions
         [Header("Button Prompts")]
         public GameObject pOneButton;
         public GameObject pTwoButton;
+        public GameObject uiControlsOne;
+        public GameObject uiControlsTwo;
 
         [Header("Configs")][SerializeField] private string m_interactionName;
 

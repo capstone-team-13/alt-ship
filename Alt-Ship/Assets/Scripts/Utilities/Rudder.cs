@@ -23,6 +23,9 @@ public class Rudder : MonoBehaviour
     [SerializeField] private Material standard;
     [SerializeField] private Material transparent;
 
+    private int selfIdentifier = 3;
+
+
     // TODO: Temp solution
     [SerializeField] private DirectionalInteraction m_interactable;
 
