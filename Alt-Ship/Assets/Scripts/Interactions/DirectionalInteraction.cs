@@ -1,7 +1,10 @@
+using Cinemachine;
+using DG.Tweening;
 using EE.Interactions;
 using JetBrains.Annotations;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DirectionalInteraction : Interactable
 {
@@ -93,25 +96,15 @@ public class DirectionalInteraction : Interactable
         var colliders = Physics.OverlapSphere(transform.position, m_interactionRadius, m_playerLayer);
         HashSet<PlayerController> currentPlayers = new HashSet<PlayerController>();
 
-        Debug.Log("Button Prompts Called");
-
         foreach ( var agent in colliders)
         {
-            Debug.Log("Collider Found: " + agent.gameObject.name);
-
             PlayerController playerController = agent.gameObject.GetComponent<PlayerController>();
             if(playerController == null) continue;
 
-            Debug.Log("Passed Null Check");
-            Debug.Log("Current Performer: " + CurrentPerformer);
-            Debug.Log("Player Num: " + playerController.playerNum);
             currentPlayers.Add(playerController);
 
                 if(playerController.playerNum == 1 && !playerController.isPerforming && !pOneButton.activeSelf)
                 {
-
-                Debug.Log("Player confirmed not performer");
-
                 pOneButton.SetActive(true);
                 uiControlsOne.SetActive(false);
                 }
@@ -123,9 +116,6 @@ public class DirectionalInteraction : Interactable
 
                 if(playerController.playerNum == 1 && playerController.isPerforming && pOneButton.activeSelf)
                 {
-
-                Debug.Log("Player confirmed is performer");
-
                 pOneButton.SetActive(false);
                 uiControlsOne.SetActive(true);
                 }
@@ -134,6 +124,7 @@ public class DirectionalInteraction : Interactable
                     pTwoButton.SetActive(false);
                 uiControlsTwo.SetActive(true);
                 }
+            RotateToCamera(playerController.playerFreeLook, playerController);
         }
 
         foreach (var previousPlayer in previousPlayers)
@@ -142,9 +133,6 @@ public class DirectionalInteraction : Interactable
             {
                 if(previousPlayer.playerNum == 1 && pOneButton.activeSelf)
                 {
-
-                    Debug.Log("Player left collider");
-
                     pOneButton.SetActive(false);
                     uiControlsOne.SetActive(false);
                 }
@@ -159,5 +147,24 @@ public class DirectionalInteraction : Interactable
         previousPlayers = currentPlayers;
     }
 
+    private void RotateToCamera(CinemachineFreeLook playerCam, PlayerController playerController)
+    {
+        if (pOneButton.activeSelf && playerController.playerNum == 1)
+        {
+            Vector3 directionToCamera = playerCam.transform.position - pOneButton.transform.position;
+            directionToCamera.y = 0;
+
+            Quaternion targetRotation = Quaternion.LookRotation(directionToCamera);
+            pOneButton.transform.rotation = Quaternion.Slerp(pOneButton.transform.rotation, targetRotation, Time.deltaTime * 5f);
+        }
+        else if (pTwoButton.activeSelf && playerController.playerNum == 2)
+        {
+            Vector3 directionToCamera = playerCam.transform.position - pTwoButton.transform.position;
+            directionToCamera.y = 0;
+
+            Quaternion targetRotation = Quaternion.LookRotation(directionToCamera);
+            pTwoButton.transform.rotation = Quaternion.Slerp(pTwoButton.transform.rotation, targetRotation, Time.deltaTime * 5f);
+        }
+    }
     #endregion
 }
