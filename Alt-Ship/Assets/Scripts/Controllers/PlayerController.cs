@@ -29,7 +29,7 @@ public class PlayerController : Controller<PlayerModel>
 
     public bool isPerforming = false;
 
-    [SerializeField] private CinemachineFreeLook playerFreeLook;
+    public CinemachineFreeLook playerFreeLook;
 
     #endregion
 
