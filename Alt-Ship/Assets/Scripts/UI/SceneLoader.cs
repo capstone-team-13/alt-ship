@@ -8,6 +8,7 @@ public enum SceneName
     LevelSelection,
     Level1,
     Level2,
+    Level3,
     End,
     Undefined
 }
@@ -21,6 +22,7 @@ public class SceneLoader : MonoBehaviour
         "Level Selection",
         "Level #2 Asset Implemented",
         "Level #3",
+        "Level #4",
         //"Luka's Greybox",
         "End"
     };
@@ -81,7 +83,8 @@ public class SceneLoader : MonoBehaviour
         {
             // For Level Three
             SelectedLevelData.Instance.finishedPurpose();
-            Load();
+            SceneManager.LoadScene(m_sceneNames[5]);
+
         }
     }
 
