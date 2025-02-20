@@ -1,5 +1,5 @@
 using JetBrains.Annotations;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +13,41 @@ public class PlayerRegistrationUI : MonoBehaviour
     [SerializeField] private KeyHintUI m_exitKeyHint;
 
     [SerializeField] private ReadyIndicatorUI m_readyIndicator;
+
+    [SerializeField] private Animator m_playerAnimator;
+    private List<string> m_joinedAnimationTriggers = new();
+    private List<string> m_exitedAnimationTriggers = new();
+    private void Start()
+    {
+        if (m_playerAnimator == null)
+        {
+            Debug.LogError("Animator is not assigned!");
+            return;
+        }
+
+        var parameters = m_playerAnimator.parameters;
+
+        const string joinedAnimationPrefix = "$(Joined)";
+        foreach (AnimatorControllerParameter parameter in parameters)
+        {
+            bool isTrigger = parameter.type == AnimatorControllerParameterType.Trigger;
+            if (!isTrigger || !parameter.name.StartsWith(joinedAnimationPrefix)) continue;
+
+            m_joinedAnimationTriggers.Add(parameter.name);
+        }
+
+        const string exitedAnimationPrefix = "$(Exited)";
+        foreach (AnimatorControllerParameter parameter in parameters)
+        {
+            bool isTrigger = parameter.type == AnimatorControllerParameterType.Trigger;
+            if (!isTrigger || !parameter.name.StartsWith(exitedAnimationPrefix)) continue;
+
+            m_exitedAnimationTriggers.Add(parameter.name);
+        }
+
+        m_playerAnimator.SetBool("Mirror", m_index != 0);
+    }
+
 
     [UsedImplicitly]
     private void OnEnable()
@@ -48,6 +83,9 @@ public class PlayerRegistrationUI : MonoBehaviour
 
         m_readyIndicator.SetColor(m_joinedColor, 1.0f);
         m_readyIndicator.SetReadyImageActive(true);
+
+        int randomIndex = Random.Range(0, m_joinedAnimationTriggers.Count);
+        m_playerAnimator.SetTrigger(m_joinedAnimationTriggers[randomIndex]);
     }
 
     private void OnPlayerExited(ref PlayerExitedEvent eventData, GameObject target, GameObject source)
@@ -61,5 +99,8 @@ public class PlayerRegistrationUI : MonoBehaviour
 
         m_readyIndicator.SetColor(m_exitedColor, 1.0f);
         m_readyIndicator.SetReadyImageActive(false);
+        
+        int randomIndex = Random.Range(0, m_exitedAnimationTriggers.Count);
+        m_playerAnimator.SetTrigger(m_exitedAnimationTriggers[randomIndex]);
     }
 }
