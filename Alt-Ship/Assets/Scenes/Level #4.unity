@@ -588,7 +588,7 @@ GameObject:
   - component: {fileID: 24155820}
   m_Layer: 0
   m_Name: Cliff02 (23)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -627,8 +627,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.0072838943, y: 0.02399069, z: 0.009533398}
-  m_Center: {x: 0.0003618413, y: 0.00017106578, z: 0.0044891797}
+  m_Size: {x: 0.0072838943, y: 0.021075385, z: 0.009533398}
+  m_Center: {x: 0.0003618413, y: -0.00022721256, z: 0.0044891792}
 --- !u!23 &24155821
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1333,7 +1333,7 @@ GameObject:
   - component: {fileID: 45954099}
   m_Layer: 0
   m_Name: Cliff02 (33)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2162,7 +2162,7 @@ GameObject:
   - component: {fileID: 76560603}
   m_Layer: 0
   m_Name: Cliff03 (25)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3166,7 +3166,7 @@ GameObject:
   - component: {fileID: 106053736}
   m_Layer: 0
   m_Name: Cliff02 (56)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3854,7 +3854,7 @@ GameObject:
   - component: {fileID: 140747855}
   m_Layer: 0
   m_Name: Cliff02 (39)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5565,7 +5565,7 @@ GameObject:
   - component: {fileID: 184360688}
   m_Layer: 0
   m_Name: Cliff02 (21)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6251,7 +6251,7 @@ GameObject:
   - component: {fileID: 205904929}
   m_Layer: 0
   m_Name: Cliff03 (38)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6560,7 +6560,7 @@ GameObject:
   - component: {fileID: 218951141}
   m_Layer: 0
   m_Name: Cliff03 (43)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6840,6 +6840,112 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.013678113, y: 0.0142017435, z: 0.028653705}
   m_Center: {x: 0.0006795067, y: 0.00010124802, z: 0.013492715}
+--- !u!1 &229034834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 229034835}
+  - component: {fileID: 229034838}
+  - component: {fileID: 229034837}
+  - component: {fileID: 229034836}
+  m_Layer: 0
+  m_Name: Cliff02 (71)
+  m_TagString: Obstacle
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &229034835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229034834}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.0000008344651, y: -0.0000006854535, z: 0.68818605, w: 0.7255343}
+  m_LocalPosition: {x: 0.4148, y: 0.0007, z: 0.00008105189}
+  m_LocalScale: {x: 0.78787, y: 0.78787, z: 1.1681982}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 763694897}
+  m_Father: {fileID: 1771943454}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 86.973}
+--- !u!65 &229034836
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229034834}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.007283898, y: 0.023990704, z: 0.0095334}
+  m_Center: {x: 0.00036184886, y: 0.00017107329, z: 0.0044891834}
+--- !u!23 &229034837
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229034834}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 2de2e415f33d69242a63d5c87b87e3d5, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &229034838
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229034834}
+  m_Mesh: {fileID: 2298213860806583902, guid: 4aab7df526e849e46a74a48c7adffb86, type: 3}
 --- !u!1001 &230506318
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7225,7 +7331,7 @@ GameObject:
   - component: {fileID: 259770391}
   m_Layer: 0
   m_Name: Cliff02 (32)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8362,7 +8468,7 @@ GameObject:
   - component: {fileID: 289703756}
   m_Layer: 0
   m_Name: Cliff03 (27)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9545,7 +9651,7 @@ GameObject:
   - component: {fileID: 327471576}
   m_Layer: 0
   m_Name: Cliff02 (59)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10945,7 +11051,7 @@ GameObject:
   - component: {fileID: 367442110}
   m_Layer: 0
   m_Name: Cliff02 (41)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11968,7 +12074,7 @@ GameObject:
   - component: {fileID: 406716049}
   m_Layer: 0
   m_Name: Cliff02 (42)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12634,7 +12740,7 @@ GameObject:
   - component: {fileID: 430556516}
   m_Layer: 0
   m_Name: Cliff02 (31)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12952,7 +13058,7 @@ GameObject:
   - component: {fileID: 440887400}
   m_Layer: 0
   m_Name: Cliff02 (46)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13050,6 +13156,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1453269592}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &441609013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 441609014}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &441609014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441609013}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1542336163}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &443588310 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4831789876847731983, guid: be38bfe8d8ac01a45b334251761ef513,
@@ -13565,7 +13702,7 @@ GameObject:
   - component: {fileID: 453779347}
   m_Layer: 0
   m_Name: Cliff03 (40)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14472,7 +14609,7 @@ GameObject:
   - component: {fileID: 476424675}
   m_Layer: 0
   m_Name: Cliff03 (45)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15249,7 +15386,7 @@ GameObject:
   - component: {fileID: 508065096}
   m_Layer: 0
   m_Name: Cliff03 (34)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15683,7 +15820,7 @@ GameObject:
   - component: {fileID: 513202767}
   m_Layer: 0
   m_Name: Cliff03 (28)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16023,7 +16160,7 @@ GameObject:
   - component: {fileID: 519058171}
   m_Layer: 0
   m_Name: Cliff03 (50)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16564,7 +16701,7 @@ GameObject:
   - component: {fileID: 526459637}
   m_Layer: 0
   m_Name: Cliff03 (26)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18433,7 +18570,7 @@ GameObject:
   - component: {fileID: 596654049}
   m_Layer: 0
   m_Name: Cliff03 (16)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19467,7 +19604,7 @@ GameObject:
   - component: {fileID: 629549304}
   m_Layer: 0
   m_Name: Cliff03 (44)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -23937,7 +24074,7 @@ GameObject:
   - component: {fileID: 749646994}
   m_Layer: 0
   m_Name: Cliff02 (24)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -24310,6 +24447,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 757878094}
   m_Mesh: {fileID: -8678823145569952518, guid: 0b37b603a26e9df419ca131e2f8d3e13, type: 3}
+--- !u!1 &763694896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 763694897}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &763694897
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763694896}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 229034835}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &765976298
 GameObject:
   m_ObjectHideFlags: 0
@@ -24324,7 +24492,7 @@ GameObject:
   - component: {fileID: 765976300}
   m_Layer: 0
   m_Name: Cliff03 (51)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26019,7 +26187,7 @@ GameObject:
   - component: {fileID: 803563377}
   m_Layer: 0
   m_Name: Cliff03 (34)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26489,7 +26657,7 @@ GameObject:
   - component: {fileID: 828074427}
   m_Layer: 0
   m_Name: Cliff03 (25)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29345,7 +29513,7 @@ GameObject:
   - component: {fileID: 923804129}
   m_Layer: 0
   m_Name: Cliff03 (41)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31743,7 +31911,7 @@ GameObject:
   - component: {fileID: 992878754}
   m_Layer: 0
   m_Name: Cliff02 (41)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31998,7 +32166,7 @@ GameObject:
   - component: {fileID: 994809343}
   m_Layer: 0
   m_Name: Cliff02 (62)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32369,7 +32537,7 @@ GameObject:
   - component: {fileID: 1023955694}
   m_Layer: 0
   m_Name: Cliff03 (42)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35292,7 +35460,7 @@ GameObject:
   - component: {fileID: 1115901709}
   m_Layer: 0
   m_Name: Cliff02 (43)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36246,7 +36414,7 @@ GameObject:
   - component: {fileID: 1139821755}
   m_Layer: 0
   m_Name: Cliff03 (52)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37528,7 +37696,7 @@ GameObject:
   - component: {fileID: 1180603598}
   m_Layer: 0
   m_Name: Cliff03 (36)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39170,7 +39338,7 @@ GameObject:
   - component: {fileID: 1224819862}
   m_Layer: 0
   m_Name: Cliff02 (27)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40156,7 +40324,7 @@ GameObject:
   - component: {fileID: 1255928405}
   m_Layer: 0
   m_Name: Cliff03 (26)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40665,7 +40833,7 @@ GameObject:
   - component: {fileID: 1263701768}
   m_Layer: 0
   m_Name: Cliff02 (68)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40771,7 +40939,7 @@ GameObject:
   - component: {fileID: 1266188167}
   m_Layer: 0
   m_Name: Cliff02 (61)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -41648,7 +41816,7 @@ GameObject:
   - component: {fileID: 1294744535}
   m_Layer: 0
   m_Name: Cliff02 (35)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43015,7 +43183,7 @@ GameObject:
   - component: {fileID: 1322655577}
   m_Layer: 0
   m_Name: Cliff02 (60)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43701,7 +43869,7 @@ GameObject:
   - component: {fileID: 1345834680}
   m_Layer: 0
   m_Name: Cliff02 (67)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43807,7 +43975,7 @@ GameObject:
   - component: {fileID: 1346645676}
   m_Layer: 0
   m_Name: Cliff02 (23)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45372,7 +45540,7 @@ GameObject:
   - component: {fileID: 1408001418}
   m_Layer: 0
   m_Name: Cliff03 (37)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45535,7 +45703,7 @@ GameObject:
   - component: {fileID: 1409241270}
   m_Layer: 0
   m_Name: Cliff02 (47)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45918,7 +46086,7 @@ GameObject:
   - component: {fileID: 1419703627}
   m_Layer: 0
   m_Name: Cliff02 (25)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46135,7 +46303,7 @@ GameObject:
   - component: {fileID: 1431160576}
   m_Layer: 0
   m_Name: Cliff03 (40)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46241,7 +46409,7 @@ GameObject:
   - component: {fileID: 1431246731}
   m_Layer: 0
   m_Name: Cliff02 (22)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46347,7 +46515,7 @@ GameObject:
   - component: {fileID: 1436417399}
   m_Layer: 0
   m_Name: Cliff03 (35)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49115,7 +49283,7 @@ GameObject:
   - component: {fileID: 1494618485}
   m_Layer: 0
   m_Name: Cliff03 (33)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49708,7 +49876,7 @@ GameObject:
   - component: {fileID: 1514090602}
   m_Layer: 0
   m_Name: Cliff02 (37)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50459,6 +50627,112 @@ Transform:
   m_Children: []
   m_Father: {fileID: 83370488}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1542336162
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1542336163}
+  - component: {fileID: 1542336166}
+  - component: {fileID: 1542336165}
+  - component: {fileID: 1542336164}
+  m_Layer: 0
+  m_Name: Cliff02 (70)
+  m_TagString: Obstacle
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1542336163
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542336162}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.0000008344651, y: -0.0000006854535, z: 0.68818605, w: 0.7255343}
+  m_LocalPosition: {x: 0.4366, y: 0.0008, z: 0.00008105189}
+  m_LocalScale: {x: 0.78787, y: 0.78787, z: 1.1681982}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 441609014}
+  m_Father: {fileID: 1771943454}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 86.973}
+--- !u!65 &1542336164
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542336162}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.007283898, y: 0.023990704, z: 0.0095334}
+  m_Center: {x: 0.00036184886, y: 0.00017107329, z: 0.0044891834}
+--- !u!23 &1542336165
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542336162}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 2de2e415f33d69242a63d5c87b87e3d5, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1542336166
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542336162}
+  m_Mesh: {fileID: 2298213860806583902, guid: 4aab7df526e849e46a74a48c7adffb86, type: 3}
 --- !u!1 &1542915315
 GameObject:
   m_ObjectHideFlags: 0
@@ -50661,7 +50935,7 @@ GameObject:
   - component: {fileID: 1546900559}
   m_Layer: 0
   m_Name: Cliff03 (29)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50856,7 +51130,7 @@ GameObject:
   - component: {fileID: 1548082184}
   m_Layer: 0
   m_Name: Cliff03 (30)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50946,8 +51220,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.013678117, y: 0.014201749, z: 0.028653711}
-  m_Center: {x: 0.00067947333, y: 0.000101203375, z: 0.013492744}
+  m_Size: {x: 0.011462792, y: 0.012404161, z: 0.028653698}
+  m_Center: {x: 0.00082482514, y: -0.0007975911, z: 0.013492738}
 --- !u!1 &1552976450
 GameObject:
   m_ObjectHideFlags: 0
@@ -51766,7 +52040,7 @@ GameObject:
   - component: {fileID: 1572076007}
   m_Layer: 0
   m_Name: Cliff02 (45)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51991,6 +52265,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73eb66376b5d28b4daec8cc75b10ed60, type: 3}
+--- !u!1 &1586976352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1586976353}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1586976353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586976352}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1708190396}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1592638124
 GameObject:
   m_ObjectHideFlags: 0
@@ -54329,7 +54634,7 @@ GameObject:
   - component: {fileID: 1649895345}
   m_Layer: 0
   m_Name: Cliff03 (12)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60605,7 +60910,7 @@ GameObject:
   - component: {fileID: 1696424415}
   m_Layer: 0
   m_Name: Cliff02 (57)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -61225,6 +61530,112 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_sceneName: 3
+--- !u!1 &1708190395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1708190396}
+  - component: {fileID: 1708190399}
+  - component: {fileID: 1708190398}
+  - component: {fileID: 1708190397}
+  m_Layer: 0
+  m_Name: Cliff02 (69)
+  m_TagString: Obstacle
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1708190396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708190395}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.000000059604645, z: 0.99971837, w: 0.023733288}
+  m_LocalPosition: {x: 0.4479, y: 0.0057, z: 0.00008105189}
+  m_LocalScale: {x: 0.78787, y: 0.78787, z: 1.1681982}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1586976353}
+  m_Father: {fileID: 1771943454}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 87.1}
+--- !u!65 &1708190397
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708190395}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.007283898, y: 0.023990704, z: 0.0095334}
+  m_Center: {x: 0.00036184886, y: 0.00017107329, z: 0.0044891834}
+--- !u!23 &1708190398
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708190395}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 2de2e415f33d69242a63d5c87b87e3d5, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1708190399
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708190395}
+  m_Mesh: {fileID: 2298213860806583902, guid: 4aab7df526e849e46a74a48c7adffb86, type: 3}
 --- !u!4 &1709081899 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3554647399002167467, guid: 7a85447cc0b7ee044817de7a2886b650,
@@ -61642,7 +62053,7 @@ GameObject:
   - component: {fileID: 1719321760}
   m_Layer: 0
   m_Name: Cliff03 (32)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62215,7 +62626,7 @@ GameObject:
   - component: {fileID: 1737806418}
   m_Layer: 0
   m_Name: Cliff03 (31)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62618,7 +63029,7 @@ GameObject:
   - component: {fileID: 1743154335}
   m_Layer: 0
   m_Name: Cliff02 (66)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62724,7 +63135,7 @@ GameObject:
   - component: {fileID: 1744402414}
   m_Layer: 0
   m_Name: Cliff03 (38)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63534,7 +63945,7 @@ GameObject:
   - component: {fileID: 1770354943}
   m_Layer: 0
   m_Name: Cliff02 (58)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63700,6 +64111,9 @@ Transform:
   - {fileID: 1345834679}
   - {fileID: 1263701767}
   - {fileID: 140747852}
+  - {fileID: 1708190396}
+  - {fileID: 1542336163}
+  - {fileID: 229034835}
   - {fileID: 454655622}
   - {fileID: 2078201173}
   - {fileID: 994809342}
@@ -65362,6 +65776,111 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1816813760}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1817325303
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1817325304}
+  - component: {fileID: 1817325307}
+  - component: {fileID: 1817325306}
+  - component: {fileID: 1817325305}
+  m_Layer: 0
+  m_Name: Cliff02 (24)
+  m_TagString: Obstacle
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1817325304
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817325303}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.2879675, y: 0.6458132, z: 0.6458132, w: 0.2879675}
+  m_LocalPosition: {x: -1595, y: -1110.1005, z: 797}
+  m_LocalScale: {x: 3955.6838, y: 3955.683, z: 7791.8794}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2029416989}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 131.936}
+--- !u!65 &1817325305
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817325303}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0072838943, y: 0.021075385, z: 0.009533398}
+  m_Center: {x: 0.0003618413, y: -0.00022721256, z: 0.0044891792}
+--- !u!23 &1817325306
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817325303}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 2de2e415f33d69242a63d5c87b87e3d5, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1817325307
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817325303}
+  m_Mesh: {fileID: 2298213860806583902, guid: 4aab7df526e849e46a74a48c7adffb86, type: 3}
 --- !u!1 &1818080629
 GameObject:
   m_ObjectHideFlags: 0
@@ -65376,7 +65895,7 @@ GameObject:
   - component: {fileID: 1818080633}
   m_Layer: 0
   m_Name: Cliff03 (31)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -68746,7 +69265,7 @@ GameObject:
   - component: {fileID: 1888999466}
   m_Layer: 0
   m_Name: Cliff02 (26)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -70599,7 +71118,7 @@ GameObject:
   - component: {fileID: 1931829323}
   m_Layer: 0
   m_Name: Cliff03 (37)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71082,7 +71601,7 @@ GameObject:
   - component: {fileID: 1955968330}
   m_Layer: 0
   m_Name: Cliff03 (49)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71708,7 +72227,7 @@ GameObject:
   - component: {fileID: 1975887385}
   m_Layer: 0
   m_Name: Cliff02 (63)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71909,7 +72428,7 @@ GameObject:
   - component: {fileID: 1977366166}
   m_Layer: 0
   m_Name: Cliff02 (34)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72129,7 +72648,7 @@ GameObject:
   - component: {fileID: 1989490169}
   m_Layer: 0
   m_Name: Cliff02 (26)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72699,7 +73218,7 @@ GameObject:
   - component: {fileID: 2006607615}
   m_Layer: 0
   m_Name: Cliff03 (32)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73732,6 +74251,7 @@ Transform:
   - {fileID: 782291238}
   - {fileID: 1712792554}
   - {fileID: 24155819}
+  - {fileID: 1817325304}
   - {fileID: 756096741}
   - {fileID: 575719292}
   - {fileID: 1471412624}
@@ -74595,7 +75115,7 @@ GameObject:
   - component: {fileID: 2042860301}
   m_Layer: 0
   m_Name: Cliff03 (33)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76738,7 +77258,7 @@ GameObject:
   - component: {fileID: 2115789971}
   m_Layer: 0
   m_Name: Cliff02 (22)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
