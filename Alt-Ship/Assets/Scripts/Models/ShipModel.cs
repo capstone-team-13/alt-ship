@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ShipModel : Model
 {
-    public int Health = 5;
+    public int Health = 3;
 
     [Header("Movement")]
     public float Speed;

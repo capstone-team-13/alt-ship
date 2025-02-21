@@ -161,6 +161,7 @@ public class SailMovementSystem : Controller<ShipModel>
         float speedDrop = previousSpeed - currentSpeed;
         if (speedDrop > mincollisionSpeed && collision.gameObject.tag == "Obstacle") 
         {
+            Application.Instance.Push(new ShipCommand.Damage(1));
             rb.velocity *= .5f;
             if (sheepOne.activeSelf) { SheepFling(sheepOne); return; }
             if (sheepTwo.activeSelf) { SheepFling(sheepTwo); return; }
