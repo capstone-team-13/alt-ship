@@ -312,7 +312,7 @@ public class MenuControlManager : MonoBehaviour
 
         if (menuIndex == 1)
         {
-            if (tutorialManager.currentPageIndex != 0 && tutorialManager.currentPageIndex != 5)
+            if (tutorialManager.currentPageIndex != 0 && tutorialManager.currentPageIndex != tutorialManager.tutorialPages.Count - 1)
             {
                 if (horizontalMovement != 0 && !toggleTwo)
                 {
@@ -337,7 +337,7 @@ public class MenuControlManager : MonoBehaviour
                 selectbuttonIndex = 1;
                 toggleOne = false;
             }
-            else if (tutorialManager.currentPageIndex == 5 && selectbuttonIndex != 0)
+            else if (tutorialManager.currentPageIndex == tutorialManager.tutorialPages.Count - 1 && selectbuttonIndex != 0)
             {
                 selectbuttonIndex = 0;
                 toggleOne = false;

@@ -61,7 +61,7 @@ public class WindEffectManager : MonoBehaviour
         if(windDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(windDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotSpeed);
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, targetRotation, Time.deltaTime * rotSpeed);
         }
     }
 }
