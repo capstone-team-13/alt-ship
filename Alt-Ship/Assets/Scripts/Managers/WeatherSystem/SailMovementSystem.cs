@@ -88,13 +88,6 @@ public class SailMovementSystem : Controller<ShipModel>
         float shipAngle = Vector3.Angle(transform.forward, windDir);
         float speedIntensity = WindInput(shipAngle);
 
-        float sailInput = Input.GetAxis("Vertical");
-
-        if (sailInput != 0f)
-        {
-            sailHeight = sailHeight + (sailInput * Time.deltaTime);
-        }
-
         sailHeight = Mathf.Clamp(sailHeight, .2f, 1f);
 
         currentSpeed = acceleration * windIntensity * speedIntensity * sailEfficiency * sailHeight;
@@ -116,9 +109,7 @@ public class SailMovementSystem : Controller<ShipModel>
             turnSpeed = turnSpeedMin;
             toggle = false;
         }
-
-        transform.Rotate(Vector3.up, angularVelocity * Time.deltaTime);
-
+        this.gameObject.transform.Rotate(Vector3.up, angularVelocity * Time.deltaTime);
     }
 
     public override void Notify<TCommand>(TCommand command)
@@ -128,6 +119,7 @@ public class SailMovementSystem : Controller<ShipModel>
         switch (command)
         {
             case ShipCommand.Steer steerCommand:
+                
                 var sign = steerCommand.RotationSign;
                 __M_Steer(sign);
                 break;
@@ -143,6 +135,7 @@ public class SailMovementSystem : Controller<ShipModel>
         }
         else
         {
+            Debug.Log("No Input, Slowing Down");
             angularVelocity = Mathf.Lerp(angularVelocity, 0f, Time.deltaTime * 2f);
         }
     }
@@ -151,7 +144,7 @@ public class SailMovementSystem : Controller<ShipModel>
     {
         velocity *= dragFrontal;
         rb.angularVelocity *= dragAngular;
-        angularVelocity = Mathf.Lerp(angularVelocity, 0f, Time.deltaTime * 1.5f);
+        angularVelocity = Mathf.Lerp(angularVelocity, angularVelocity * 0.8f, Time.deltaTime * 1.5f);
     }
 
     private void Tilting()

@@ -56,12 +56,12 @@ public class Rudder : MonoBehaviour
         }
     }
 
-    private void steeringBoat(InputAction.CallbackContext context)
+    private void SteeringBoat(InputAction.CallbackContext context)
     {
         rotationSign = context.ReadValue<float>();
     }
 
-    private void steeringCanceled(InputAction.CallbackContext context)
+    private void SteeringCanceled(InputAction.CallbackContext context)
     {
         rotationSign = 0.0f;
     }
@@ -219,14 +219,14 @@ public class Rudder : MonoBehaviour
 
         rotationSign = 0.0f;
         steering.Enable();
-        steering.performed += steeringBoat;
-        steering.canceled += steeringCanceled;
+        steering.performed += SteeringBoat;
+        steering.canceled += SteeringCanceled;
     }
 
     private void StationAbandonded()
     {
-        steering.performed -= steeringBoat;
-        steering.canceled -= steeringCanceled;
+        steering.performed -= SteeringBoat;
+        steering.canceled -= SteeringCanceled;
         rotationSign = 0.0f;
         steering.Disable();
 
