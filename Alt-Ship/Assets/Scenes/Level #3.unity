@@ -53210,9 +53210,9 @@ GameObject:
   - component: {fileID: 1850551215}
   - component: {fileID: 1850551214}
   - component: {fileID: 1850551213}
-  - component: {fileID: 1850551218}
   - component: {fileID: 1850551216}
   - component: {fileID: 1850551217}
+  - component: {fileID: 1850551218}
   m_Layer: 7
   m_Name: Goal (1)
   m_TagString: Untagged
@@ -53324,9 +53324,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1907bd508898d61418c78efe2e444817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_sceneName: 5
---- !u!135 &1850551218
-SphereCollider:
+  m_sceneName: 2
+--- !u!65 &1850551218
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -53344,7 +53344,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2
+  m_Size: {x: 0.99999994, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1853510736
 PrefabInstance:

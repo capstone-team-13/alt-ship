@@ -137,6 +137,10 @@ public class LevelSelectMenu : MonoBehaviour
     {
     }
 
+    private void OnWest(InputAction.CallbackContext context)
+    {
+    }
+
     private void OnSouth(InputAction.CallbackContext context)
     {
         if (context.ReadValue<float>() > 0 && !southToggle)
@@ -218,9 +222,11 @@ public class LevelSelectMenu : MonoBehaviour
         }
     }
 
-    private void OnWest(InputAction.CallbackContext context)
+    public void ChooseLevel(int num)
     {
+        SelectedLevelData.Instance.levelChosen(num);
     }
+
 
     private (InputAction actionNorth, InputAction actionEast, InputAction actionSouth, InputAction actionWest)
         __M_FindActions()
