@@ -15,7 +15,6 @@ namespace EE.AMVCC
             if (m_instance == null)
             {
                 m_instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else if (m_instance != this)
             {
@@ -52,6 +51,11 @@ namespace EE.AMVCC
         public void UnregisterController(IController controller)
         {
             m_controllers.Remove(controller);
+        }
+
+        public static void CleanUp()
+        {
+            m_instance = null;
         }
 
         #endregion
