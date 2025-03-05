@@ -39,7 +39,7 @@ public class SailMovementSystem : Controller<ShipModel>
     [Header("Sheep")] public GameObject sheepOne;
     public GameObject sheepTwo;
     public GameObject sheepThree;
-    public float mincollisionSpeed = 8f;
+    public float mincollisionSpeed = 4f;
     public float collisionCD = 10f;
     private bool collisionToggle = false;
 
@@ -159,17 +159,12 @@ public class SailMovementSystem : Controller<ShipModel>
         if (collisionToggle) return;
         Debug.Log("[Collision] Not in cooling down");
 
-        if (collision.gameObject.tag == "Obstacle")
-        {
-            Debug.Log("[Collision] Damage Command Shoot");
-            Application.Instance.Push(new ShipCommand.Damage(1));
-            StartCoroutine(SheepCooldown(collisionCD));
-        }
-
         float currentSpeed = rb.velocity.magnitude;
         float speedDrop = previousSpeed - currentSpeed;
         if (speedDrop > mincollisionSpeed && collision.gameObject.tag == "Obstacle")
         {
+            Application.Instance.Push(new ShipCommand.Damage(1));
+
             rb.velocity *= .5f;
             if (sheepOne.activeSelf)
             {
@@ -188,6 +183,7 @@ public class SailMovementSystem : Controller<ShipModel>
                 SheepFling(sheepThree);
                 return;
             }
+            StartCoroutine(SheepCooldown(collisionCD));
         }
 
     }
