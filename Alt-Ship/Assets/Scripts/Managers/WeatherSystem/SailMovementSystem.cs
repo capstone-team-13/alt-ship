@@ -9,8 +9,7 @@ using UnityEngine.UI;
 
 public class SailMovementSystem : Controller<ShipModel>
 {
-    [Header("Ship Variables")]
-    public float acceleration = 10f;
+    [Header("Ship Variables")] public float acceleration = 10f;
     public float turnSpeed = 1f;
     public float turnSpeedMax = 6f;
     public float turnSpeedMin = 3f;
@@ -31,15 +30,13 @@ public class SailMovementSystem : Controller<ShipModel>
     private float previousSpeed;
     private bool toggle = false;
 
-    [Header("Tilting")]
-    public bool tiltingToggle = true;
+    [Header("Tilting")] public bool tiltingToggle = true;
     public float tiltAmount = 2f;
     public float tiltSpeed = .5f;
     public float forwardTilt = 1f;
     public float forwardTiltSpeed = .3f;
 
-    [Header("Sheep")]
-    public GameObject sheepOne;
+    [Header("Sheep")] public GameObject sheepOne;
     public GameObject sheepTwo;
     public GameObject sheepThree;
     public float mincollisionSpeed = 8f;
@@ -77,7 +74,7 @@ public class SailMovementSystem : Controller<ShipModel>
     {
         if (shipAngle < 45f) return 1f;
         if (shipAngle > 135f) return 0.2f;
-        return Mathf.Lerp(1f,0.2f, (shipAngle - 45f) / 90f);
+        return Mathf.Lerp(1f, 0.2f, (shipAngle - 45f) / 90f);
     }
 
     private void Movement()
@@ -109,6 +106,7 @@ public class SailMovementSystem : Controller<ShipModel>
             turnSpeed = turnSpeedMin;
             toggle = false;
         }
+
         this.gameObject.transform.Rotate(Vector3.up, angularVelocity * Time.deltaTime);
     }
 
@@ -119,9 +117,12 @@ public class SailMovementSystem : Controller<ShipModel>
         switch (command)
         {
             case ShipCommand.Steer steerCommand:
-                
+
                 var sign = steerCommand.RotationSign;
                 __M_Steer(sign);
+                break;
+            case ShipCommand.Damage damageCommand:
+                Model.Health -= damageCommand.Value;
                 break;
         }
     }
@@ -155,20 +156,41 @@ public class SailMovementSystem : Controller<ShipModel>
 
     private void OnCollisionEnter(Collision collision)
     {
-        if ((collisionToggle)) return;
+        Debug.Log($"[Collision] Collide with {collision.gameObject.tag}");
+        if (collisionToggle) return;
+        Debug.Log("[Collision] Not in cooling down");
+
+        if (collision.gameObject.tag == "Obstacle")
+        {
+            Debug.Log("[Collision] Damage Command Shoot");
+            Application.Instance.Push(new ShipCommand.Damage(1));
+            StartCoroutine(SheepCooldown(collisionCD));
+        }
 
         float currentSpeed = rb.velocity.magnitude;
         float speedDrop = previousSpeed - currentSpeed;
-        if (speedDrop > mincollisionSpeed && collision.gameObject.tag == "Obstacle") 
+        if (speedDrop > mincollisionSpeed && collision.gameObject.tag == "Obstacle")
         {
-            Application.Instance.Push(new ShipCommand.Damage(1));
             rb.velocity *= .5f;
-            if (sheepOne.activeSelf) { SheepFling(sheepOne); return; }
-            if (sheepTwo.activeSelf) { SheepFling(sheepTwo); return; }
-            if (sheepThree.activeSelf) { SheepFling(sheepThree); return; }
+            if (sheepOne.activeSelf)
+            {
+                SheepFling(sheepOne);
+                return;
+            }
+
+            if (sheepTwo.activeSelf)
+            {
+                SheepFling(sheepTwo);
+                return;
+            }
+
+            if (sheepThree.activeSelf)
+            {
+                SheepFling(sheepThree);
+                return;
+            }
         }
 
-        StartCoroutine(SheepCooldown(collisionCD));
     }
 
     private void SheepFling(GameObject sheep)
@@ -189,7 +211,7 @@ public class SailMovementSystem : Controller<ShipModel>
 
         Vector3 startPosition = sheep.transform.position;
         Vector3 targetPosition = startPosition + flingDirection * 5f;
-        
+
         Quaternion startRotation = sheep.transform.rotation;
 
         Quaternion targetRotation = startRotation * Quaternion.Euler(Random.insideUnitSphere * 360f);
