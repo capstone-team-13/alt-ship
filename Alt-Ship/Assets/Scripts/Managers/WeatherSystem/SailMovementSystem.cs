@@ -117,7 +117,6 @@ public class SailMovementSystem : Controller<ShipModel>
         switch (command)
         {
             case ShipCommand.Steer steerCommand:
-
                 var sign = steerCommand.RotationSign;
                 __M_Steer(sign);
                 break;
