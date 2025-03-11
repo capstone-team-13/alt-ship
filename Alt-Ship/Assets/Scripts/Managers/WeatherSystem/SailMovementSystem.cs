@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using EE.AMVCC;
-using Application = EE.AMVCC.Application;
-using JetBrains.Annotations;
-using Unity.Burst.CompilerServices;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
+using Application = EE.AMVCC.Application;
 
 public class SailMovementSystem : Controller<ShipModel>
 {
@@ -112,10 +108,13 @@ public class SailMovementSystem : Controller<ShipModel>
 
     public override void Notify<TCommand>(TCommand command)
     {
-        if (command is not ShipCommand) return;
+        if (command is not (GameCommand or ShipCommand)) return;
 
         switch (command)
         {
+            case GameCommand.GameStart:
+                // TODO: SET MODEL SPEED HERE
+                break;
             case ShipCommand.Steer steerCommand:
                 var sign = steerCommand.RotationSign;
                 __M_Steer(sign);
@@ -183,9 +182,9 @@ public class SailMovementSystem : Controller<ShipModel>
                 SheepFling(sheepThree);
                 return;
             }
+
             StartCoroutine(SheepCooldown(collisionCD));
         }
-
     }
 
     private void SheepFling(GameObject sheep)

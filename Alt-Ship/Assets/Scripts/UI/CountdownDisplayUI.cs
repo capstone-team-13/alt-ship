@@ -1,10 +1,27 @@
+using EE.AMVCC;
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using Application = EE.AMVCC.Application;
 
-public class CountdownDisplayUI : MonoBehaviour
+public class CountdownDisplayUI : MonoBehaviour, IController
 {
+    [SerializeField] private CountDown m_counter;
     [SerializeField] private TMP_Text m_countdownText;
+
+    [UsedImplicitly]
+    private void OnEnable()
+    {
+        m_counter.onCountdownUpdated.AddListener(UpdateRemainingTime);
+        m_counter.onCountdownFinished.AddListener(EndGame);
+    }
+
+    [UsedImplicitly]
+    private void OnDisable()
+    {
+        m_counter.onCountdownUpdated.RemoveListener(UpdateRemainingTime);
+        m_counter.onCountdownFinished.RemoveListener(EndGame);
+    }
 
     public void EndGame()
     {
@@ -30,6 +47,17 @@ public class CountdownDisplayUI : MonoBehaviour
             m_countdownText.color = new Color(1f, 0.796f, 0.039f);
             m_countdownText.transform.localPosition = new Vector3(0, m_countdownText.transform.localPosition.y,
                 m_countdownText.transform.localPosition.z);
+        }
+    }
+
+    public void Notify<TCommand>(TCommand command) where TCommand : ICommand
+    {
+        switch (command)
+        {
+            case GameCommand.GameStart:
+                m_countdownText.gameObject.SetActive(true);
+                m_counter.StartCountdown();
+                break;
         }
     }
 }
