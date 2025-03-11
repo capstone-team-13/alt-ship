@@ -48,10 +48,14 @@ public class WeatherManager : MonoBehaviour
 
     private void WindVariations()
     {
-        targetDirection = Random.insideUnitSphere;
-        Debug.Log("Vector 3 Direction" +  targetDirection);
-        targetDirection.y = 0f;
-        targetDirection.Normalize();
+        Vector3 referenceForward = Vector3.forward;
+
+        float angle = Random.Range(-90f, 90f);
+
+        Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
+
+        targetDirection = rotation * referenceForward;
+
         targetIntensity = Random.Range(minIntensity, maxIntensity);
     }
 
