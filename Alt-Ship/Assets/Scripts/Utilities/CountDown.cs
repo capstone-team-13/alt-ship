@@ -11,11 +11,6 @@ public class CountDown : MonoBehaviour
     private float m_remainingTime;
     private bool m_isCountingDown;
 
-    private void Start()
-    {
-        StartCountdown();
-    }
-
     private void Update()
     {
         if (!m_isCountingDown || !(m_remainingTime > 0)) return;
