@@ -1,7 +1,6 @@
 using DG.Tweening;
 using EE.AMVCC;
 using JetBrains.Annotations;
-using NodeCanvas.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +17,8 @@ public class HealthUI : Controller<ShipModel>
     private List<GameObject> m_indicators = new();
     private Coroutine m_waveCoroutine;
 
-    [SerializeField] private CanvasGroup m_canvasGroup;
+    [Header("Refs.")] [SerializeField] private CanvasGroup m_canvasGroup;
+    [SerializeField] private RectTransform m_bouncySheep;
 
     [UsedImplicitly]
     private void Start()
@@ -82,7 +82,10 @@ public class HealthUI : Controller<ShipModel>
 
         foreach (var indicator in m_indicators) indicator.SetActive(false);
         for (var i = 0; i < currentHealth; ++i) m_indicators[i].SetActive(true);
-        
+
+        // Temp checking if player is taking damage
+        // if (currentHealth < m_indicators.Count) __M_BounceSheep();
+
         Canvas.ForceUpdateCanvases();
 
         __M_ApplyWaveEffect(currentHealth);
@@ -122,6 +125,58 @@ public class HealthUI : Controller<ShipModel>
             }
 
             indicator.transform.localPosition = originalPosition;
+        }
+    }
+
+    private void __M_BounceSheep()
+    {
+        m_bouncySheep.anchoredPosition = new Vector2(0, 32);
+        m_bouncySheep.gameObject.SetActive(true);
+        m_bouncySheep.localScale = Vector3.one;
+
+        StartCoroutine(__M_StartBounceAndShrink());
+    }
+
+    private IEnumerator __M_StartBounceAndShrink()
+    {
+        const float duration = 3f;
+        const float initialUpForce = 2500f;
+
+        var canvas = m_bouncySheep.GetComponentInParent<Canvas>();
+        var canvasRect = canvas.GetComponent<RectTransform>();
+
+        var screenBounds = new Vector2(canvasRect.rect.width / 2, canvasRect.rect.height);
+
+        var elapsedTime = 0f;
+
+        float randomXForce = Random.Range(-initialUpForce, initialUpForce);
+        var velocity = new Vector2(randomXForce, initialUpForce);
+
+        m_bouncySheep.DOScale(Vector3.zero, 0.5f)
+            .SetEase(Ease.InBack)
+            .SetDelay(duration)
+            .OnComplete(() => m_bouncySheep.gameObject.SetActive(false));
+
+        while (elapsedTime < duration + 0.5f)
+        {
+            var newPosition = m_bouncySheep.anchoredPosition + (velocity * Time.deltaTime);
+
+            if (Mathf.Abs(newPosition.x) > screenBounds.x)
+            {
+                velocity.x *= -1;
+                newPosition.x = Mathf.Sign(newPosition.x) * screenBounds.x;
+                m_bouncySheep.localScale *= 0.99f;
+            }
+
+            if (newPosition.y <= 0 || newPosition.y >= screenBounds.y)
+            {
+                velocity.y *= -1;
+                m_bouncySheep.localScale *= 0.99f;
+            }
+
+            m_bouncySheep.anchoredPosition = newPosition;
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
     }
 }
