@@ -80,10 +80,10 @@ public class HealthUI : Controller<ShipModel>
             m_indicators.Add(indicator);
         }
 
-        if (indicatorToGenerate > 0) Canvas.ForceUpdateCanvases();
-
         foreach (var indicator in m_indicators) indicator.SetActive(false);
         for (var i = 0; i < currentHealth; ++i) m_indicators[i].SetActive(true);
+        
+        Canvas.ForceUpdateCanvases();
 
         __M_ApplyWaveEffect(currentHealth);
     }
