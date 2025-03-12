@@ -21,7 +21,9 @@ namespace EE.AMVCC
                 Destroy(gameObject);
             }
 
-            m_controllers = FindObjectsOfType<MonoBehaviour>().OfType<IController>().ToList();
+            m_controllers = Resources.FindObjectsOfTypeAll<MonoBehaviour>()
+                .OfType<IController>()
+                .ToList();
         }
 
         #endregion

@@ -40,4 +40,9 @@ public class CountDown : MonoBehaviour
     {
         return m_remainingTime;
     }
+
+    public float GetTime()
+    {
+        return m_time;
+    }
 }

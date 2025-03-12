@@ -2,6 +2,7 @@ using Cinemachine;
 using DG.Tweening;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Events;
 using Application = EE.AMVCC.Application;
 
 public class GoalCinemachineFocus : MonoBehaviour
@@ -12,7 +13,7 @@ public class GoalCinemachineFocus : MonoBehaviour
     [SerializeField] private float m_maxMoveDuration = 5.0f;
     [SerializeField] private float m_startDelay = 1f;
 
-    private bool m_finished;
+    public UnityEvent<string> StopStarted;
 
     [UsedImplicitly]
     private void Start()
@@ -34,6 +35,7 @@ public class GoalCinemachineFocus : MonoBehaviour
             var dynamicDuration = Mathf.Min(Mathf.Max(m_minMoveDuration, distance / 50f), m_maxMoveDuration);
 
             Tween moveTween = camTransform.DOMove(virtualCamera.transform.position, dynamicDuration)
+                .OnStart(() => { StopStarted.Invoke(virtualCamera.gameObject.name); })
                 .SetEase(Ease.InOutQuad);
 
             Tween fovTween = DOTween.To(() => m_camera.m_Lens.FieldOfView,
