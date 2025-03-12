@@ -1,9 +1,12 @@
+using DG.Tweening;
 using EE.AMVCC;
 using JetBrains.Annotations;
+using NodeCanvas.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Application = EE.AMVCC.Application;
+using CanvasGroup = UnityEngine.CanvasGroup;
 
 public class HealthUI : Controller<ShipModel>
 {
@@ -14,6 +17,8 @@ public class HealthUI : Controller<ShipModel>
 
     private List<GameObject> m_indicators = new();
     private Coroutine m_waveCoroutine;
+
+    [SerializeField] private CanvasGroup m_canvasGroup;
 
     [UsedImplicitly]
     private void Start()
@@ -37,6 +42,22 @@ public class HealthUI : Controller<ShipModel>
                 __M_UpdateHealth(Model.Health - damageCommand.Value);
                 break;
         }
+    }
+
+    [UsedImplicitly]
+    public void FadeIn(string objectName)
+    {
+        if (!objectName.Contains("ShowHealth")) return;
+
+        var canvasGroupGameObject = m_canvasGroup.gameObject;
+
+        m_canvasGroup.alpha = 0;
+        canvasGroupGameObject.transform.localScale = Vector3.zero;
+        canvasGroupGameObject.SetActive(true);
+
+        var sequence = DOTween.Sequence();
+        sequence.Append(m_canvasGroup.DOFade(1, 0.5f).SetEase(Ease.OutQuad))
+            .Join(canvasGroupGameObject.transform.DOScale(1, 0.5f).SetEase(Ease.OutBack));
     }
 
     #endregion

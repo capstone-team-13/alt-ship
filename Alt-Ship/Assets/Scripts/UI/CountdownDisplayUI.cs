@@ -1,3 +1,4 @@
+using DG.Tweening;
 using EE.AMVCC;
 using JetBrains.Annotations;
 using TMPro;
@@ -8,6 +9,8 @@ public class CountdownDisplayUI : MonoBehaviour, IController
 {
     [SerializeField] private CountDown m_counter;
     [SerializeField] private TMP_Text m_countdownText;
+
+    [SerializeField] private CanvasGroup m_canvasGroup;
 
     [UsedImplicitly]
     private void OnEnable()
@@ -50,12 +53,28 @@ public class CountdownDisplayUI : MonoBehaviour, IController
         }
     }
 
+    [UsedImplicitly]
+    public void FadeIn(string objectName)
+    {
+        if (!objectName.Contains("ShowTimer")) return;
+
+        var canvasGroupGameObject = m_canvasGroup.gameObject;
+
+        m_canvasGroup.alpha = 0;
+        canvasGroupGameObject.transform.localScale = Vector3.zero;
+        canvasGroupGameObject.SetActive(true);
+        var sequence = DOTween.Sequence();
+
+        sequence.Append(m_canvasGroup.DOFade(1, 0.5f).SetEase(Ease.OutQuad))
+            .Join(canvasGroupGameObject.transform.DOScale(1, 0.5f).SetEase(Ease.OutBack))
+            .OnStart(() => { UpdateRemainingTime(m_counter.GetTime()); });
+    }
+
     public void Notify<TCommand>(TCommand command) where TCommand : ICommand
     {
         switch (command)
         {
             case GameCommand.GameStart:
-                m_countdownText.gameObject.SetActive(true);
                 m_counter.StartCountdown();
                 break;
         }

@@ -16,6 +16,8 @@ public class DeviceRegister : MonoBehaviour
     // Old Data Structure
     [SerializeField] private CameraController m_cameraController;
 
+    [SerializeField] private PlayerInputManager m_playerInputManager;
+
     #endregion
 
     #region Unity Callbacks
@@ -142,7 +144,6 @@ public class DeviceRegister : MonoBehaviour
         if (playerController != null) playerController.SetUpPlayerModel(id);
         else throw new Exception($"PlayerController component not found on GameObject: {player.name}");
         Debug.Log($"Player {id} model set up.");
-
     }
 
     private void __M_AssignToPlayerArray(PlayerInput player, int id)
