@@ -15,10 +15,30 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638773831934445426
+  lastModified: 638773904415848005
   FileSizes:
   - Name: Desktop
     Value: 1036
+  Exists: 1
+--- !u!114 &-5037296669332114124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/SFX.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/SFX.bank
+  Name: SFX
+  StudioPath: bank:/SFX
+  lastModified: 638773904425829376
+  FileSizes:
+  - Name: Desktop
+    Value: 494
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -35,14 +55,45 @@ MonoBehaviour:
   EditorBanks:
   - {fileID: 2922641999198952095}
   - {fileID: -8226560037070188177}
-  EditorEvents: []
+  - {fileID: 4292037102422584775}
+  - {fileID: -5037296669332114124}
+  EditorEvents:
+  - {fileID: 5891393821818694823}
+  - {fileID: 1461715764210771365}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8226560037070188177}
   StringsBanks:
   - {fileID: 2922641999198952095}
-  cacheTime: 638773831934445426
+  cacheTime: 638773904425829376
   cacheVersion: 131846
+--- !u!114 &1461715764210771365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/Menu Music (Loop)
+  m_EditorClassIdentifier: 
+  Path: event:/Music/Menu Music (Loop)
+  Guid:
+    Data1: -1747216169
+    Data2: 1268218093
+    Data3: -1632591219
+    Data4: 815899688
+  Banks:
+  - {fileID: 4292037102422584775}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 55879
 --- !u!114 &2922641999198952095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,8 +109,55 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638773831934445426
+  lastModified: 638773904415867953
   FileSizes:
   - Name: Desktop
-    Value: 712
+    Value: 928
   Exists: 1
+--- !u!114 &4292037102422584775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Music.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Music.bank
+  Name: Music
+  StudioPath: bank:/Music
+  lastModified: 638773904425769480
+  FileSizes:
+  - Name: Desktop
+    Value: 1631136
+  Exists: 1
+--- !u!114 &5891393821818694823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/Level Music 1 (Loop)
+  m_EditorClassIdentifier: 
+  Path: event:/Music/Level Music 1 (Loop)
+  Guid:
+    Data1: 1743372831
+    Data2: 1316985349
+    Data3: -1341150805
+    Data4: -1428996537
+  Banks:
+  - {fileID: 4292037102422584775}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 61341
