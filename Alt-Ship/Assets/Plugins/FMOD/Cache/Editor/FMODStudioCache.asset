@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638773904415848005
+  lastModified: 638775533636714560
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -35,7 +35,7 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638773904425829376
+  lastModified: 638775513908404096
   FileSizes:
   - Name: Desktop
     Value: 494
@@ -60,13 +60,41 @@ MonoBehaviour:
   EditorEvents:
   - {fileID: 5891393821818694823}
   - {fileID: 1461715764210771365}
+  - {fileID: 285704282483453886}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8226560037070188177}
   StringsBanks:
   - {fileID: 2922641999198952095}
-  cacheTime: 638773904425829376
+  cacheTime: 638775535842834254
   cacheVersion: 131846
+--- !u!114 &285704282483453886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/Menu Music 2 (Loop)
+  m_EditorClassIdentifier: 
+  Path: event:/Music/Menu Music 2 (Loop)
+  Guid:
+    Data1: -1355889916
+    Data2: 1194150707
+    Data3: -691787342
+    Data4: 1705637049
+  Banks:
+  - {fileID: 4292037102422584775}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 32669
 --- !u!114 &1461715764210771365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,7 +117,7 @@ MonoBehaviour:
   - {fileID: 4292037102422584775}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
@@ -109,10 +137,10 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638773904415867953
+  lastModified: 638775533636734511
   FileSizes:
   - Name: Desktop
-    Value: 928
+    Value: 980
   Exists: 1
 --- !u!114 &4292037102422584775
 MonoBehaviour:
@@ -129,10 +157,10 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638773904425769480
+  lastModified: 638775535842834254
   FileSizes:
   - Name: Desktop
-    Value: 1631136
+    Value: 2038176
   Exists: 1
 --- !u!114 &5891393821818694823
 MonoBehaviour:
@@ -156,7 +184,7 @@ MonoBehaviour:
   - {fileID: 4292037102422584775}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
