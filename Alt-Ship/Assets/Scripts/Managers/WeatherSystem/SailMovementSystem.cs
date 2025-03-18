@@ -162,28 +162,32 @@ public class SailMovementSystem : Controller<ShipModel>
         float speedDrop = previousSpeed - currentSpeed;
         if (speedDrop > mincollisionSpeed && collision.gameObject.tag == "Obstacle")
         {
-            Application.Instance.Push(new ShipCommand.Damage(1));
-
             rb.velocity *= .5f;
+            StartCoroutine(SheepCooldown(collisionCD));
+
             if (sheepOne.activeSelf)
             {
+                Application.Instance.Push(new ShipCommand.Damage(1));
+
                 SheepFling(sheepOne);
                 return;
             }
 
             if (sheepTwo.activeSelf)
             {
+                Application.Instance.Push(new ShipCommand.Damage(1));
+
                 SheepFling(sheepTwo);
                 return;
             }
 
             if (sheepThree.activeSelf)
             {
+                Application.Instance.Push(new ShipCommand.Damage(1));
+
                 SheepFling(sheepThree);
                 return;
             }
-
-            StartCoroutine(SheepCooldown(collisionCD));
         }
     }
 
