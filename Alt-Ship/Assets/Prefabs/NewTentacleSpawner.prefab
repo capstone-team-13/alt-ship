@@ -95,6 +95,37 @@ Transform:
   - {fileID: 2658627076984395822}
   m_Father: {fileID: 2535171278487958755}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &322815009153166375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5142565773176669861}
+  m_Layer: 0
+  m_Name: TentacleEndPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5142565773176669861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322815009153166375}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1886253935025482869}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &522598175040689379
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,6 +521,8 @@ GameObject:
   - component: {fileID: 1886253935025482869}
   - component: {fileID: 3503395356794159144}
   - component: {fileID: 5637411325430588328}
+  - component: {fileID: 6790075618820879557}
+  - component: {fileID: 8895783376844519163}
   m_Layer: 0
   m_Name: NewTentacleSpawner
   m_TagString: Untagged
@@ -511,6 +544,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 464554871739885902}
+  - {fileID: 5142565773176669861}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3503395356794159144
@@ -532,6 +566,8 @@ MonoBehaviour:
   maxCycleLength: 12
   tentacle: {fileID: 7019465991732079609}
   animator: {fileID: 1502805193658158886}
+  newTentacleAttack: {fileID: 8895783376844519163}
+  shipInRange: 0
 --- !u!135 &5637411325430588328
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -553,6 +589,53 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 120
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6790075618820879557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2118583574137705769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a88a40bc4e195634a8d8d07ed6786fb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  instant: 0
+  overtime: 0
+  overtimeInstant: 1
+  minDistance: 30
+  outerDistanceInstant: 120
+  distanceOvertime: 120
+  totaltimeOvertime: 10
+  newTentacleDetector: {fileID: 3503395356794159144}
+  shipParent: {fileID: 0}
+  tentacle: {fileID: 0}
+  slider: {fileID: 0}
+--- !u!114 &8895783376844519163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2118583574137705769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dee6d0d1f0b9a4419d44e7cedfd0025, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  left: 0
+  right: 0
+  timeToAttack: 0
+  timeToStart: 0
+  moveDuration: 2
+  shipTentacleLeft: {fileID: 0}
+  shipTentacleRight: {fileID: 0}
+  ship: {fileID: 0}
+  endLocation: {fileID: 322815009153166375}
+  sailMovementSystem: {fileID: 0}
+  sailFunction: {fileID: 0}
+  toggle: 0
 --- !u!1 &2217640059986155693
 GameObject:
   m_ObjectHideFlags: 0

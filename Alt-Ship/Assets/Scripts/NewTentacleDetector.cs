@@ -1,11 +1,15 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NewTentacleDetector : MonoBehaviour
 {
     [Header("Spawning Type")]
+    // Tentacles will all always be spawned when the game starts
     [SerializeField] private bool preSpawned;
+    // Tentacles will only spawn in when the player is in range, and will go back down when they are not
     [SerializeField] private bool rangeSpawned;
+    // Tentacles will go up and down periodically, and will always stay up when players are in range
     [SerializeField] private bool cyclingSpawns;
 
     [Header("Spawning Variables")]
@@ -13,16 +17,19 @@ public class NewTentacleDetector : MonoBehaviour
     [SerializeField] private float maxCycleLength = 10f;
 
     [Header("References")]
-    [SerializeField] private GameObject tentacle;
+    public GameObject tentacle;
     [SerializeField] private Animator animator;
+    [SerializeField] private NewTentacleAttack newTentacleAttack;
 
-    private bool shipInRange;
+    public bool shipInRange;
     private bool isUp;
     private bool isAnimating;
     private bool waitingToFall;
     private bool waitingToRise;
+    private bool isDefeated;
     private Coroutine fallCoroutine;
     private float currentCycleTime;
+    private bool isAttacking;
 
     private void Awake()
     {
@@ -37,6 +44,15 @@ public class NewTentacleDetector : MonoBehaviour
 
     private void Update()
     {
+        if (isAttacking) 
+        {
+            return;
+        }
+        if (isDefeated) 
+        {
+            TentacleSlayed();
+        }
+
         if (cyclingSpawns)
         {
             if (isUp && !waitingToFall && !shipInRange)
@@ -56,6 +72,7 @@ public class NewTentacleDetector : MonoBehaviour
                 waitingToRise = true;
                 StartCoroutine(WaitToRise());
             }
+
         }
         else
         {
@@ -69,25 +86,31 @@ public class NewTentacleDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((other.CompareTag("Ship") && rangeSpawned && !shipInRange) || (other.CompareTag("Ship") && cyclingSpawns && !shipInRange))
+        if (!isAttacking)
         {
-            shipInRange = true;
-            TentacleArise();
+            if ((other.CompareTag("Ship") && rangeSpawned && !shipInRange) || (other.CompareTag("Ship") && cyclingSpawns && !shipInRange))
+            {
+                shipInRange = true;
+                TentacleArise();
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if ((other.CompareTag("Ship") && rangeSpawned && shipInRange) || (other.CompareTag("Ship") && cyclingSpawns && shipInRange))
+        if (!isAttacking)
         {
-            shipInRange = false;
-            if (cyclingSpawns)
+            if ((other.CompareTag("Ship") && rangeSpawned && shipInRange) || (other.CompareTag("Ship") && cyclingSpawns && shipInRange))
             {
-                TentacleSubmerge();
-            }
-            else if (rangeSpawned)
-            {
-                TentacleSubmerge();
+                shipInRange = false;
+                if (cyclingSpawns)
+                {
+                    TentacleSubmerge();
+                }
+                else if (rangeSpawned)
+                {
+                    TentacleSubmerge();
+                }
             }
         }
     }
@@ -99,8 +122,10 @@ public class NewTentacleDetector : MonoBehaviour
         isAnimating = false;
         waitingToFall = false;
         waitingToRise = false;
+        isDefeated = false;
+        isAttacking = false;
 
-        currentCycleTime = Random.Range(minCycleLength, maxCycleLength);
+    currentCycleTime = Random.Range(minCycleLength, maxCycleLength);
     }
 
     private void TentacleArise()
@@ -165,6 +190,48 @@ public class NewTentacleDetector : MonoBehaviour
         waitingToFall = false;
         tentacle.SetActive(false);
 
-        currentCycleTime = Random.Range(minCycleLength, maxCycleLength); // Set new random cycle time after falling
+        if (isDefeated)
+        {
+            this.gameObject.SetActive(false);
+        }
+
+        currentCycleTime = Random.Range(minCycleLength, maxCycleLength);
+
+        if (isAttacking)
+        {
+            newTentacleAttack.StartAttack();
+        }
+
+        if (shipInRange && !isDefeated && !isAttacking)
+        {
+            TentacleArise();
+        }
     }
+
+    public void TentacleSlayed()
+    {
+        isDefeated = true;
+        if (isUp)
+        {
+            TentacleSubmerge();
+        }
+        else
+        {
+            StartCoroutine(TentFall());
+        }
+    }
+
+    public void TentacleAttackStart()
+    {
+        isAttacking = true;
+        if (isUp)
+        {
+            TentacleSubmerge();
+        }
+        else
+        {
+            StartCoroutine(TentFall());
+        }
+    }
+
 }
