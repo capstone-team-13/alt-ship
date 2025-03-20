@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638773831934445426
+  lastModified: 638780165300179714
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -35,11 +35,39 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638778828801283745
+  lastModified: 638780165301980777
   FileSizes:
   - Name: Desktop
-    Value: 494
+    Value: 455200
   Exists: 1
+--- !u!114 &-4896205368197171205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Victory
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Victory
+  Guid:
+    Data1: -1608827898
+    Data2: 1268782905
+    Data3: 1086121112
+    Data4: 1810485547
+  Banks:
+  - {fileID: 4292037102422584775}
+  - {fileID: -5037296669332114124}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 5856
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,16 +85,20 @@ MonoBehaviour:
   - {fileID: -8226560037070188177}
   - {fileID: 4292037102422584775}
   - {fileID: -5037296669332114124}
+  - {fileID: 7731720054968118756}
   EditorEvents:
   - {fileID: 5891393821818694823}
   - {fileID: 1461715764210771365}
   - {fileID: 285704282483453886}
+  - {fileID: -4896205368197171205}
+  - {fileID: 5940426322468549394}
+  - {fileID: 8676570355895688675}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8226560037070188177}
   StringsBanks:
   - {fileID: 2922641999198952095}
-  cacheTime: 638778828801283745
+  cacheTime: 638780165301980777
   cacheVersion: 131846
 --- !u!114 &285704282483453886
 MonoBehaviour:
@@ -137,10 +169,10 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638778828801183064
+  lastModified: 638780165300199735
   FileSizes:
   - Name: Desktop
-    Value: 980
+    Value: 1166
   Exists: 1
 --- !u!114 &4292037102422584775
 MonoBehaviour:
@@ -157,10 +189,10 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638778828801273734
+  lastModified: 638780148011496628
   FileSizes:
   - Name: Desktop
-    Value: 2038176
+    Value: 2101984
   Exists: 1
 --- !u!114 &5891393821818694823
 MonoBehaviour:
@@ -189,3 +221,77 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 61341
+--- !u!114 &5940426322468549394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Defeat
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Defeat
+  Guid:
+    Data1: -708999746
+    Data2: 1294738203
+    Data3: 1513950364
+    Data4: -58078723
+  Banks:
+  - {fileID: -5037296669332114124}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 32600
+--- !u!114 &7731720054968118756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Player.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Player.bank
+  Name: Player
+  StudioPath: bank:/Player
+  lastModified: 638780165301732602
+  FileSizes:
+  - Name: Desktop
+    Value: 85024
+  Exists: 1
+--- !u!114 &8676570355895688675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Footsteps
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Footsteps
+  Guid:
+    Data1: -2042865168
+    Data2: 1139958273
+    Data3: -491302783
+    Data4: -285770599
+  Banks:
+  - {fileID: 7731720054968118756}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 8097
