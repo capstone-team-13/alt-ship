@@ -15,18 +15,6 @@ public class NewTentacleCombat : MonoBehaviour
     [Header("Variables")]
     [SerializeField] private float timeToAttack;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void InitiateAttack(bool left, bool right)
     {
         if(left && right)

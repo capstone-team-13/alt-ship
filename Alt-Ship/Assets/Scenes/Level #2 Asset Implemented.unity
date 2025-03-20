@@ -8172,6 +8172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 444276928}
   - component: {fileID: 444276929}
+  - component: {fileID: 444276930}
   m_Layer: 0
   m_Name: RightTentacle
   m_TagString: Untagged
@@ -8233,6 +8234,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!135 &444276930
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444276927}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 55
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &444752597
 GameObject:
   m_ObjectHideFlags: 0
@@ -10129,6 +10151,26 @@ PrefabInstance:
       propertyPath: minCycleLength
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5142565773176669861, guid: 81da2c254c237ac41a8b0d8271a5b985,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -51.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5142565773176669861, guid: 81da2c254c237ac41a8b0d8271a5b985,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9767285
+      objectReference: {fileID: 0}
+    - target: {fileID: 5142565773176669861, guid: 81da2c254c237ac41a8b0d8271a5b985,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.21447967
+      objectReference: {fileID: 0}
+    - target: {fileID: 5142565773176669861, guid: 81da2c254c237ac41a8b0d8271a5b985,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -24.77
+      objectReference: {fileID: 0}
     - target: {fileID: 6790075618820879557, guid: 81da2c254c237ac41a8b0d8271a5b985,
         type: 3}
       propertyPath: instant
@@ -10157,7 +10199,7 @@ PrefabInstance:
     - target: {fileID: 8895783376844519163, guid: 81da2c254c237ac41a8b0d8271a5b985,
         type: 3}
       propertyPath: right
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8895783376844519163, guid: 81da2c254c237ac41a8b0d8271a5b985,
         type: 3}
@@ -53765,6 +53807,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6450210966109978267}
   - component: {fileID: 6450210966109978268}
+  - component: {fileID: 6450210966109978269}
   m_Layer: 0
   m_Name: LeftTentacle
   m_TagString: Untagged
@@ -53865,6 +53908,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!135 &6450210966109978269
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5965035429297136673}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 55
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &6636861475343682752
 Transform:
   m_ObjectHideFlags: 0
