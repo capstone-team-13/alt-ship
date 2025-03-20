@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638780165300179714
+  lastModified: 638780171024411308
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -35,10 +35,10 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638780165301980777
+  lastModified: 638780171024939567
   FileSizes:
   - Name: Desktop
-    Value: 455200
+    Value: 459584
   Exists: 1
 --- !u!114 &-4896205368197171205
 MonoBehaviour:
@@ -93,12 +93,13 @@ MonoBehaviour:
   - {fileID: -4896205368197171205}
   - {fileID: 5940426322468549394}
   - {fileID: 8676570355895688675}
+  - {fileID: 4192864276437882910}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8226560037070188177}
   StringsBanks:
   - {fileID: 2922641999198952095}
-  cacheTime: 638780165301980777
+  cacheTime: 638780171024939567
   cacheVersion: 131846
 --- !u!114 &285704282483453886
 MonoBehaviour:
@@ -169,11 +170,38 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638780165300199735
+  lastModified: 638780171024426250
   FileSizes:
   - Name: Desktop
-    Value: 1166
+    Value: 1202
   Exists: 1
+--- !u!114 &4192864276437882910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Pause
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Pause
+  Guid:
+    Data1: -732212994
+    Data2: 1113042686
+    Data3: 1667366072
+    Data4: 1334874199
+  Banks:
+  - {fileID: -5037296669332114124}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2040
 --- !u!114 &4292037102422584775
 MonoBehaviour:
   m_ObjectHideFlags: 0
