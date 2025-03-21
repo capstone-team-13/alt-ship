@@ -5252,7 +5252,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &233364968
 Transform:
   m_ObjectHideFlags: 0
@@ -8173,6 +8173,7 @@ GameObject:
   - component: {fileID: 444276928}
   - component: {fileID: 444276929}
   - component: {fileID: 444276930}
+  - component: {fileID: 444276931}
   m_Layer: 0
   m_Name: RightTentacle
   m_TagString: Untagged
@@ -8255,6 +8256,23 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 55
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &444276931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444276927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56bc62c5fe1e8aa4c895ea7f932c4b5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 444276929}
+  target: {fileID: 0}
+  timeToAttack: 0
+  isFinished: 0
+  isStarted: 0
 --- !u!1 &444752597
 GameObject:
   m_ObjectHideFlags: 0
@@ -25337,7 +25355,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1038354103
 Transform:
   m_ObjectHideFlags: 0
@@ -39614,11 +39632,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tentacleLeft: {fileID: 5965035429297136673}
   tentacleRight: {fileID: 444276927}
+  tentacleBehaviourLeft: {fileID: 6450210966109978270}
+  tentacleBehaviourRight: {fileID: 444276931}
   sailMovementSystem: {fileID: 1701215697}
   sailFunction: {fileID: 525514242}
-  leftAnimator: {fileID: 6450210966109978268}
-  rightAnimator: {fileID: 444276929}
-  timeToAttack: 8
+  targetLeft: {fileID: 0}
+  targetRight: {fileID: 0}
+  sheepArray:
+  - {fileID: 233364967}
+  - {fileID: 1300887443}
+  - {fileID: 1038354102}
 --- !u!1001 &1703660876
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -53808,6 +53831,7 @@ GameObject:
   - component: {fileID: 6450210966109978267}
   - component: {fileID: 6450210966109978268}
   - component: {fileID: 6450210966109978269}
+  - component: {fileID: 6450210966109978270}
   m_Layer: 0
   m_Name: LeftTentacle
   m_TagString: Untagged
@@ -53929,6 +53953,23 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 55
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6450210966109978270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5965035429297136673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56bc62c5fe1e8aa4c895ea7f932c4b5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 6450210966109978268}
+  target: {fileID: 0}
+  timeToAttack: 0
+  isFinished: 0
+  isStarted: 0
 --- !u!4 &6636861475343682752
 Transform:
   m_ObjectHideFlags: 0
