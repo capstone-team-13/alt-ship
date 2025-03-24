@@ -37,7 +37,7 @@ public class NewTentacleSystem : MonoBehaviour
 
     private bool inRangeCheck;
 
-    private bool disableFunction = false;
+    public bool disableFunction = false;
 
     private float timer = 0f;
 

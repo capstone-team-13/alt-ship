@@ -19,14 +19,19 @@ public class NewTentacleCombat : MonoBehaviour
     [SerializeField] private GameObject targetRight;
     public GameObject[] sheepArray;
 
+    private bool sameTarget;
+    private int pickTarget;
+
     private void Update()
     {
         if(tentacleBehaviourLeft.isStarted || tentacleBehaviourRight.isStarted)
         {
             if(tentacleBehaviourLeft.isFinished && tentacleBehaviourRight.isFinished)
             {
-                tentacleBehaviourLeft.isStarted = false;
-                tentacleBehaviourRight.isStarted = false;
+                tentacleBehaviourLeft.ResetVariables();
+                tentacleBehaviourRight.ResetVariables();
+                tentacleLeft.SetActive(false);
+                tentacleRight.SetActive(false);
                 targetLeft = null;
                 targetRight = null;
 
@@ -49,6 +54,20 @@ public class NewTentacleCombat : MonoBehaviour
 
             tentacleBehaviourLeft.setTarget(targetLeft);
             tentacleBehaviourRight.setTarget(targetRight);
+
+            if (sameTarget)
+            {
+                if (pickTarget == 1)
+                {
+                    tentacleBehaviourLeft.notFirst = true;
+                    tentacleBehaviourRight.notFirst = false;
+                }
+                else
+                {
+                    tentacleBehaviourLeft.notFirst = false;
+                    tentacleBehaviourRight.notFirst = true;
+                }
+            }
         }
         else if(left && !right)
         {
@@ -84,6 +103,7 @@ public class NewTentacleCombat : MonoBehaviour
         if (availableSheep.Count == 1)
         {
             target = availableSheep[0];
+            pickTentacle();
             return;
         }
 
@@ -96,6 +116,19 @@ public class NewTentacleCombat : MonoBehaviour
         while (newTarget == oppositeTarget);
 
         target = newTarget;
+    }
+
+    private void pickTentacle()
+    {
+        sameTarget = true;
+        if(Random.value < .5f)
+        {
+            pickTarget = 1;
+        }
+        else 
+        { 
+            pickTarget = 2;
+        }
     }
 
     private void StartShip()
