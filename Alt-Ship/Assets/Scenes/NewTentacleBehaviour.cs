@@ -29,6 +29,7 @@ public class NewTentacleBehaviour : MonoBehaviour
 
     private void OnEnable()
     {
+        toggle = false;
         isFinished = false;
         isStarted = true;
     }
@@ -142,6 +143,7 @@ public class NewTentacleBehaviour : MonoBehaviour
         wasAttacked = false;
         finishedWaiting = false;
         target = null;
+        toggle = false;
 
         animator.ResetTrigger("InitiateAttack");
         animator.ResetTrigger("InitiateRetreat");
