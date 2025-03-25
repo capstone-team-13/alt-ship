@@ -25,6 +25,8 @@ public class NewTentacleBehaviour : MonoBehaviour
     private bool finishedWaiting = false;
     private bool toggle = false;
 
+    public bool killTent = false;
+
     private void OnEnable()
     {
         isFinished = false;
@@ -33,6 +35,11 @@ public class NewTentacleBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (killTent)
+        {
+            WasAttacked();
+        }
+
         if (target != null && !sheepIsGrabbed && !notFirst)
         {
             LookAtTarget();
@@ -107,6 +114,8 @@ public class NewTentacleBehaviour : MonoBehaviour
         {
             animator.SetTrigger("InitiateRetreat");
         }
+
+        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).IsName("Disappear"));
 
         yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
 
