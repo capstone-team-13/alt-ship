@@ -14,7 +14,7 @@ public class NewTentacleBehaviour : MonoBehaviour
     [SerializeField] private GameObject tentTip;
     [SerializeField] private float timeToAttack;
 
-    public bool isFinished = false;
+    public bool isFinished = true;
     public bool isStarted = false;
     public bool notFirst = false;
 
@@ -24,8 +24,10 @@ public class NewTentacleBehaviour : MonoBehaviour
     private bool wasAttacked = false;
     private bool finishedWaiting = false;
     private bool toggle = false;
+
     private void OnEnable()
     {
+        isFinished = false;
         isStarted = true;
     }
 
@@ -123,7 +125,6 @@ public class NewTentacleBehaviour : MonoBehaviour
     }
     public void ResetVariables()
     {
-        isFinished = false;
         isStarted = false;
         notFirst = false;
         timerReset = false;

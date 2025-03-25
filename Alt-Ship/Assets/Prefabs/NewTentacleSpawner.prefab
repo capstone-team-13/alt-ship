@@ -703,11 +703,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a18a904959737704598a0375045574ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preSpawned: 1
+  preSpawned: 0
   rangeSpawned: 0
-  cyclingSpawns: 0
-  minCycleLength: 8
-  maxCycleLength: 12
+  cyclingSpawns: 1
+  minCycleLength: 6
+  maxCycleLength: 10
   tentacle: {fileID: 7019465991732079609}
   animator: {fileID: 1502805193658158886}
   newTentacleAttack: {fileID: 8895783376844519163}
@@ -751,7 +751,7 @@ MonoBehaviour:
   minDistance: 30
   outerDistanceInstant: 120
   distanceOvertime: 120
-  totaltimeOvertime: 10
+  totaltimeOvertime: 5
   newTentacleDetector: {fileID: 3503395356794159144}
   shipParent: {fileID: 0}
   tentacle: {fileID: 0}
@@ -777,7 +777,7 @@ MonoBehaviour:
   sailMovementSystem: {fileID: 0}
   sailFunction: {fileID: 0}
   newTentacleCombat: {fileID: 0}
-  toggle: 0
+  toggle: 1
 --- !u!1 &2217640059986155693
 GameObject:
   m_ObjectHideFlags: 0
