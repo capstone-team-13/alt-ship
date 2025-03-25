@@ -1,3 +1,4 @@
+using AmplifyShaderEditor;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -30,6 +31,7 @@ public class NewTentacleDetector : MonoBehaviour
     private Coroutine fallCoroutine;
     private float currentCycleTime;
     private bool isAttacking;
+
 
     private void Awake()
     {
@@ -172,7 +174,7 @@ public class NewTentacleDetector : MonoBehaviour
     {
         yield return new WaitForSeconds(currentCycleTime);
 
-        if (!isAnimating && !tentacle.activeSelf)
+        if (!isAnimating && !tentacle.activeSelf && !isAttacking)
         {
             TentacleArise();
         }
