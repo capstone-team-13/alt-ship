@@ -39,6 +39,8 @@ public class SailMovementSystem : Controller<ShipModel>
     public float collisionCD = 10f;
     private bool collisionToggle = false;
 
+    private bool disableFunction = false;
+
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
@@ -46,6 +48,7 @@ public class SailMovementSystem : Controller<ShipModel>
 
     private void Update()
     {
+        if (disableFunction) return;
         if (tiltingToggle)
         {
             float sideTilt = Mathf.Sin(Time.time * tiltSpeed) * tiltAmount;
@@ -57,6 +60,12 @@ public class SailMovementSystem : Controller<ShipModel>
 
     private void FixedUpdate()
     {
+        if (disableFunction)
+        {
+            rb.velocity = Vector3.zero;
+            return;
+        }
+
         if (WeatherManager.Instance == null) return;
         sailHeight = Model.Speed;
         Movement();
@@ -163,29 +172,30 @@ public class SailMovementSystem : Controller<ShipModel>
         if (speedDrop > mincollisionSpeed && collision.gameObject.tag == "Obstacle")
         {
             rb.velocity *= .5f;
-            StartCoroutine(SheepCooldown(collisionCD));
-
-            if (sheepOne.activeSelf)
+            if (sheepOne != null && sheepOne.activeSelf)
             {
-                Application.Instance.Push(new ShipCommand.Damage(1));
-
                 SheepFling(sheepOne);
+                StartCoroutine(SheepCooldown(collisionCD));
+                Application.Instance.Push(new ShipCommand.Damage(1));
+
                 return;
             }
 
-            if (sheepTwo.activeSelf)
+            if (sheepTwo != null && sheepTwo.activeSelf)
             {
-                Application.Instance.Push(new ShipCommand.Damage(1));
-
                 SheepFling(sheepTwo);
+                StartCoroutine(SheepCooldown(collisionCD));
+                Application.Instance.Push(new ShipCommand.Damage(1));
+
                 return;
             }
 
-            if (sheepThree.activeSelf)
+            if (sheepThree != null && sheepThree.activeSelf)
             {
+                SheepFling(sheepThree);
+                StartCoroutine(SheepCooldown(collisionCD));
                 Application.Instance.Push(new ShipCommand.Damage(1));
 
-                SheepFling(sheepThree);
                 return;
             }
         }
@@ -229,11 +239,16 @@ public class SailMovementSystem : Controller<ShipModel>
 
         sheep.SetActive(false);
     }
-
     private IEnumerator SheepCooldown(float cooldown)
     {
         collisionToggle = true;
         yield return new WaitForSeconds(cooldown);
         collisionToggle = false;
     }
+
+    public void disableSailing()
+    {
+        disableFunction = !disableFunction;
+    }
+
 }

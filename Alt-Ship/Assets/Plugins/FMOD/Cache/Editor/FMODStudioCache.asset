@@ -15,7 +15,6 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638778527152078875
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -35,7 +34,6 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638780600889174702
   FileSizes:
   - Name: Desktop
     Value: 459584
@@ -94,12 +92,12 @@ MonoBehaviour:
   - {fileID: 5940426322468549394}
   - {fileID: 8676570355895688675}
   - {fileID: 4192864276437882910}
+  - {fileID: 6115389322024424284}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8226560037070188177}
   StringsBanks:
   - {fileID: 2922641999198952095}
-  cacheTime: 638780600889174702
   cacheVersion: 131846
 --- !u!114 &285704282483453886
 MonoBehaviour:
@@ -170,10 +168,10 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638780600889044798
+
   FileSizes:
   - Name: Desktop
-    Value: 1202
+    Value: 1254
   Exists: 1
 --- !u!114 &4192864276437882910
 MonoBehaviour:
@@ -217,10 +215,9 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638780600889134537
   FileSizes:
   - Name: Desktop
-    Value: 2101984
+    Value: 3030176
   Exists: 1
 --- !u!114 &5891393821818694823
 MonoBehaviour:
@@ -276,6 +273,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 32600
+--- !u!114 &6115389322024424284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/Level Music 2 (Loop)
+  m_EditorClassIdentifier: 
+  Path: event:/Music/Level Music 2 (Loop)
+  Guid:
+    Data1: 637525513
+    Data2: 1124085424
+    Data3: -1466985344
+    Data4: 1637286457
+  Banks:
+  - {fileID: 4292037102422584775}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 66037
 --- !u!114 &7731720054968118756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,7 +315,6 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 638780600889144505
   FileSizes:
   - Name: Desktop
     Value: 85024
