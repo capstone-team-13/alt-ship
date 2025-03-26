@@ -45,6 +45,7 @@ public class SailFunction : MonoBehaviour
     public GameObject pTworiggingLower;
     public GameObject pTworiggingUpper;
 
+    private bool disableFunction = false;
 
     private void Awake()
     {
@@ -184,12 +185,12 @@ public class SailFunction : MonoBehaviour
 
     private void PullingSail(InputAction.CallbackContext context)
     {
-        if (context.ReadValue<float>() > 0)
+        if (context.ReadValue<float>() > 0 && !disableFunction)
         {
             isRaising = true;
             isLowering = false;
         }
-        else if (context.ReadValue<float>() < 0)
+        else if (context.ReadValue<float>() < 0 && !disableFunction)
         {
             isLowering = true;
             isRaising = false;
@@ -229,7 +230,17 @@ public class SailFunction : MonoBehaviour
 
     private void SailChange()
     {
-        shipModel.Speed = Mathf.Clamp(shipModel.Speed, .2f, 1f);
+
+        if (!disableFunction)
+        {
+            shipModel.Speed = Mathf.Clamp(shipModel.Speed, .2f, 1f);
+        }
+        else if (disableFunction)
+        {
+            shipModel.Speed = Mathf.Clamp(shipModel.Speed, 0f, 0f);
+        }
+
+
         sailIndicator.SetPosition(1, new Vector3(0, shipModel.Speed * -5, 0));
         float sailHeight = Mathf.Lerp(pOneriggingLower.transform.transform.localScale.y, shipModel.Speed, 1f * Time.deltaTime);
         float upperSailHeight = Mathf.Lerp(pOneriggingUpper.transform.transform.localScale.y, shipModel.Speed, 1f * Time.deltaTime);
@@ -244,4 +255,9 @@ public class SailFunction : MonoBehaviour
         pTworiggingUpper.transform.transform.localScale = new Vector3(1f, sailHeight, 1f);
 
     }
+    public void disableSail()
+    {
+        disableFunction = !disableFunction;
+    }
+
 }
