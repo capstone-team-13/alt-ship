@@ -253,6 +253,24 @@ public class LevelSelectMenu : MonoBehaviour
     public void ChooseLevel(int num)
     {
         SelectedLevelData.Instance.levelChosen(num);
+        if (num == 0)
+        {
+            SwapSheep();
+            lvlOneSheep.gameObject.SetActive(true);
+            EnableStart();
+        }
+        else if (num == 1) 
+        {
+            SwapSheep();
+            lvlTwoSheep.gameObject.SetActive(true);
+            EnableStart();
+        }
+        else if (num == 2) 
+        {
+            SwapSheep();
+            lvlThreeSheep.gameObject.SetActive(true);
+            EnableStart();
+        }
     }
 
 
