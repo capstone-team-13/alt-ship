@@ -23,6 +23,19 @@ public class LevelSelectMenu : MonoBehaviour
     public Button startGame;
     public Button back;
 
+    [Header("Prompt Reference")]
+    [SerializeField] private Image lvlOnePrompt;
+    [SerializeField] private Image lvlOneSheep;
+    [SerializeField] private Image lvlTwoPrompt;
+    [SerializeField] private Image lvlTwoSheep;
+    [SerializeField] private Image lvlThreePrompt;
+    [SerializeField] private Image lvlThreeSheep;
+
+    [SerializeField] private GameObject startLevelParent;
+
+    [SerializeField] private Image startPrompt;
+    [SerializeField] private Image backPrompt;
+
     [Header("Other")] public SceneLoader sceneLoader;
 
     [SerializeField] private int selectbuttonIndex = 10;
@@ -34,6 +47,8 @@ public class LevelSelectMenu : MonoBehaviour
     private bool southToggle = false;
     private bool toggleOne = false;
     private bool toggleTwo = false;
+
+    private bool startIsActive = false;
 
     private float tolerance = .7f;
 
@@ -156,6 +171,10 @@ public class LevelSelectMenu : MonoBehaviour
                         return;
                     }
 
+                    SwapSheep();
+                    lvlOneSheep.gameObject.SetActive(true);
+                    EnableStart();
+
                     SelectedLevelData.Instance.levelChosen(0);
                 }
                 // Level Two
@@ -167,6 +186,10 @@ public class LevelSelectMenu : MonoBehaviour
                         return;
                     }
 
+                    SwapSheep();
+                    lvlTwoSheep.gameObject.SetActive(true);
+                    EnableStart();
+
                     SelectedLevelData.Instance.levelChosen(1);
                 }
                 // Level Three
@@ -177,6 +200,11 @@ public class LevelSelectMenu : MonoBehaviour
                         Debug.Log("Null");
                         return;
                     }
+
+                    SwapSheep();
+                    lvlThreeSheep.gameObject.SetActive(true);
+                    EnableStart();
+
                     SelectedLevelData.Instance.levelChosen(2);
                 }
             }
@@ -266,18 +294,24 @@ public class LevelSelectMenu : MonoBehaviour
         {
             if (levelOne == null) return;
             levelOne.Select();
+            SwapSelection();
+            lvlOnePrompt.gameObject.SetActive(true);
             toggleOne = !toggleOne;
         }
         else if (selectbuttonIndex == 1 && !toggleOne)
         {
             if (levelTwo == null) return;
             levelTwo.Select();
+            SwapSelection();
+            lvlTwoPrompt.gameObject.SetActive(true);
             toggleOne = !toggleOne;
         }
         else if (selectbuttonIndex == 2 && !toggleOne)
         {
             if (levelThree == null) return;
             levelThree.Select();
+            SwapSelection();
+            lvlThreePrompt.gameObject.SetActive(true);
             toggleOne = !toggleOne;
         }
     }
@@ -288,12 +322,16 @@ public class LevelSelectMenu : MonoBehaviour
         {
             if (startGame == null) return;
             startGame.Select();
+            SwapSelection();
+            startPrompt.gameObject.SetActive(true);
             toggleOne = !toggleOne;
         }
         else if (selectbuttonIndex == 1 && !toggleOne)
         {
             if (back == null) return;
             back.Select();
+            SwapSelection();
+            backPrompt.gameObject.SetActive(true);
             toggleOne = !toggleOne;
         }
     }
@@ -343,12 +381,28 @@ public class LevelSelectMenu : MonoBehaviour
                 }
             }
         }
+        else if (menuIndex == 1 && !toggleTwo)
+        {
+            if (horizontalMovement != 0 && !toggleTwo)
+            {
+                if (selectbuttonIndex == 0)
+                {
+                    selectbuttonIndex = 1;
+                }
+                else if (selectbuttonIndex != 0 && startIsActive)
+                {
+                    selectbuttonIndex = 0;
+                }
+                toggleTwo = !toggleTwo;
+                toggleOne = !toggleOne;
+            }
+        }
 
         if (verticleMovement != 0 && !toggleTwo)
         {
             if (menuIndex == 0)
             {
-                if (verticleMovement < -tolerance)
+                if (verticleMovement != 0 && startIsActive)
                 {
                     // 0-1
                     menuIndex = 1;
@@ -356,7 +410,7 @@ public class LevelSelectMenu : MonoBehaviour
                     selectbuttonIndex = 0;
                     buttonChange();
                 }
-                else if (verticleMovement > tolerance)
+                else if (verticleMovement > tolerance || verticleMovement < -tolerance)
                 {
                     // 1-1
                     menuIndex = 1;
@@ -369,29 +423,19 @@ public class LevelSelectMenu : MonoBehaviour
             {
                 if (selectbuttonIndex == 0)
                 {
-                    if (verticleMovement > tolerance)
+                    if (verticleMovement > tolerance || verticleMovement < -tolerance)
                     {
                         menuIndex = 0;
-                        selectbuttonIndex = lastButNum;
-                        buttonChange();
-                    }
-                    else if (verticleMovement < -tolerance)
-                    {
-                        selectbuttonIndex = 1;
+                        selectbuttonIndex = 2;
                         buttonChange();
                     }
                 }
                 else if (selectbuttonIndex == 1)
                 {
-                    if (verticleMovement > tolerance)
-                    {
-                        selectbuttonIndex = 0;
-                        buttonChange();
-                    }
-                    else if (verticleMovement < -tolerance)
+                    if (verticleMovement > tolerance || verticleMovement < -tolerance)
                     {
                         menuIndex = 0;
-                        selectbuttonIndex = lastButNum;
+                        selectbuttonIndex = 0;
                         buttonChange();
                     }
                 }
@@ -409,4 +453,30 @@ public class LevelSelectMenu : MonoBehaviour
         toggleTwo = !toggleTwo;
         toggleOne = false;
     }
+
+    private void SwapSelection()
+    {
+        lvlOnePrompt.gameObject.SetActive(false);
+        lvlTwoPrompt.gameObject.SetActive(false);
+        lvlThreePrompt.gameObject.SetActive(false);
+        startPrompt.gameObject.SetActive(false);
+        backPrompt.gameObject.SetActive(false);
+    }
+
+    private void SwapSheep()
+    {
+        lvlOneSheep.gameObject.SetActive(false);
+        lvlTwoSheep.gameObject.SetActive(false);
+        lvlThreeSheep.gameObject.SetActive(false);
+    }
+
+    private void EnableStart()
+    {
+        if (startLevelParent.activeSelf == false)
+        {
+            startLevelParent.SetActive(true);
+            startIsActive = true;
+        }
+    }
+
 }

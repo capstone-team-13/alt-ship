@@ -1,5 +1,32 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8697239519200660037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/Level Music 2 (Loop)
+  m_EditorClassIdentifier: 
+  Path: event:/Music/Level Music 2 (Loop)
+  Guid:
+    Data1: 637525513
+    Data2: 1124085424
+    Data3: -1466985344
+    Data4: 1637286457
+  Banks:
+  - {fileID: 4292037102422584775}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 66037
 --- !u!114 &-8226560037070188177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,7 +42,7 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638778294319698490
+  lastModified: 638775561383675814
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -35,7 +62,7 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638782492056266214
+  lastModified: 638786856978413104
   FileSizes:
   - Name: Desktop
     Value: 459584
@@ -68,6 +95,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 5856
+--- !u!114 &-4758995089936508836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/Level Music 3 (Loop)
+  m_EditorClassIdentifier: 
+  Path: event:/Music/Level Music 3 (Loop)
+  Guid:
+    Data1: -511562790
+    Data2: 1220579495
+    Data3: 1824413828
+    Data4: -404287394
+  Banks:
+  - {fileID: 4292037102422584775}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 87312
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,12 +148,14 @@ MonoBehaviour:
   - {fileID: 5940426322468549394}
   - {fileID: 8676570355895688675}
   - {fileID: 4192864276437882910}
+  - {fileID: -8697239519200660037}
+  - {fileID: -4758995089936508836}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8226560037070188177}
   StringsBanks:
   - {fileID: 2922641999198952095}
-  cacheTime: 638782492056266214
+  cacheTime: 638786856978413104
   cacheVersion: 131846
 --- !u!114 &285704282483453886
 MonoBehaviour:
@@ -170,10 +226,10 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638782492056191134
+  lastModified: 638784580200413127
   FileSizes:
   - Name: Desktop
-    Value: 1202
+    Value: 1292
   Exists: 1
 --- !u!114 &4192864276437882910
 MonoBehaviour:
@@ -217,10 +273,10 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638782492056246199
+  lastModified: 638786856978403129
   FileSizes:
   - Name: Desktop
-    Value: 2101984
+    Value: 4185024
   Exists: 1
 --- !u!114 &5891393821818694823
 MonoBehaviour:
@@ -291,7 +347,7 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 638782492056256218
+  lastModified: 638784533298806530
   FileSizes:
   - Name: Desktop
     Value: 85024
