@@ -107,7 +107,7 @@ private IEnumerator MoveToEnd()
         if(!isMoving && ship != null)
         {
             sailFunction.disableSail();
-            sailMovementSystem.disableSailing();
+            sailMovementSystem.DisableSailing();
             StartCoroutine(MoveToEnd());
 
         }

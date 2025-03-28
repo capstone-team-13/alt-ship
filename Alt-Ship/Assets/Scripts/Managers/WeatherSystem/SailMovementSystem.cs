@@ -246,9 +246,23 @@ public class SailMovementSystem : Controller<ShipModel>
         collisionToggle = false;
     }
 
-    public void disableSailing()
+    public void DisableSailing()
     {
+        if (IsYFrozen())
+        {
+            rb.constraints &= ~RigidbodyConstraints.FreezeRotationY;
+        }
+        else
+        {
+            rb.constraints |= RigidbodyConstraints.FreezeRotationY;
+        }
+
         disableFunction = !disableFunction;
+    }
+
+    private bool IsYFrozen()
+    {
+        return (rb.constraints & RigidbodyConstraints.FreezeRotationY) == RigidbodyConstraints.FreezeRotationY;
     }
 
 }

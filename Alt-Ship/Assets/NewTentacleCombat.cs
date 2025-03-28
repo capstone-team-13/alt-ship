@@ -133,7 +133,7 @@ public class NewTentacleCombat : MonoBehaviour
 
     private void StartShip()
     {
-        sailMovementSystem.disableSailing();
+        sailMovementSystem.DisableSailing();
         sailFunction.disableSail();
     }
 
