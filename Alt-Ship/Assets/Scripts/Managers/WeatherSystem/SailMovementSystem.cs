@@ -129,7 +129,7 @@ public class SailMovementSystem : Controller<ShipModel>
                 __M_Steer(sign);
                 break;
             case ShipCommand.Damage damageCommand:
-                Model.Health -= damageCommand.Value;
+   //             Model.Health -= damageCommand.Value;
                 break;
         }
     }
@@ -174,28 +174,28 @@ public class SailMovementSystem : Controller<ShipModel>
             rb.velocity *= .5f;
             if (sheepOne != null && sheepOne.activeSelf)
             {
-                SheepFling(sheepOne);
-                StartCoroutine(SheepCooldown(collisionCD));
                 Application.Instance.Push(new ShipCommand.Damage(1));
 
+                SheepFling(sheepOne);
+                StartCoroutine(SheepCooldown(collisionCD));
                 return;
             }
 
             if (sheepTwo != null && sheepTwo.activeSelf)
             {
-                SheepFling(sheepTwo);
-                StartCoroutine(SheepCooldown(collisionCD));
                 Application.Instance.Push(new ShipCommand.Damage(1));
 
+                SheepFling(sheepTwo);
+                StartCoroutine(SheepCooldown(collisionCD));
                 return;
             }
 
             if (sheepThree != null && sheepThree.activeSelf)
             {
-                SheepFling(sheepThree);
-                StartCoroutine(SheepCooldown(collisionCD));
                 Application.Instance.Push(new ShipCommand.Damage(1));
 
+                SheepFling(sheepThree);
+                StartCoroutine(SheepCooldown(collisionCD));
                 return;
             }
         }

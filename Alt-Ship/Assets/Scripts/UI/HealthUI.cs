@@ -39,7 +39,8 @@ public class HealthUI : Controller<ShipModel>
                 __M_UpdateHealth(healthUpdateCommand.CurrentHealth);
                 break;
             case ShipCommand.Damage damageCommand:
-                __M_UpdateHealth(Model.Health - damageCommand.Value);
+                Model.Health -= damageCommand.Value;
+                __M_UpdateHealth(Model.Health);
                 break;
         }
     }
@@ -64,8 +65,11 @@ public class HealthUI : Controller<ShipModel>
 
     private void __M_UpdateHealth(int currentHealth)
     {
+        Debug.Log("Current Health: " + currentHealth);
+
         if (currentHealth <= 0)
         {
+            Debug.Log("Current Health Two: " + currentHealth);
             Application.Instance.Push(new GameCommand.GameEnd(Time.time));
             PlayerPrefs.SetInt("Game Result", (int)GameResult.Lose);
             m_sceneLoader.Load();
@@ -89,6 +93,8 @@ public class HealthUI : Controller<ShipModel>
         Canvas.ForceUpdateCanvases();
 
         __M_ApplyWaveEffect(currentHealth);
+        Debug.Log("Current Health: " + currentHealth);
+
     }
 
     private void __M_ApplyWaveEffect()
