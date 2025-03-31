@@ -93,11 +93,11 @@ public class SailMovementSystem : Controller<ShipModel>
         sailHeight = Mathf.Clamp(sailHeight, .2f, 1f);
 
         currentSpeed = acceleration * windIntensity * speedIntensity * sailEfficiency * sailHeight;
-        float smoothSpeed = Mathf.Lerp(rb.velocity.magnitude, currentSpeed, Time.deltaTime * accelerationSmoothing);
+        float smoothSpeed = Mathf.Lerp(rb.velocity.magnitude, currentSpeed, Time.fixedDeltaTime * accelerationSmoothing);
         Vector3 targetVelocity = transform.forward * smoothSpeed;
         //Debug.Log("Current Speed: " + smoothSpeed);
 
-        rb.velocity = Vector3.Lerp(rb.velocity, targetVelocity, Time.deltaTime * velocitySmoothing);
+        rb.velocity = Vector3.Lerp(rb.velocity, targetVelocity, Time.fixedDeltaTime * velocitySmoothing);
 
 
         // Inputs are temporary for testing
