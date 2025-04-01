@@ -60,7 +60,7 @@
 	<object class="MarkerTrack" id="{a244aad1-e415-4aa4-a2a1-ec97271a89b0}" />
 	<object class="GroupTrack" id="{fd8dcdf0-56d8-4865-9af7-a114b15ea249}">
 		<relationship name="modules">
-			<destination>{2ce9bd87-347b-470c-8a51-3b2563270a13}</destination>
+			<destination>{8854221a-c0d3-45b5-885c-0a61f6907c37}</destination>
 		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{f2c25813-22b3-425d-afb1-48cbce006033}</destination>
@@ -68,10 +68,10 @@
 	</object>
 	<object class="Timeline" id="{adfdd79f-c017-46ff-be5e-87555b4ad383}">
 		<relationship name="modules">
-			<destination>{2ce9bd87-347b-470c-8a51-3b2563270a13}</destination>
+			<destination>{8854221a-c0d3-45b5-885c-0a61f6907c37}</destination>
 		</relationship>
 		<relationship name="markers">
-			<destination>{0037c2e3-2387-48a3-8ddc-759fa94312fa}</destination>
+			<destination>{b975cf4f-1e3f-4a16-bcb5-ce9b979a2cdd}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{371c41b3-c32c-4383-9081-e887c3c37119}">
@@ -91,9 +91,12 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{0337080e-c1a2-46a6-a142-a2b614262530}" />
-	<object class="SingleSound" id="{2ce9bd87-347b-470c-8a51-3b2563270a13}">
+	<object class="SingleSound" id="{8854221a-c0d3-45b5-885c-0a61f6907c37}">
 		<property name="length">
 			<value>66.037551020408159</value>
+		</property>
+		<property name="volume">
+			<value>2.5</value>
 		</property>
 		<relationship name="audioFile">
 			<destination>{3a620c24-bdfc-4fbb-ae67-c2ff0219f60d}</destination>
@@ -101,7 +104,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{f2c25813-22b3-425d-afb1-48cbce006033}">
 		<property name="volume">
-			<value>-26</value>
+			<value>-24.5</value>
 		</property>
 		<property name="name">
 			<value>Audio 1</value>
@@ -116,7 +119,7 @@
 			<destination>{371c41b3-c32c-4383-9081-e887c3c37119}</destination>
 		</relationship>
 	</object>
-	<object class="LoopRegion" id="{0037c2e3-2387-48a3-8ddc-759fa94312fa}">
+	<object class="LoopRegion" id="{b975cf4f-1e3f-4a16-bcb5-ce9b979a2cdd}">
 		<property name="position">
 			<value>0</value>
 		</property>

@@ -39,6 +39,8 @@ public class SailMovementSystem : Controller<ShipModel>
     public float collisionCD = 10f;
     private bool collisionToggle = false;
 
+    private bool disableFunction = false;
+
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
@@ -46,6 +48,7 @@ public class SailMovementSystem : Controller<ShipModel>
 
     private void Update()
     {
+        if (disableFunction) return;
         if (tiltingToggle)
         {
             float sideTilt = Mathf.Sin(Time.time * tiltSpeed) * tiltAmount;
@@ -57,6 +60,12 @@ public class SailMovementSystem : Controller<ShipModel>
 
     private void FixedUpdate()
     {
+        if (disableFunction)
+        {
+            rb.velocity = Vector3.zero;
+            return;
+        }
+
         if (WeatherManager.Instance == null) return;
         sailHeight = Model.Speed;
         Movement();
@@ -84,11 +93,11 @@ public class SailMovementSystem : Controller<ShipModel>
         sailHeight = Mathf.Clamp(sailHeight, .2f, 1f);
 
         currentSpeed = acceleration * windIntensity * speedIntensity * sailEfficiency * sailHeight;
-        float smoothSpeed = Mathf.Lerp(rb.velocity.magnitude, currentSpeed, Time.deltaTime * accelerationSmoothing);
+        float smoothSpeed = Mathf.Lerp(rb.velocity.magnitude, currentSpeed, Time.fixedDeltaTime * accelerationSmoothing);
         Vector3 targetVelocity = transform.forward * smoothSpeed;
         //Debug.Log("Current Speed: " + smoothSpeed);
 
-        rb.velocity = Vector3.Lerp(rb.velocity, targetVelocity, Time.deltaTime * velocitySmoothing);
+        rb.velocity = Vector3.Lerp(rb.velocity, targetVelocity, Time.fixedDeltaTime * velocitySmoothing);
 
 
         // Inputs are temporary for testing
@@ -120,7 +129,7 @@ public class SailMovementSystem : Controller<ShipModel>
                 __M_Steer(sign);
                 break;
             case ShipCommand.Damage damageCommand:
-                Model.Health -= damageCommand.Value;
+   //             Model.Health -= damageCommand.Value;
                 break;
         }
     }
@@ -154,6 +163,8 @@ public class SailMovementSystem : Controller<ShipModel>
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (disableFunction) return;
+
         Debug.Log($"[Collision] Collide with {collision.gameObject.tag}");
         if (collisionToggle) return;
         Debug.Log("[Collision] Not in cooling down");
@@ -163,29 +174,30 @@ public class SailMovementSystem : Controller<ShipModel>
         if (speedDrop > mincollisionSpeed && collision.gameObject.tag == "Obstacle")
         {
             rb.velocity *= .5f;
-            StartCoroutine(SheepCooldown(collisionCD));
-
-            if (sheepOne.activeSelf)
+            if (sheepOne != null && sheepOne.activeSelf)
             {
                 Application.Instance.Push(new ShipCommand.Damage(1));
 
                 SheepFling(sheepOne);
+                StartCoroutine(SheepCooldown(collisionCD));
                 return;
             }
 
-            if (sheepTwo.activeSelf)
+            if (sheepTwo != null && sheepTwo.activeSelf)
             {
                 Application.Instance.Push(new ShipCommand.Damage(1));
 
                 SheepFling(sheepTwo);
+                StartCoroutine(SheepCooldown(collisionCD));
                 return;
             }
 
-            if (sheepThree.activeSelf)
+            if (sheepThree != null && sheepThree.activeSelf)
             {
                 Application.Instance.Push(new ShipCommand.Damage(1));
 
                 SheepFling(sheepThree);
+                StartCoroutine(SheepCooldown(collisionCD));
                 return;
             }
         }
@@ -229,11 +241,30 @@ public class SailMovementSystem : Controller<ShipModel>
 
         sheep.SetActive(false);
     }
-
     private IEnumerator SheepCooldown(float cooldown)
     {
         collisionToggle = true;
         yield return new WaitForSeconds(cooldown);
         collisionToggle = false;
     }
+
+    public void DisableSailing()
+    {
+        if (IsYFrozen())
+        {
+            rb.constraints &= ~RigidbodyConstraints.FreezeRotationY;
+        }
+        else
+        {
+            rb.constraints |= RigidbodyConstraints.FreezeRotationY;
+        }
+
+        disableFunction = !disableFunction;
+    }
+
+    private bool IsYFrozen()
+    {
+        return (rb.constraints & RigidbodyConstraints.FreezeRotationY) == RigidbodyConstraints.FreezeRotationY;
+    }
+
 }

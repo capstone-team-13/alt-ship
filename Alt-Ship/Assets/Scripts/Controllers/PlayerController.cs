@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Application = EE.AMVCC.Application;
 using Cinemachine;
+using EE.CU;
 
 public class PlayerController : Controller<PlayerModel>
 {
@@ -133,16 +134,15 @@ public class PlayerController : Controller<PlayerModel>
     }
 
     [UsedImplicitly]
-    private void Update()
+
+    void FixedUpdate()
     {
         if (Model.Dead) return;
-        // if (m_player.enabled) __M_Move();
-        if (m_player.enabled)
-        {
-            var movementInput = __M_GetPlayerInput();
-            __M_Move();
-            m_controllers[playerNum - 1].UserInput = Model.Speed > Mathf.Epsilon ? movementInput : Vector3.zero;
-        }
+
+        Vector3 movementInput = __M_GetPlayerInput();
+        __M_Move();
+
+        m_controllers[playerNum - 1].UserInput = Model.Speed > Mathf.Epsilon ? movementInput : Vector3.zero;
     }
 
     [UsedImplicitly]

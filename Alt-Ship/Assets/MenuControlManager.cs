@@ -22,8 +22,12 @@ public class MenuControlManager : MonoBehaviour
     public Button tutorial;
     public Button tutNext;
     public Button tutPrev;
+    public Image startPrompt;
+    public Image tutPrompt;
+    public Image exitPrompt;
 
     [SerializeField] private int selectbuttonIndex = 10;
+
     private int menuIndex = 0;
 
     private int buttonCount = 2;
@@ -227,18 +231,30 @@ public class MenuControlManager : MonoBehaviour
         {
             if (start == null) return;
             start.Select();
+
+            SwapPrompt();
+            startPrompt.gameObject.SetActive(true);
+
             toggleOne = !toggleOne;
         }
         else if (selectbuttonIndex == 1 && !toggleOne)
         {
             if (tutorial == null) return;
             tutorial.Select();
+
+            SwapPrompt();
+            tutPrompt.gameObject.SetActive(true);
+
             toggleOne = !toggleOne;
         }
         else if (selectbuttonIndex == 2 && !toggleOne)
         {
             if (exit == null) return;
             exit.Select();
+
+            SwapPrompt();
+            exitPrompt.gameObject.SetActive(true);
+
             toggleOne = !toggleOne;
         }
     }
@@ -344,6 +360,13 @@ public class MenuControlManager : MonoBehaviour
             }
         }
 
+    }
+
+    private void SwapPrompt()
+    {
+        startPrompt.gameObject.SetActive(false);
+        tutPrompt.gameObject.SetActive(false);
+        exitPrompt.gameObject.SetActive(false);
     }
 
 }
