@@ -184,6 +184,12 @@ public class NewTentacleDetector : MonoBehaviour
         isAnimating = true;
         animator.SetBool("isUp", false);
 
+
+        if (isAttacking)
+        {
+            newTentacleAttack.StartAttack();
+        }
+
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
 
         isUp = false;
@@ -197,11 +203,6 @@ public class NewTentacleDetector : MonoBehaviour
         }
 
         currentCycleTime = Random.Range(minCycleLength, maxCycleLength);
-
-        if (isAttacking)
-        {
-            newTentacleAttack.StartAttack();
-        }
 
         if (shipInRange && !isDefeated && !isAttacking)
         {

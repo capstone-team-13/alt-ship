@@ -163,6 +163,8 @@ public class SailMovementSystem : Controller<ShipModel>
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (disableFunction) return;
+
         Debug.Log($"[Collision] Collide with {collision.gameObject.tag}");
         if (collisionToggle) return;
         Debug.Log("[Collision] Not in cooling down");
