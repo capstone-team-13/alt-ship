@@ -35,6 +35,10 @@ public class Rudder : MonoBehaviour
     private bool m_steering;
     private float rotationSign;
 
+    private bool isInteracting = false;
+
+    private GameObject playerOn;
+
     #region Unity Callbacks
 
     [UsedImplicitly]
@@ -72,10 +76,13 @@ public class Rudder : MonoBehaviour
 
     public void Interact(IInteractable interactable, GameObject interactor)
     {
+        if (isInteracting) return;
+
         playerInput = interactor.GetComponent<PlayerInput>();
         if (playerInput != null)
         {
             inputActions = playerInput.actions;
+            playerOn = playerInput.gameObject;
             NewPlayerStarted();
         }
 
@@ -96,16 +103,26 @@ public class Rudder : MonoBehaviour
             playerController.ResetTransform();
             TelemetryLogger.Log(this, "Rudder Used");
         }
+
+        isInteracting = true;
+
     }
 
     // Exit is never running
     public void Exit(IInteractable interactable, GameObject interactor)
     {
+        if (playerOn != null) 
+        {
+            if (playerOn != interactor) return;
+        }
+
         Debug.Log("Is Running");
         interactable.InteractionName = "Stop Steering";
 
         var playeModel = interactor.GetComponent<PlayerModel>();
         __M_UnLockPlayer(playeModel);
+        isInteracting = false;
+        playerOn = null;
     }
 
     #endregion
