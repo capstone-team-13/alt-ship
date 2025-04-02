@@ -1,20 +1,18 @@
 using Cinemachine;
-using DG.Tweening;
 using EE.Interactions;
 using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class DirectionalInteraction : Interactable
 {
     #region Editor API
 
-    [Header("Directional Interaction")]
-    [SerializeField]
+    [Header("Directional Interaction")] [SerializeField]
     private float m_interactionRadius = 2.0f;
 
-    [SerializeField][Range(-180, 180)] private float m_imageRotationY = 0;
+    [SerializeField] [Range(-180, 180)] private float m_imageRotationY = 0;
 
     [SerializeField] private LayerMask m_playerLayer;
 
@@ -44,32 +42,37 @@ public class DirectionalInteraction : Interactable
 
     #region API
 
+    // Now it's the same as range interaction
     protected override bool CanInteract()
     {
+        // var notInCoolingDown = base.CanInteract();
+        // var colliders = Physics.OverlapSphere(transform.position, m_interactionRadius, m_playerLayer);
+        // return notInCoolingDown && colliders.Length > 0;
+
         // Operation is not in cooling down & no player is using object
         var baseCheck = base.CanInteract();
         if (!baseCheck) return false;
-
+        
         var colliders = Physics.OverlapSphere(transform.position, m_interactionRadius, m_playerLayer);
-
+        
         var rotatedForward = __M_RotateImageForward();
-
+        
         // TODO: Refactor to specific player can interact
         var anyAgentBehind = false;
-
+        
         foreach (var agent in colliders)
         {
             var directionToAgent = agent.transform.position - transform.position;
             var dotProduct = Vector3.Dot(rotatedForward, directionToAgent.normalized);
             var behindObject = dotProduct < 0;
-
+        
             if (!behindObject || agent.gameObject != CurrentPerformer)
                 continue;
-
+        
             anyAgentBehind = true;
             break;
         }
-
+        
         return anyAgentBehind;
     }
 
@@ -124,6 +127,7 @@ public class DirectionalInteraction : Interactable
                 pTwoButton.SetActive(false);
                 uiControlsTwo.SetActive(true);
             }
+
             RotateToCamera(playerController.playerFreeLook, playerController);
         }
 
@@ -155,7 +159,8 @@ public class DirectionalInteraction : Interactable
             directionToCamera.y = 0;
 
             Quaternion targetRotation = Quaternion.LookRotation(directionToCamera);
-            pOneButton.transform.rotation = Quaternion.Slerp(pOneButton.transform.rotation, targetRotation, Time.deltaTime * 5f);
+            pOneButton.transform.rotation =
+                Quaternion.Slerp(pOneButton.transform.rotation, targetRotation, Time.deltaTime * 5f);
         }
         else if (pTwoButton.activeSelf && playerController.playerNum == 2)
         {
@@ -163,8 +168,10 @@ public class DirectionalInteraction : Interactable
             directionToCamera.y = 0;
 
             Quaternion targetRotation = Quaternion.LookRotation(directionToCamera);
-            pTwoButton.transform.rotation = Quaternion.Slerp(pTwoButton.transform.rotation, targetRotation, Time.deltaTime * 5f);
+            pTwoButton.transform.rotation =
+                Quaternion.Slerp(pTwoButton.transform.rotation, targetRotation, Time.deltaTime * 5f);
         }
     }
+
     #endregion
 }
