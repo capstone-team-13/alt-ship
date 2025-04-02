@@ -88,6 +88,10 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
+    public void LevelSelect()
+    {
+        SceneManager.LoadScene(m_sceneNames[2]);
+    }
     public void CloseGame()
     {
         Application.Quit();

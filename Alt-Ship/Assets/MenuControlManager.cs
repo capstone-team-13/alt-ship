@@ -59,7 +59,7 @@ public class MenuControlManager : MonoBehaviour
             MenuButtonHighlight();
         }
 
-        if(menuIndex == 1)
+        if (menuIndex == 1)
         {
             TutorialButtonHighlight();
         }
@@ -147,7 +147,7 @@ public class MenuControlManager : MonoBehaviour
             toggleOne = false;
             toggleTwo = false;
         }
-        else if (menuIndex == 2) 
+        else if (menuIndex == 2)
         {
             creditsPage.SetActive(false);
             menuIndex = 0;
@@ -163,7 +163,7 @@ public class MenuControlManager : MonoBehaviour
             {
                 if (selectbuttonIndex == 0)
                 {
-                    sceneLoader.Load();
+                    SkipRegistration();
                 }
                 else if (selectbuttonIndex == 1)
                 {
@@ -174,7 +174,7 @@ public class MenuControlManager : MonoBehaviour
                 }
                 else if (selectbuttonIndex == 2)
                 {
-                    if(creditsPage != null)
+                    if (creditsPage != null)
                     {
                         creditsPage.SetActive(true);
                         menuIndex = 2;
@@ -199,7 +199,7 @@ public class MenuControlManager : MonoBehaviour
             southToggle = !southToggle;
         }
 
-        if(context.ReadValue<float>() == 0 && southToggle)
+        if (context.ReadValue<float>() == 0 && southToggle)
         {
             southToggle = !southToggle;
         }
@@ -266,13 +266,13 @@ public class MenuControlManager : MonoBehaviour
         }
         else if (selectbuttonIndex == 2 && !toggleOne)
         {
-            if(credits == null) return;
+            if (credits == null) return;
             credits.Select();
 
             SwapPrompt();
             creditsPrompt.gameObject.SetActive(true);
 
-            toggleOne= !toggleOne;
+            toggleOne = !toggleOne;
         }
         else if (selectbuttonIndex == 3 && !toggleOne)
         {
@@ -288,13 +288,13 @@ public class MenuControlManager : MonoBehaviour
 
     private void TutorialButtonHighlight()
     {
-        if(selectbuttonIndex == 0 && !toggleOne)
+        if (selectbuttonIndex == 0 && !toggleOne)
         {
             if (tutPrev == null) return;
             tutPrev.Select();
             toggleOne = !toggleOne;
         }
-        else if(selectbuttonIndex == 1 && !toggleOne)
+        else if (selectbuttonIndex == 1 && !toggleOne)
         {
             if (tutNext == null) return;
             tutNext.Select();
@@ -380,7 +380,7 @@ public class MenuControlManager : MonoBehaviour
                     toggleTwo = !toggleTwo;
                 }
             }
-            else if(tutorialManager.currentPageIndex == 0 && selectbuttonIndex != 1)
+            else if (tutorialManager.currentPageIndex == 0 && selectbuttonIndex != 1)
             {
                 selectbuttonIndex = 1;
                 toggleOne = false;
@@ -417,5 +417,27 @@ public class MenuControlManager : MonoBehaviour
         creditsPrompt.gameObject.SetActive(false);
         exitPrompt.gameObject.SetActive(false);
     }
+
+
+    private void SkipRegistration()
+    {
+        GameObject deviceRegister = null;
+
+        if (GameObject.FindGameObjectWithTag("DeviceManager") != null)
+        {
+            deviceRegister = GameObject.FindGameObjectWithTag("DeviceManager");
+        }
+
+        if (deviceRegister == null) 
+        {
+            sceneLoader.Load();
+        }
+        else
+        {
+            sceneLoader.LevelSelect();
+        }
+
+    }
+
 
 }
