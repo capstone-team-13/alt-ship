@@ -15,22 +15,25 @@ public class MenuControlManager : MonoBehaviour
 
     public SceneLoader sceneLoader;
     public TutorialManager tutorialManager;
+    public GameObject creditsPage;
 
     [Header("Button Reference")]
     public Button start;
     public Button exit;
+    public Button credits;
     public Button tutorial;
     public Button tutNext;
     public Button tutPrev;
     public Image startPrompt;
     public Image tutPrompt;
+    public Image creditsPrompt;
     public Image exitPrompt;
 
     [SerializeField] private int selectbuttonIndex = 10;
 
     private int menuIndex = 0;
 
-    private int buttonCount = 2;
+    private int buttonCount = 3;
 
     private bool toggleOne = false;
     private bool toggleTwo = false;
@@ -136,13 +139,19 @@ public class MenuControlManager : MonoBehaviour
 
     private void OnEast(InputAction.CallbackContext context)
     {
-        if(menuIndex == 1)
+        if (menuIndex == 1)
         {
             tutorialManager.CloseTutorial();
             menuIndex = 0;
             selectbuttonIndex = 1;
             toggleOne = false;
             toggleTwo = false;
+        }
+        else if (menuIndex == 2) 
+        {
+            creditsPage.SetActive(false);
+            menuIndex = 0;
+            selectbuttonIndex = 2;
         }
     }
 
@@ -164,6 +173,14 @@ public class MenuControlManager : MonoBehaviour
                     toggleOne = false;
                 }
                 else if (selectbuttonIndex == 2)
+                {
+                    if(creditsPage != null)
+                    {
+                        creditsPage.SetActive(true);
+                        menuIndex = 2;
+                    }
+                }
+                else if (selectbuttonIndex == 3)
                 {
                     Application.Quit();
                 }
@@ -249,6 +266,16 @@ public class MenuControlManager : MonoBehaviour
         }
         else if (selectbuttonIndex == 2 && !toggleOne)
         {
+            if(credits == null) return;
+            credits.Select();
+
+            SwapPrompt();
+            creditsPrompt.gameObject.SetActive(true);
+
+            toggleOne= !toggleOne;
+        }
+        else if (selectbuttonIndex == 3 && !toggleOne)
+        {
             if (exit == null) return;
             exit.Select();
 
@@ -280,17 +307,22 @@ public class MenuControlManager : MonoBehaviour
         float verticleMovement = Input.GetAxis("Vertical");
         float horizontalMovement = Input.GetAxis("Horizontal");
 
+        Vector2 dpad = Gamepad.current.dpad.ReadValue();
+
+        float dpadX = dpad.x;
+        float dpadY = dpad.y;
+
         if (menuIndex == 0)
         {
 
-            if (verticleMovement != 0 && !toggleTwo)
+            if (verticleMovement != 0 && !toggleTwo || dpadY != 0 && !toggleTwo)
             {
-                if (verticleMovement != 0 && selectbuttonIndex == 10)
+                if (verticleMovement != 0 && selectbuttonIndex == 10 || dpadY != 0 && selectbuttonIndex == 10)
                 {
                     selectbuttonIndex = 0;
                     toggleTwo = !toggleTwo;
                 }
-                else if (verticleMovement > 0)
+                else if (verticleMovement > 0 || dpadY > 0)
                 {
 
                     if (selectbuttonIndex > 0)
@@ -304,7 +336,7 @@ public class MenuControlManager : MonoBehaviour
                     toggleTwo = !toggleTwo;
                     toggleOne = !toggleOne;
                 }
-                else if (verticleMovement < 0)
+                else if (verticleMovement < 0 || dpadY < 0)
                 {
                     if (selectbuttonIndex < buttonCount)
                     {
@@ -320,7 +352,7 @@ public class MenuControlManager : MonoBehaviour
                 }
             }
 
-            else if (verticleMovement == 0 && toggleTwo)
+            else if (verticleMovement == 0 && dpadY == 0 && toggleTwo)
             {
                 toggleTwo = !toggleTwo;
             }
@@ -330,7 +362,7 @@ public class MenuControlManager : MonoBehaviour
         {
             if (tutorialManager.currentPageIndex != 0 && tutorialManager.currentPageIndex != tutorialManager.tutorialPages.Count - 1)
             {
-                if (horizontalMovement != 0 && !toggleTwo)
+                if (horizontalMovement != 0 && !toggleTwo || dpadX != 0 && !toggleTwo)
                 {
                     if (selectbuttonIndex == 1)
                     {
@@ -343,7 +375,7 @@ public class MenuControlManager : MonoBehaviour
                     toggleTwo = !toggleTwo;
                     toggleOne = !toggleOne;
                 }
-                else if (horizontalMovement == 0 && toggleTwo)
+                else if (horizontalMovement == 0 && toggleTwo && dpadX == 0 && toggleTwo)
                 {
                     toggleTwo = !toggleTwo;
                 }
@@ -362,10 +394,27 @@ public class MenuControlManager : MonoBehaviour
 
     }
 
+    public void OpenCreditButton()
+    {
+        if (creditsPage != null)
+        {
+            creditsPage.SetActive(true);
+        }
+    }
+
+    public void CloseCreditButton()
+    {
+        if (creditsPage != null)
+        {
+            creditsPage.SetActive(false);
+        }
+    }
+
     private void SwapPrompt()
     {
         startPrompt.gameObject.SetActive(false);
         tutPrompt.gameObject.SetActive(false);
+        creditsPrompt.gameObject.SetActive(false);
         exitPrompt.gameObject.SetActive(false);
     }
 

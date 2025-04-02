@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using EasyLayoutNS.Extensions;
 
 public class LevelSelectMenu : MonoBehaviour
 {
@@ -359,7 +360,12 @@ public class LevelSelectMenu : MonoBehaviour
         float verticleMovement = Input.GetAxis("Vertical");
         float horizontalMovement = Input.GetAxis("Horizontal");
 
-        if (verticleMovement != 0 && selectbuttonIndex == 10 || horizontalMovement != 0 && selectbuttonIndex == 10)
+        Vector2 dpad = Gamepad.current.dpad.ReadValue();
+
+        float dpadX = dpad.x;
+        float dpadY = dpad.y;
+
+        if (verticleMovement != 0 && selectbuttonIndex == 10 || horizontalMovement != 0 && selectbuttonIndex == 10 || dpadX !=0 && selectbuttonIndex == 10 || dpadY != 0 && selectbuttonIndex == 10)
         {
             selectbuttonIndex = 0;
             toggleTwo = !toggleTwo;
@@ -367,9 +373,9 @@ public class LevelSelectMenu : MonoBehaviour
 
         if (menuIndex == 0 && !toggleTwo)
         {
-            if (horizontalMovement != 0 && !toggleTwo)
+            if (horizontalMovement != 0 && !toggleTwo || dpadX != 0 && !toggleTwo)
             {
-                if (horizontalMovement < -tolerance)
+                if (horizontalMovement < -tolerance || dpadX < -tolerance)
                 {
                     if (selectbuttonIndex > 0)
                     {
@@ -383,7 +389,7 @@ public class LevelSelectMenu : MonoBehaviour
                     toggleTwo = !toggleTwo;
                     toggleOne = !toggleOne;
                 }
-                else if (horizontalMovement > tolerance)
+                else if (horizontalMovement > tolerance || dpadX > tolerance)
                 {
                     if (selectbuttonIndex < buttonCount)
                     {
@@ -401,7 +407,7 @@ public class LevelSelectMenu : MonoBehaviour
         }
         else if (menuIndex == 1 && !toggleTwo)
         {
-            if (horizontalMovement != 0 && !toggleTwo)
+            if (horizontalMovement != 0 && !toggleTwo || dpadX != 0 && !toggleTwo)
             {
                 if (selectbuttonIndex == 0)
                 {
@@ -416,11 +422,11 @@ public class LevelSelectMenu : MonoBehaviour
             }
         }
 
-        if (verticleMovement != 0 && !toggleTwo)
+        if (verticleMovement != 0 && !toggleTwo || dpadY != 0 && !toggleTwo)
         {
             if (menuIndex == 0)
             {
-                if (verticleMovement != 0 && startIsActive)
+                if (verticleMovement != 0 && startIsActive || dpadY != 0 && startIsActive)
                 {
                     // 0-1
                     menuIndex = 1;
@@ -428,7 +434,7 @@ public class LevelSelectMenu : MonoBehaviour
                     selectbuttonIndex = 0;
                     buttonChange();
                 }
-                else if (verticleMovement > tolerance || verticleMovement < -tolerance)
+                else if (verticleMovement > tolerance || verticleMovement < -tolerance || dpadY > tolerance || dpadY < -tolerance)
                 {
                     // 1-1
                     menuIndex = 1;
@@ -441,7 +447,7 @@ public class LevelSelectMenu : MonoBehaviour
             {
                 if (selectbuttonIndex == 0)
                 {
-                    if (verticleMovement > tolerance || verticleMovement < -tolerance)
+                    if (verticleMovement > tolerance || verticleMovement < -tolerance || dpadY > tolerance || dpadY < -tolerance)
                     {
                         menuIndex = 0;
                         selectbuttonIndex = 2;
@@ -450,7 +456,7 @@ public class LevelSelectMenu : MonoBehaviour
                 }
                 else if (selectbuttonIndex == 1)
                 {
-                    if (verticleMovement > tolerance || verticleMovement < -tolerance)
+                    if (verticleMovement > tolerance || verticleMovement < -tolerance || dpadY > tolerance || dpadY < -tolerance)
                     {
                         menuIndex = 0;
                         selectbuttonIndex = 0;
@@ -460,7 +466,7 @@ public class LevelSelectMenu : MonoBehaviour
             }
         }
 
-        if (horizontalMovement == 0 && verticleMovement == 0 && toggleTwo)
+        if (horizontalMovement == 0 && verticleMovement == 0 && dpadX == 0 && dpadY == 0 && toggleTwo)
         {
             toggleTwo = !toggleTwo;
         }
