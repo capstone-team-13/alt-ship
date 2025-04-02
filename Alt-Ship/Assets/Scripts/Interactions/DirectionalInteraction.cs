@@ -2,6 +2,7 @@ using Cinemachine;
 using EE.Interactions;
 using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DirectionalInteraction : Interactable
@@ -44,35 +45,35 @@ public class DirectionalInteraction : Interactable
     // Now it's the same as range interaction
     protected override bool CanInteract()
     {
-        var notInCoolingDown = base.CanInteract();
-        var colliders = Physics.OverlapSphere(transform.position, m_interactionRadius, m_playerLayer);
-        return notInCoolingDown && colliders.Length > 0;
+        // var notInCoolingDown = base.CanInteract();
+        // var colliders = Physics.OverlapSphere(transform.position, m_interactionRadius, m_playerLayer);
+        // return notInCoolingDown && colliders.Length > 0;
 
         // Operation is not in cooling down & no player is using object
-        // var baseCheck = base.CanInteract();
-        // if (!baseCheck) return false;
-        //
-        // var colliders = Physics.OverlapSphere(transform.position, m_interactionRadius, m_playerLayer);
-        //
-        // var rotatedForward = __M_RotateImageForward();
-        //
-        // // TODO: Refactor to specific player can interact
-        // var anyAgentBehind = false;
-        //
-        // foreach (var agent in colliders)
-        // {
-        //     var directionToAgent = agent.transform.position - transform.position;
-        //     var dotProduct = Vector3.Dot(rotatedForward, directionToAgent.normalized);
-        //     var behindObject = dotProduct < 0;
-        //
-        //     if (!behindObject || agent.gameObject != CurrentPerformer)
-        //         continue;
-        //
-        //     anyAgentBehind = true;
-        //     break;
-        // }
-        //
-        // return anyAgentBehind;
+        var baseCheck = base.CanInteract();
+        if (!baseCheck) return false;
+        
+        var colliders = Physics.OverlapSphere(transform.position, m_interactionRadius, m_playerLayer);
+        
+        var rotatedForward = __M_RotateImageForward();
+        
+        // TODO: Refactor to specific player can interact
+        var anyAgentBehind = false;
+        
+        foreach (var agent in colliders)
+        {
+            var directionToAgent = agent.transform.position - transform.position;
+            var dotProduct = Vector3.Dot(rotatedForward, directionToAgent.normalized);
+            var behindObject = dotProduct < 0;
+        
+            if (!behindObject || agent.gameObject != CurrentPerformer)
+                continue;
+        
+            anyAgentBehind = true;
+            break;
+        }
+        
+        return anyAgentBehind;
     }
 
     #endregion
