@@ -53,6 +53,8 @@ public class LevelSelectMenu : MonoBehaviour
 
     private float tolerance = .7f;
 
+    private float dpadX = 0f;
+    private float dpadY = 0f;
 
     private void OnEnable()
     {
@@ -360,10 +362,13 @@ public class LevelSelectMenu : MonoBehaviour
         float verticleMovement = Input.GetAxis("Vertical");
         float horizontalMovement = Input.GetAxis("Horizontal");
 
-        Vector2 dpad = Gamepad.current.dpad.ReadValue();
+        if (Gamepad.current != null)
+        {
+            Vector2 dpad = Gamepad.current.dpad.ReadValue();
 
-        float dpadX = dpad.x;
-        float dpadY = dpad.y;
+            dpadX = dpad.x;
+            dpadY = dpad.y;
+        }
 
         if (verticleMovement != 0 && selectbuttonIndex == 10 || horizontalMovement != 0 && selectbuttonIndex == 10 || dpadX !=0 && selectbuttonIndex == 10 || dpadY != 0 && selectbuttonIndex == 10)
         {
