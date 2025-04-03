@@ -39,6 +39,9 @@ public class MenuControlManager : MonoBehaviour
     private bool toggleTwo = false;
     private bool southToggle = false;
 
+    private float dpadX = 0f;
+    private float dpadY = 0f;
+
     private void OnEnable()
     {
         EnableHandlers();
@@ -307,10 +310,13 @@ public class MenuControlManager : MonoBehaviour
         float verticleMovement = Input.GetAxis("Vertical");
         float horizontalMovement = Input.GetAxis("Horizontal");
 
-        Vector2 dpad = Gamepad.current.dpad.ReadValue();
+        if (Gamepad.current != null)
+        {
+            Vector2 dpad = Gamepad.current.dpad.ReadValue();
 
-        float dpadX = dpad.x;
-        float dpadY = dpad.y;
+            dpadX = dpad.x;
+            dpadY = dpad.y;
+        }
 
         if (menuIndex == 0)
         {
