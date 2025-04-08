@@ -19,7 +19,7 @@ public class NewTentacleSystem : MonoBehaviour
     // Distance the tentacle will attack at. (Instant / OvertimeInstant)
     [SerializeField] private float minDistance;
     // Distance the tentacle will start tracing the players distance (Instant)
-    [SerializeField] private float outerDistanceInstant;
+    public float outerDistanceInstant;
     // Distance the tentacle will start trying to attack the player (Overtime / OvertimeInstant)
     [SerializeField] private float distanceOvertime;
     // Time it takes the tentacle to attack the player (Overtime / OvertimeInstant)

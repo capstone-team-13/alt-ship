@@ -20,6 +20,18 @@ public class NewTentacleCombat : MonoBehaviour
     [SerializeField] private SailMovementSystem sailMovementSystem;
     [SerializeField] private SailFunction sailFunction;
 
+    [Header("Cannon Warning")]
+
+    [SerializeField] private GameObject exclamationLeftOne;
+    [SerializeField] private GameObject exclamationLeftTwo;
+
+    [SerializeField] private GameObject exclamationRightOne;
+    [SerializeField] private GameObject exclamationRightTwo;
+
+    [SerializeField] private NewCannonController cannonControllerLeft;
+    [SerializeField] private NewCannonController cannonControllerRight;
+
+
     [Header("Variables")]
     [SerializeField] private GameObject targetLeft;
     [SerializeField] private GameObject targetRight;
@@ -27,6 +39,9 @@ public class NewTentacleCombat : MonoBehaviour
 
     private bool sameTarget;
     private int pickTarget;
+
+    private bool cannonLeftToggle = false;
+    private bool cannonRightToggle = false;
 
     private void Update()
     {
@@ -40,6 +55,15 @@ public class NewTentacleCombat : MonoBehaviour
                 StartCoroutine(GrabTentacleDisable(grabAnimatorLeft));
                 tentacleLeft.SetActive(false);
                 tentacleRight.SetActive(false);
+
+                exclamationLeftOne.SetActive(false);
+                exclamationLeftTwo.SetActive(false);
+                exclamationRightOne.SetActive(false);
+                exclamationRightTwo.SetActive(false);
+
+                cannonLeftToggle = false;
+                cannonRightToggle = false;
+
                 targetLeft = null;
                 targetRight = null;
 
@@ -47,6 +71,17 @@ public class NewTentacleCombat : MonoBehaviour
 
                 StartShip();
             }
+            else if(cannonControllerLeft.m_manning && cannonLeftToggle)
+            {
+                ToggleWarningLeft();
+            }
+            else if(cannonControllerLeft.m_manning && cannonControllerRight)
+            {
+                ToggleWarningRight();
+            }
+
+
+
         }
     }
 
@@ -128,6 +163,8 @@ public class NewTentacleCombat : MonoBehaviour
 
             tentacleBehaviourRight.setTarget(targetRight);
         }
+
+        CannonWarning();
     }
 
     private void PickTargets(ref GameObject target, GameObject oppositeTarget)
@@ -178,6 +215,32 @@ public class NewTentacleCombat : MonoBehaviour
     {
         sailMovementSystem.DisableSailing();
         sailFunction.disableSail();
+    }
+
+    private void CannonWarning()
+    {
+         if(tentacleLeft.activeSelf && !cannonControllerLeft.m_manning)
+        {
+            ToggleWarningLeft();
+        }
+         if(tentacleRight.activeSelf && !cannonControllerRight.m_manning)
+        {
+            ToggleWarningRight();
+        }
+    }
+
+    private void ToggleWarningLeft()
+    {
+        cannonLeftToggle = !cannonLeftToggle;
+        exclamationLeftOne.SetActive(!exclamationLeftOne.activeSelf);
+        exclamationLeftTwo.SetActive(!exclamationLeftTwo.activeSelf);
+    }
+
+    private void ToggleWarningRight()
+    {
+        cannonRightToggle = !cannonRightToggle;
+        exclamationRightOne.SetActive(!exclamationRightOne.activeSelf);
+        exclamationRightTwo.SetActive(!exclamationRightTwo.activeSelf);
     }
 
 }

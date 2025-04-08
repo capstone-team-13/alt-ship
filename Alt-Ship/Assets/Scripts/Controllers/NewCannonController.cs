@@ -50,7 +50,7 @@ public class NewCannonController : MonoBehaviour
 
     private float currentDirection;
 
-    private bool m_manning = false;
+    public bool m_manning = false;
 
     private void Awake()
     {
