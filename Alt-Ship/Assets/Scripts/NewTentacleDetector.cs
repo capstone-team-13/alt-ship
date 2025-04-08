@@ -225,6 +225,7 @@ public class NewTentacleDetector : MonoBehaviour
 
     public void TentacleAttackStart()
     {
+        newTentacleAttack.StartGrab();
         isAttacking = true;
         if (isUp)
         {

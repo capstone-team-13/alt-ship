@@ -48,7 +48,7 @@ public class SailMovementSystem : Controller<ShipModel>
 
     private void Update()
     {
-        if (disableFunction) return;
+        if (!disableFunction) return;
         if (tiltingToggle)
         {
             float sideTilt = Mathf.Sin(Time.time * tiltSpeed) * tiltAmount;
