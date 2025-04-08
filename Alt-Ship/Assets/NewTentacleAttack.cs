@@ -39,6 +39,8 @@ public class NewTentacleAttack : MonoBehaviour
 
 private IEnumerator MoveToEnd()
     {
+        yield return new WaitForSeconds(1f);
+
         isMoving = true;
 
         Vector3 startPos = ship.transform.position;
@@ -111,6 +113,11 @@ private IEnumerator MoveToEnd()
             StartCoroutine(MoveToEnd());
 
         }
+    }
+
+    public void StartGrab()
+    {
+        newTentacleCombat.InitiateMovement(left, right);
     }
 
 }

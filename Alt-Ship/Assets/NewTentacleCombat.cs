@@ -8,6 +8,12 @@ public class NewTentacleCombat : MonoBehaviour
     [SerializeField] private GameObject tentacleLeft;
     [SerializeField] private GameObject tentacleRight;
 
+    [SerializeField] private GameObject tentacleGrabLeft;
+    [SerializeField] private GameObject tentacleGrabRight;
+
+    [SerializeField] private Animator grabAnimatorLeft;
+    [SerializeField] private Animator grabAnimatorRight;
+
     [SerializeField] private NewTentacleBehaviour tentacleBehaviourLeft;
     [SerializeField] private NewTentacleBehaviour tentacleBehaviourRight;
 
@@ -30,6 +36,8 @@ public class NewTentacleCombat : MonoBehaviour
             {
                 tentacleBehaviourLeft.ResetVariables();
                 tentacleBehaviourRight.ResetVariables();
+                StartCoroutine(GrabTentacleDisable(grabAnimatorRight));
+                StartCoroutine(GrabTentacleDisable(grabAnimatorLeft));
                 tentacleLeft.SetActive(false);
                 tentacleRight.SetActive(false);
                 targetLeft = null;
@@ -40,6 +48,41 @@ public class NewTentacleCombat : MonoBehaviour
                 StartShip();
             }
         }
+    }
+
+    public void InitiateMovement(bool left, bool right)
+    {
+        tentacleGrabLeft.SetActive(true);
+        tentacleGrabRight.SetActive(true);
+
+        if(left && right)
+        {
+            return;
+        }
+        else if (left)
+        {
+            StartCoroutine(GrabTentacleFall(grabAnimatorRight));
+        }
+        else if (right) 
+        {
+            StartCoroutine(GrabTentacleFall(grabAnimatorLeft));
+        }
+    }
+
+    private IEnumerator GrabTentacleFall(Animator animator)
+    {
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length + 2f);
+
+        StartCoroutine(GrabTentacleDisable(animator));
+    }
+
+    private IEnumerator GrabTentacleDisable(Animator animator)
+    {
+        animator.SetTrigger("Retreat");
+
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length + 2f);
+
+        animator.gameObject.SetActive(false);
     }
 
     public void InitiateAttack(bool left, bool right)
