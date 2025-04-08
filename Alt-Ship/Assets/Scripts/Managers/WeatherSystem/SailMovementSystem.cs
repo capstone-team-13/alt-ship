@@ -27,10 +27,10 @@ public class SailMovementSystem : Controller<ShipModel>
     private bool toggle = false;
 
     [Header("Tilting")] public bool tiltingToggle = true;
-    public float tiltAmount = 2f;
-    public float tiltSpeed = .5f;
-    public float forwardTilt = 1f;
-    public float forwardTiltSpeed = .3f;
+    private float tiltAmount = 1.2f;
+    private float tiltSpeed = 2f;
+    private float forwardTilt = 1.15f;
+    private float forwardTiltSpeed = 1.8f;
 
     [Header("Sheep")] public GameObject sheepOne;
     public GameObject sheepTwo;

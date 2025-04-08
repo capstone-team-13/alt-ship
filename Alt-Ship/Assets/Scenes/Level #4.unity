@@ -16224,6 +16224,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8a5cbdb1afeab84da0878c230191612, type: 3}
+--- !u!1 &449048498 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8952812397761129214, guid: 09244853805f0614ba2eb4a820b44a7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 384132725}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &449048500 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5231809293413849378, guid: 09244853805f0614ba2eb4a820b44a7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 384132725}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &449355431
 GameObject:
   m_ObjectHideFlags: 0
@@ -27002,10 +27014,6 @@ MonoBehaviour:
   velocitySmoothing: 0.5
   sailHeight: 0.2
   tiltingToggle: 1
-  tiltAmount: 0.55
-  tiltSpeed: 0.5
-  forwardTilt: 0.3
-  forwardTiltSpeed: 0.15
   sheepOne: {fileID: 1450422982}
   sheepTwo: {fileID: 584657020}
   sheepThree: {fileID: 997401071}
@@ -27081,6 +27089,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tentacleLeft: {fileID: 384132727}
   tentacleRight: {fileID: 384132730}
+  tentacleGrabLeft: {fileID: 1954240314}
+  tentacleGrabRight: {fileID: 449048498}
+  grabAnimatorLeft: {fileID: 1954240316}
+  grabAnimatorRight: {fileID: 449048500}
   tentacleBehaviourLeft: {fileID: 384132728}
   tentacleBehaviourRight: {fileID: 384132729}
   sailMovementSystem: {fileID: 726318019}
@@ -84596,6 +84608,18 @@ Transform:
   - {fileID: 644600026}
   m_Father: {fileID: 726318017}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1954240314 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5181218678764394765, guid: 09244853805f0614ba2eb4a820b44a7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 384132725}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1954240316 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1203398633973637380, guid: 09244853805f0614ba2eb4a820b44a7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 384132725}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1955968326
 GameObject:
   m_ObjectHideFlags: 0

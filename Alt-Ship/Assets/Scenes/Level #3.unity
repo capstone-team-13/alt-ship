@@ -16462,6 +16462,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &534275719 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5181218678764394765, guid: 09244853805f0614ba2eb4a820b44a7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1184326159}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &534275721 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1203398633973637380, guid: 09244853805f0614ba2eb4a820b44a7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1184326159}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &549337951
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19192,6 +19204,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6027530732779323162, guid: 19f67bc314c270544ab73106708112e0,
     type: 3}
   m_PrefabInstance: {fileID: 632768753}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &636469725 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8952812397761129214, guid: 09244853805f0614ba2eb4a820b44a7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1184326159}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &636469727 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5231809293413849378, guid: 09244853805f0614ba2eb4a820b44a7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1184326159}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &637071478
 GameObject:
@@ -25753,6 +25777,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tentacleLeft: {fileID: 1184326161}
   tentacleRight: {fileID: 1184326164}
+  tentacleGrabLeft: {fileID: 534275719}
+  tentacleGrabRight: {fileID: 636469725}
+  grabAnimatorLeft: {fileID: 534275721}
+  grabAnimatorRight: {fileID: 636469727}
   tentacleBehaviourLeft: {fileID: 1184326162}
   tentacleBehaviourRight: {fileID: 1184326163}
   sailMovementSystem: {fileID: 838780338}
