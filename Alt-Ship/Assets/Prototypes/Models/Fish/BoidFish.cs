@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BoidFish : MonoBehaviour
 {
-    [Header("游动参数")]
+    [Header("setting")]
     public float speed = 1.5f;
     public float rotationSpeed = 2f;
     public float neighborDistance = 5f;
@@ -19,7 +19,7 @@ public class BoidFish : MonoBehaviour
 
     void Update()
     {
-        // ✅ 若速度为0，则不移动也不更新方向（可改为允许转头）
+        
         if (speed <= 0.01f)
             return;
 
@@ -60,33 +60,33 @@ public class BoidFish : MonoBehaviour
             direction += cohesion * 1.0f + alignment * 1.0f + separation * 1.5f;
         }
 
-        // ✅ 加入中心控制，避免游出范围
+     
         Vector3 centerOffset = manager.GetSwimCenter() - transform.position;
         if (centerOffset.magnitude > manager.GetSwimRange())
         {
             direction += centerOffset.normalized * 2f;
         }
 
-        // ✅ 限制在XZ平面（清空Y方向）
+     
         direction.y = 0f;
         direction.Normalize();
 
-        // ✅ 平滑转向
+    
         moveDirection = Vector3.Lerp(moveDirection, direction, rotationSpeed * Time.deltaTime);
 
-        // ✅ 只在平面内旋转
+     
         if (moveDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
-        // ✅ 移动
+    
         transform.position += moveDirection * speed * Time.deltaTime;
 
-        // ✅ 固定Y坐标（保持在平面）
+     
         Vector3 pos = transform.position;
-        pos.y = manager.GetSwimCenter().y; // 或者直接设为 y = 0
+        pos.y = manager.GetSwimCenter().y; 
         transform.position = pos;
     }
 }

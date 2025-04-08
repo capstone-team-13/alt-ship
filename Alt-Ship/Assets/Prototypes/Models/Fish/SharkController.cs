@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class SharkController : MonoBehaviour
 {
-    [Header("鲨鱼设置")]
+    [Header("Shark setting")]
     public GameObject sharkPrefab;
     public float speed = 2f;
     public float rotationSpeed = 2f;
 
-    [Header("活动范围")]
-    public Vector3 range = new Vector3(20, 0, 20); // 只在XZ方向移动
+    [Header("Range")]
+    public Vector3 range = new Vector3(20, 0, 20); 
 
-    [Header("目标切换停顿")]
+    [Header("target switch stop")]
     public float minWaitTime = 1f;
     public float maxWaitTime = 2f;
 
@@ -31,7 +31,7 @@ public class SharkController : MonoBehaviour
     {
         if (!sharkInstance) return;
 
-        // 如果正在等待，就不动
+       
         if (waiting)
         {
             waitTimer += Time.deltaTime;
@@ -43,7 +43,7 @@ public class SharkController : MonoBehaviour
             return;
         }
 
-        // 到达目标 → 进入等待状态
+        
         if (Vector3.Distance(sharkInstance.transform.position, targetPosition) < 1f)
         {
             waiting = true;
@@ -58,7 +58,7 @@ public class SharkController : MonoBehaviour
     void MoveShark()
     {
         Vector3 dir = targetPosition - sharkInstance.transform.position;
-        dir.y = 0f; // 保持在平面内
+        dir.y = 0f; 
         dir.Normalize();
 
         if (dir != Vector3.zero)
@@ -70,7 +70,7 @@ public class SharkController : MonoBehaviour
 
         sharkInstance.transform.position += sharkInstance.transform.forward * speed * Time.deltaTime;
 
-        // 固定在指定平面高度
+       
         Vector3 pos = sharkInstance.transform.position;
         pos.y = transform.position.y;
         sharkInstance.transform.position = pos;
@@ -81,14 +81,14 @@ public class SharkController : MonoBehaviour
         Vector3 center = transform.position;
         Vector3 newTarget;
 
-        // 防止新目标太近（避免转圈）
+        
         do
         {
             float x = Random.Range(-range.x, range.x);
             float z = Random.Range(-range.z, range.z);
             newTarget = new Vector3(center.x + x, center.y, center.z + z);
         }
-        while (Vector3.Distance(newTarget, sharkInstance.transform.position) < 3f);
+        while (Vector3.Distance(newTarget, sharkInstance.transform.position) < 6f);
 
         targetPosition = newTarget;
     }
