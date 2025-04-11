@@ -220,7 +220,7 @@ public class SailMovementSystem : Controller<ShipModel>
         float timeElapsed = 0f;
 
         Vector3 startPosition = sheep.transform.position;
-        Vector3 targetPosition = startPosition + flingDirection * 5f;
+        Vector3 targetPosition = startPosition + flingDirection * 10f;
 
         Quaternion startRotation = sheep.transform.rotation;
 
