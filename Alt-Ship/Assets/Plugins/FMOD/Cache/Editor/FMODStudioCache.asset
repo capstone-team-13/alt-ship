@@ -42,11 +42,38 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638795791407435734
+  lastModified: 638800144944299779
   FileSizes:
   - Name: Desktop
-    Value: 1292
+    Value: 1376
   Exists: 1
+--- !u!114 &-8440063412225403921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Cannon Shot
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Cannon Shot
+  Guid:
+    Data1: 374369553
+    Data2: 1192562265
+    Data3: -94895468
+    Data4: -1411209017
+  Banks:
+  - {fileID: -4639551170784832692}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1671
 --- !u!114 &-7943701470945764482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,6 +128,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 32600
+--- !u!114 &-5343029320339762167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Rock Crash
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Rock Crash
+  Guid:
+    Data1: -129462172
+    Data2: 1147108389
+    Data3: -1024386427
+    Data4: -460962963
+  Banks:
+  - {fileID: -4639551170784832692}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-5056878682622098284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,10 +197,10 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638795791407647112
+  lastModified: 638800144975216709
   FileSizes:
   - Name: Desktop
-    Value: 459584
+    Value: 474496
   Exists: 1
 --- !u!114 &-4294084659690747384
 MonoBehaviour:
@@ -217,7 +271,7 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 638795791407617306
+  lastModified: 638800144968604387
   FileSizes:
   - Name: Desktop
     Value: 85024
@@ -237,7 +291,7 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638795791407425767
+  lastModified: 638800144944269858
   FileSizes:
   - Name: Desktop
     Value: 1036
@@ -270,12 +324,14 @@ MonoBehaviour:
   - {fileID: -7943701470945764482}
   - {fileID: -6549498665699326865}
   - {fileID: 3194565841477418229}
+  - {fileID: -8440063412225403921}
+  - {fileID: -5343029320339762167}
   EditorParameters: []
   MasterBanks:
   - {fileID: -864908421193499706}
   StringsBanks:
   - {fileID: -8560429708944185121}
-  cacheTime: 638795791407647112
+  cacheTime: 638800144975216709
   cacheVersion: 131846
 --- !u!114 &1430518080035615988
 MonoBehaviour:
@@ -292,7 +348,7 @@ MonoBehaviour:
   Path: Assets/Audio/FMOD Studio/Ewe Few Crew/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638795791407587594
+  lastModified: 638800144966674594
   FileSizes:
   - Name: Desktop
     Value: 4185024
